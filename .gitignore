@@ -6,4 +6,5 @@ out
 build
 .DS_Store
 *.log
-test-ai.mjs
+test-*.mjs
+*.tsbuildinfo

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
+import { User, signInWithCustomToken, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
-import { auth, db, googleProvider } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { UserProfile } from '@/types';
 
 interface AuthContextType {
@@ -24,13 +24,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Check for 1-click OAuth callback token in URL
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const authToken = urlParams.get('auth_token');
+      if (authToken) {
+        signInWithCustomToken(auth, authToken)
+          .then(() => {
+            urlParams.delete('auth_token');
+            const remainingQuery = urlParams.toString();
+            const newUrl = window.location.pathname + (remainingQuery ? `?${remainingQuery}` : '');
+            window.history.replaceState({}, document.title, newUrl);
+          })
+          .catch((err) => {
+            console.error('Failed to sign in with custom token from OAuth callback:', err);
+          });
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         // Sync & listen to user document in Firestore in real-time
         const userDocRef = doc(db, 'users', currentUser.uid);
-        
+
         const unsubDoc = onSnapshot(userDocRef, async (snap) => {
           if (snap.exists()) {
             setProfile(snap.data() as UserProfile);
@@ -66,17 +86,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGoogle = async () => {
     try {
       setLoading(true);
-      await signInWithPopup(auth, googleProvider);
+      // Directly redirect to branded Google OAuth Screen with SW REPLY logo & YouTube scopes
+      window.location.href = `/api/auth/google-url${user?.uid ? `?uid=${user.uid}` : ''}`;
     } catch (error) {
       console.error('Google Sign In Error:', error);
-      throw error;
-    } finally {
       setLoading(false);
     }
   };
 
   const connectYouTubeChannel = () => {
-    if (!user) return;
+    if (!user) {
+      window.location.href = '/api/auth/google-url';
+      return;
+    }
     // Redirect to backend OAuth generation with user's UID in state
     window.location.href = `/api/auth/google-url?uid=${user.uid}`;
   };

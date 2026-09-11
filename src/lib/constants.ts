@@ -14,7 +14,8 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   toneStyle: 'pro_mentor',
   personaBio: 'Energetic Indian Creator who loves helping audience grow, values genuine feedback, and speaks in natural relatable Hinglish.',
   customSignature: '— SW Tech Solution Team ❤️',
-  promotionalLink: '',
+  appDownloadLink: '',
+  courseOrWebsiteLink: '',
   callToAction: 'Video pasand aayi toh like and share karna mat bhoolna!',
   blacklistKeywords: [
     'sub4sub',
