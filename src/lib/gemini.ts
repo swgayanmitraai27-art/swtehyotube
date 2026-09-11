@@ -2,7 +2,6 @@ import { AIReplySuggestion, CreatorPersonaConfig } from '@/types';
 import { DEFAULT_CREATOR_PERSONA } from './constants';
 
 const apiKey = process.env.GEMINI_API_KEY || '';
-// Exact model specified by user
 const MODEL_ID = 'gemma-4-31b-it';
 
 /**
@@ -12,6 +11,81 @@ export function formatAuthorMention(authorDisplayName: string): string {
   if (!authorDisplayName) return '';
   const cleaned = authorDisplayName.replace(/^@/, '').trim();
   return `@${cleaned}`;
+}
+
+/**
+ * Helper to safely extract responses from JSON or formatted bullet text
+ */
+function parseModelOutput(rawText: string, mention: string): AIReplySuggestion[] {
+  // 1. Try strict JSON parse first
+  try {
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
+        return parsed.suggestions.map((s: any, idx: number) => ({
+          id: String(idx + 1),
+          tone: s.tone || 'hinglish_friendly',
+          toneLabel: s.toneLabel || 'Suggested Reply',
+          text: s.text.startsWith(mention) ? s.text : `${mention} ${s.text}`,
+          autoMentioned: mention,
+        }));
+      }
+    }
+  } catch (e) {
+    // Continue to fallback parser
+  }
+
+  // 2. Fallback parser: extract lines with quotes or labels
+  const extracted: AIReplySuggestion[] = [];
+  const lines = rawText.split('\n');
+
+  for (const line of lines) {
+    const quoteMatch = line.match(/["']([^"']{10,300})["']/);
+    if (quoteMatch && quoteMatch[1]) {
+      let text = quoteMatch[1].trim();
+      if (!text.startsWith(mention)) {
+        text = `${mention} ${text}`;
+      }
+      extracted.push({
+        id: String(extracted.length + 1),
+        tone: extracted.length === 0 ? 'hinglish_friendly' : extracted.length === 1 ? 'quick_heart' : extracted.length === 2 ? 'support_detailed' : 'witty_meme',
+        toneLabel: extracted.length === 0 ? 'Friendly (Hinglish)' : extracted.length === 1 ? 'Quick Heart & Emojis' : extracted.length === 2 ? 'Helpful Guidance' : 'High-Energy',
+        text,
+        autoMentioned: mention,
+      });
+      if (extracted.length >= 4) break;
+    }
+  }
+
+  if (extracted.length > 0) {
+    return extracted;
+  }
+
+  // 3. Guaranteed safe fallback
+  return [
+    {
+      id: '1',
+      tone: 'hinglish_friendly',
+      toneLabel: 'Friendly (Hinglish)',
+      text: `${mention} Shukriya bhai! ❤️ Keep supporting and stay tuned for more updates!`,
+      autoMentioned: mention,
+    },
+    {
+      id: '2',
+      tone: 'quick_heart',
+      toneLabel: 'Quick Heart & Love',
+      text: `${mention} Thank you for watching! 🔥 Agla video jald hi live hoga.`,
+      autoMentioned: mention,
+    },
+    {
+      id: '3',
+      tone: 'support_detailed',
+      toneLabel: 'Helpful Guidance',
+      text: `${mention} Notes aur batches ke liye aap description me diye gaye App link ko check kar sakte hain! 📚`,
+      autoMentioned: mention,
+    }
+  ];
 }
 
 /**
@@ -81,8 +155,6 @@ CRITICAL RULES:
 - Return ONLY a strict JSON object with this schema:
 
 {
-  "sentiment": "positive" | "question" | "feedback" | "criticism" | "spam" | "neutral",
-  "intent": "appreciation" | "inquiry" | "feature_request" | "brand_mention" | "troll" | "general",
   "suggestions": [
     {
       "tone": "hinglish_friendly",
@@ -96,12 +168,12 @@ CRITICAL RULES:
     },
     {
       "tone": "support_detailed",
-      "toneLabel": "Helpful / Student Guidance",
+      "toneLabel": "Helpful Guidance",
       "text": "..."
     },
     {
       "tone": "witty_meme",
-      "toneLabel": "High-Energy & Motivating",
+      "toneLabel": "High-Energy",
       "text": "..."
     }
   ]
@@ -132,47 +204,13 @@ CRITICAL RULES:
     if (res.ok) {
       const data = await res.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      const cleanedJson = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(cleanedJson);
-
-      if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-        return parsed.suggestions.map((s: any, idx: number) => ({
-          id: String(idx + 1),
-          tone: s.tone || 'hinglish_friendly',
-          toneLabel: s.toneLabel || 'Suggested Reply',
-          text: s.text,
-          autoMentioned: mention,
-        }));
-      }
+      return parseModelOutput(rawText, mention);
     }
   } catch (error) {
     console.error('Gemma 4 31B IT AI error:', error);
   }
 
-  // Fallback intelligent templates
-  return [
-    {
-      id: '1',
-      tone: 'hinglish_friendly',
-      toneLabel: 'Friendly (Hinglish)',
-      text: `${mention} Shukriya bhai! ❤️ Keep supporting and stay tuned for more!`,
-      autoMentioned: mention,
-    },
-    {
-      id: '2',
-      tone: 'quick_heart',
-      toneLabel: 'Quick Heart & Love',
-      text: `${mention} Love your support! 🔥 Next video jald hi aane wali hai.`,
-      autoMentioned: mention,
-    },
-    {
-      id: '3',
-      tone: 'support_detailed',
-      toneLabel: 'Helpful / Student Guidance',
-      text: `${mention} Notes aur batches ke liye aap Vidyakul App check kar sakte hain! Link description me hai. 📚`,
-      autoMentioned: mention,
-    }
-  ];
+  return parseModelOutput('', mention);
 }
 
 /**
