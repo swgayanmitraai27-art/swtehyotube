@@ -1,0 +1,171 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { adminDb } from '@/lib/firebase-admin';
+import { fetchChannelComments, postYouTubeReply } from '@/lib/youtube';
+import { generateSingleAutoPilotReply } from '@/lib/gemini';
+import { evaluateCommentEligibility } from '@/lib/quota-guard';
+import { DEFAULT_CREATOR_PERSONA } from '@/lib/constants';
+import { CreatorPersonaConfig } from '@/types';
+import * as admin from 'firebase-admin';
+
+export async function GET(req: NextRequest) {
+  try {
+    const authHeader = req.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+
+    // Verify secret for automated cron runs if configured
+    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+      const { searchParams } = new URL(req.url);
+      const uid = searchParams.get('uid');
+      if (!uid) {
+        return NextResponse.json({ error: 'Unauthorized cron request' }, { status: 401 });
+      }
+    }
+
+    const { searchParams } = new URL(req.url);
+    const targetUid = searchParams.get('uid');
+
+    // Query active auto-pilot creators
+    let usersQuery = adminDb.collection('users').where('autoPilotEnabled', '==', true);
+    if (targetUid) {
+      usersQuery = adminDb.collection('users').where(admin.firestore.FieldPath.documentId(), '==', targetUid);
+    }
+
+    const usersSnap = await usersQuery.get();
+
+    if (usersSnap.empty) {
+      return NextResponse.json({ success: true, message: 'No active auto-pilot users found', processed: 0 });
+    }
+
+    const results: any[] = [];
+
+    for (const userDoc of usersSnap.docs) {
+      const userId = userDoc.id;
+      const userData = userDoc.data();
+      let credits = userData.credits || 0;
+
+      if (credits <= 0 || !userData.channelId) {
+        continue;
+      }
+
+      // Fetch persona settings
+      const personaDoc = await adminDb.collection('users').doc(userId).collection('settings').doc('persona').get();
+      const persona: CreatorPersonaConfig = personaDoc.exists
+        ? (personaDoc.data() as CreatorPersonaConfig)
+        : {
+            ...DEFAULT_CREATOR_PERSONA,
+            channelName: userData.channelTitle || 'My Channel',
+            creatorName: userData.displayName || 'Creator',
+          };
+
+      // Fetch unreplied comments
+      let comments = [];
+      try {
+        comments = await fetchChannelComments(userId, undefined, 10);
+      } catch (err) {
+        console.warn(`Could not fetch comments for user ${userId}:`, err);
+        continue;
+      }
+
+      let userRepliesCount = 0;
+
+      for (const comment of comments) {
+        if (credits <= 0) break;
+        if (comment.isReplied) continue;
+
+        // Check if already processed in replies subcollection
+        const existingReply = await adminDb
+          .collection('users')
+          .doc(userId)
+          .collection('replies')
+          .doc(comment.id)
+          .get();
+
+        if (existingReply.exists) continue;
+
+        // Quota Guard check
+        const eligibility = evaluateCommentEligibility(
+          comment.textDisplay,
+          comment.authorChannelUrl || '',
+          userData.channelId,
+          persona
+        );
+
+        if (!eligibility.shouldReply) {
+          // Log skipped reason
+          await adminDb
+            .collection('users')
+            .doc(userId)
+            .collection('replies')
+            .doc(comment.id)
+            .set({
+              commentId: comment.id,
+              authorName: comment.authorDisplayName,
+              originalComment: comment.textDisplay,
+              status: 'skipped',
+              reason: eligibility.reason,
+              timestamp: Date.now(),
+            });
+          continue;
+        }
+
+        // Generate Hinglish AI Reply
+        try {
+          const aiReplyText = await generateSingleAutoPilotReply(
+            comment.textDisplay,
+            comment.authorDisplayName,
+            comment.videoTitle || 'Video',
+            persona
+          );
+
+          // Post reply to YouTube API
+          const postRes = await postYouTubeReply(userId, comment.id, aiReplyText);
+
+          if (postRes.success) {
+            credits -= 1;
+            userRepliesCount += 1;
+
+            // Deduct credit
+            await userDoc.ref.update({
+              credits: admin.firestore.FieldValue.increment(-1),
+              updatedAt: Date.now(),
+            });
+
+            // Record successful log
+            await adminDb
+              .collection('users')
+              .doc(userId)
+              .collection('replies')
+              .doc(comment.id)
+              .set({
+                commentId: comment.id,
+                authorName: comment.authorDisplayName,
+                originalComment: comment.textDisplay,
+                replyText: aiReplyText,
+                toneUsed: persona.toneStyle,
+                status: 'success',
+                timestamp: Date.now(),
+                youtubeReplyId: postRes.commentId,
+              });
+          }
+        } catch (genErr) {
+          console.error(`Auto-pilot failed for comment ${comment.id}:`, genErr);
+        }
+      }
+
+      results.push({
+        userId,
+        repliesSent: userRepliesCount,
+        remainingCredits: credits,
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      processedUsers: results.length,
+      results,
+    });
+  } catch (error: any) {
+    console.error('Auto-pilot execution failed:', error);
+    return NextResponse.json({ error: error.message || 'Auto-pilot failed' }, { status: 500 });
+  }
+}

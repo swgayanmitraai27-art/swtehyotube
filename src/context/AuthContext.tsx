@@ -1,0 +1,124 @@
+'use client';
+
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User, signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { auth, db, googleProvider } from '@/lib/firebase';
+import { UserProfile } from '@/types';
+
+interface AuthContextType {
+  user: User | null;
+  profile: UserProfile | null;
+  loading: boolean;
+  isYouTubeConnected: boolean;
+  signInWithGoogle: () => Promise<void>;
+  connectYouTubeChannel: () => void;
+  logout: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        // Sync & listen to user document in Firestore in real-time
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        
+        const unsubDoc = onSnapshot(userDocRef, async (snap) => {
+          if (snap.exists()) {
+            setProfile(snap.data() as UserProfile);
+          } else {
+            // Auto-provision initial 50 Free Trial Credits
+            const initialProfile: UserProfile = {
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              displayName: currentUser.displayName || 'Creator',
+              photoURL: currentUser.photoURL || '',
+              credits: 50,
+              plan: 'free',
+              autoPilotEnabled: false,
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+            };
+            await setDoc(userDocRef, initialProfile);
+            setProfile(initialProfile);
+          }
+          setLoading(false);
+        });
+
+        return () => unsubDoc();
+      } else {
+        setProfile(null);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const signInWithGoogle = async () => {
+    try {
+      setLoading(true);
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error('Google Sign In Error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const connectYouTubeChannel = () => {
+    if (!user) return;
+    // Redirect to backend OAuth generation with user's UID in state
+    window.location.href = `/api/auth/google-url?uid=${user.uid}`;
+  };
+
+  const logout = async () => {
+    await firebaseSignOut(auth);
+    setUser(null);
+    setProfile(null);
+  };
+
+  const refreshProfile = async () => {
+    if (!user) return;
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists()) {
+      setProfile(snap.data() as UserProfile);
+    }
+  };
+
+  const isYouTubeConnected = Boolean(profile?.channelId);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        profile,
+        loading,
+        isYouTubeConnected,
+        signInWithGoogle,
+        connectYouTubeChannel,
+        logout,
+        refreshProfile,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
