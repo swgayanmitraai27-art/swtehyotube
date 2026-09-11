@@ -259,7 +259,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 bg-zinc-950 py-10 px-4 text-center text-xs text-zinc-400 mt-auto">
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-10 px-4 text-xs text-zinc-400 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-rose-600 flex items-center justify-center">
@@ -267,7 +267,11 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-white">SW Tech Solution</span>
           </div>
-          <p>© {new Date().getFullYear()} SW Tech Solution. Built with Next.js, Google Gemini & Razorpay.</p>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-rose-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-rose-400 transition-colors">Terms of Service</Link>
+          </div>
+          <p>© {new Date().getFullYear()} SW Tech Solution. All rights reserved.</p>
         </div>
       </footer>
 
