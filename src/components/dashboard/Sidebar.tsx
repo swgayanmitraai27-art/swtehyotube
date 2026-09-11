@@ -85,7 +85,7 @@ export default function Sidebar() {
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            {profile?.plan === 'pro_monthly' ? 'Pro Creator Plan' : 'Free Trial'}
+            {profile?.plan === 'pro' ? 'Pro Creator Plan' : profile?.plan === 'starter' ? 'Starter Plan' : profile?.plan === 'enterprise' ? 'Enterprise' : 'Free Trial'}
           </span>
           <span className="text-[10px] text-zinc-500">{profile?.credits || 0} Credits Left</span>
         </div>
