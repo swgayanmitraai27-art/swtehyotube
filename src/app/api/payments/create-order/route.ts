@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     let amount = 49900; // Default ₹499 in paise
     let description = '🚀 Starter Plan (₹499/Month)';
-    let creditsToAdd = 500;
+    let creditsToAdd = 1000;
     let purchaseType = 'subscription';
 
     if (planId) {
