@@ -2,11 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getOAuth2Client, fetchChannelInfo } from '@/lib/youtube';
 import { adminDb } from '@/lib/firebase-admin';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const code = searchParams.get('code');
-    const uid = searchParams.get('state'); // UID passed during OAuth start
+    const uid = searchParams.get('state');
 
     if (!code || !uid) {
       return NextResponse.redirect(new URL('/dashboard?error=missing_code_or_uid', req.url));
@@ -19,7 +22,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard?error=token_exchange_failed', req.url));
     }
 
-    // 1. Store tokens securely in user's subcollection
     const tokenData = {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token || '',
@@ -31,11 +33,8 @@ export async function GET(req: NextRequest) {
 
     await adminDb.collection('users').doc(uid).collection('tokens').doc('youtube').set(tokenData, { merge: true });
 
-    // 2. Fetch Channel Info directly
     try {
       const channelInfo = await fetchChannelInfo(uid);
-
-      // 3. Update main User profile with channel details
       await adminDb.collection('users').doc(uid).set(
         {
           channelId: channelInfo.id,
@@ -51,7 +50,6 @@ export async function GET(req: NextRequest) {
       console.warn('Could not fetch channel details immediately:', channelErr);
     }
 
-    // Redirect user back to dashboard with success message
     return NextResponse.redirect(new URL('/dashboard?connected=true', req.url));
   } catch (error: any) {
     console.error('OAuth Callback Processing Error:', error);
