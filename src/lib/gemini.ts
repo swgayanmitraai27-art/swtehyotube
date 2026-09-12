@@ -4,7 +4,7 @@ import { DEFAULT_CREATOR_PERSONA } from './constants';
 const apiKey = process.env.GEMINI_API_KEY || '';
 
 // Prioritized supported active Gemini model versions
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-flash-latest'];
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'];
 
 /**
  * Clean & format author handle for YouTube mentions
@@ -124,7 +124,7 @@ MANDATORY RULES:
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 1200,
+            maxOutputTokens: 3000,
             responseMimeType: 'application/json',
             responseSchema: {
               type: 'OBJECT',
