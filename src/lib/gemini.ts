@@ -3,8 +3,8 @@ import { DEFAULT_CREATOR_PERSONA } from './constants';
 
 const apiKey = process.env.GEMINI_API_KEY || '';
 
-// Prioritized supported active Gemini model versions
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'];
+// Prioritized active models: Gemma 4 31B IT as #1 Primary
+const GEMINI_MODELS = ['gemma-4-31b-it', 'gemma-4-26b-a4b-it', 'gemini-2.5-flash'];
 
 /**
  * Clean & format author handle for YouTube mentions
@@ -16,31 +16,62 @@ export function formatAuthorMention(authorDisplayName: string): string {
 }
 
 /**
- * Helper to parse and clean model suggestions
+ * Helper to safely extract JSON suggestions from raw output or markdown
  */
-function normalizeSuggestions(suggestions: any[], mention: string): AIReplySuggestion[] {
-  if (!Array.isArray(suggestions) || suggestions.length === 0) {
-    return [];
+function parseModelOutput(rawText: string, mention: string): AIReplySuggestion[] {
+  try {
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (parsed.suggestions && Array.isArray(parsed.suggestions) && parsed.suggestions.length > 0) {
+        return parsed.suggestions.map((s: any, idx: number) => {
+          let text = (s.text || '').trim();
+          if (mention && !text.startsWith(mention)) {
+            text = `${mention} ${text}`;
+          }
+          return {
+            id: String(idx + 1),
+            tone: s.tone || (idx === 0 ? 'hinglish_friendly' : idx === 1 ? 'quick_heart' : idx === 2 ? 'support_detailed' : 'witty_meme'),
+            toneLabel: s.toneLabel || (idx === 0 ? 'Motivating Mentor' : idx === 1 ? 'Confidence Booster' : idx === 2 ? 'Actionable Guide' : 'High Hustle'),
+            text,
+            autoMentioned: mention,
+          };
+        });
+      }
+    }
+  } catch (e) {
+    // Continue
   }
 
-  return suggestions.map((s: any, idx: number) => {
-    let text = (s.text || '').trim();
-    if (mention && !text.startsWith(mention)) {
-      text = `${mention} ${text}`;
-    }
-    return {
-      id: String(idx + 1),
-      tone: s.tone || (idx === 0 ? 'hinglish_friendly' : idx === 1 ? 'quick_heart' : idx === 2 ? 'support_detailed' : 'witty_meme'),
-      toneLabel: s.toneLabel || (idx === 0 ? 'Motivating Mentor' : idx === 1 ? 'Confidence Booster' : idx === 2 ? 'Actionable Guide' : 'High Hustle'),
-      text,
+  // Fallback
+  return [
+    {
+      id: '1',
+      tone: 'hinglish_friendly',
+      toneLabel: 'Motivating Mentor',
+      text: `${mention} Bilkul possible hai bhai! 💪 Mehnat aur consistent revision par focus karo, result zaroor aayega!`,
       autoMentioned: mention,
-    };
-  });
+    },
+    {
+      id: '2',
+      tone: 'quick_heart',
+      toneLabel: 'Confidence Booster',
+      text: `${mention} Mehnat karte raho, hum aapke saath hain! 🔥 All the best!`,
+      autoMentioned: mention,
+    },
+    {
+      id: '3',
+      tone: 'support_detailed',
+      toneLabel: 'Study Guidance',
+      text: `${mention} NCERT aur previous year questions (PYQs) ko daily practice karein aur description me diye gaye resources ko check karein! 📚`,
+      autoMentioned: mention,
+    },
+  ];
 }
 
 /**
  * Generate 3-4 multi-tone suggested replies dynamically tailored to the video's Title, Description, and Channel Persona
- * Powered directly by Google Gemini 2.5 Flash
+ * Powered by Google Gemma 4 31B IT Model
  */
 export async function generateHinglishReplySuggestions(
   commentText: string,
@@ -57,7 +88,7 @@ export async function generateHinglishReplySuggestions(
     nicheContext = `
 CATEGORY: 📚 EdTech / Board Exams / Online Education (e.g., SW Gyan Bhumi / Vidyakul)
 - Target Students: ${persona.targetAudience || 'Class 9th, 10th, 11th, 12th Board Exam Students'}
-- App Name: "${persona.appName || 'Official App'}"
+- App Name: "${persona.appName || 'SW Gyan Bhumi App'}"
 - App Download Link: "${persona.appDownloadLink || ''}"
 - Course / Batch Link: "${persona.courseOrWebsiteLink || ''}"
 - NICHE RULES:
@@ -79,7 +110,6 @@ CATEGORY: 📈 Finance / Stock Market / Trading
 `;
   }
 
-  // Trim video description for prompt context
   const trimmedDescription = videoDescription ? videoDescription.substring(0, 700) : '';
 
   const prompt = `
@@ -109,8 +139,33 @@ Generate 4 distinct, intelligent, hyper-relevant Hinglish replies:
 
 MANDATORY RULES:
 - Every suggestion text MUST start with the exact mention tag "${mention}".
-- Address the SPECIFIC topic of the comment (e.g., if they asked for board exam 98% in 4 months, address 4 months, NCERT, PYQs, and daily revision).
-- DO NOT give generic repetitive answers like "Thanks for watching". Make it 100% personalized!
+- Address the SPECIFIC topic of the comment.
+- Return output strictly formatted as JSON:
+
+{
+  "suggestions": [
+    {
+      "tone": "hinglish_friendly",
+      "toneLabel": "Motivating Mentor",
+      "text": "${mention} ..."
+    },
+    {
+      "tone": "quick_heart",
+      "toneLabel": "Confidence Booster",
+      "text": "${mention} ..."
+    },
+    {
+      "tone": "support_detailed",
+      "toneLabel": "4-Month Study Plan",
+      "text": "${mention} ..."
+    },
+    {
+      "tone": "witty_meme",
+      "toneLabel": "Hustle Booster",
+      "text": "${mention} ..."
+    }
+  ]
+}
 `;
 
   for (const model of GEMINI_MODELS) {
@@ -125,68 +180,30 @@ MANDATORY RULES:
           generationConfig: {
             temperature: 0.7,
             maxOutputTokens: 3000,
-            responseMimeType: 'application/json',
-            responseSchema: {
-              type: 'OBJECT',
-              properties: {
-                suggestions: {
-                  type: 'ARRAY',
-                  items: {
-                    type: 'OBJECT',
-                    properties: {
-                      tone: { type: 'STRING' },
-                      toneLabel: { type: 'STRING' },
-                      text: { type: 'STRING' },
-                    },
-                    required: ['tone', 'toneLabel', 'text'],
-                  },
-                },
-              },
-              required: ['suggestions'],
-            },
           },
         }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        const parts = data.candidates?.[0]?.content?.parts || [];
+        // Filter out reasoning/thought parts from Gemma 4
+        const answerPart = parts.find((p: any) => !p.thought) || parts[parts.length - 1];
+        const rawText = answerPart?.text || '';
+        
         if (rawText) {
-          const parsed = JSON.parse(rawText);
-          if (parsed.suggestions && parsed.suggestions.length > 0) {
-            return normalizeSuggestions(parsed.suggestions, mention);
+          const suggestions = parseModelOutput(rawText, mention);
+          if (suggestions.length > 0) {
+            return suggestions;
           }
         }
       }
     } catch (error) {
-      console.warn(`Gemini model ${model} error, trying next fallback:`, error);
+      console.warn(`Model ${model} error, trying next fallback:`, error);
     }
   }
 
-  // Context-aware smart fallback if all models fail
-  return [
-    {
-      id: '1',
-      tone: 'hinglish_friendly',
-      toneLabel: 'Motivating Mentor',
-      text: `${mention} Bilkul possible hai bhai! 💪 Mehnat aur consistent revision par focus karo, result zaroor aayega!`,
-      autoMentioned: mention,
-    },
-    {
-      id: '2',
-      tone: 'quick_heart',
-      toneLabel: 'Confidence Booster',
-      text: `${mention} Mehnat karte raho, hum aapke saath hain! 🔥 All the best!`,
-      autoMentioned: mention,
-    },
-    {
-      id: '3',
-      tone: 'support_detailed',
-      toneLabel: 'Study Guidance',
-      text: `${mention} NCERT aur previous year questions (PYQs) ko daily practice karein aur description me diye gaye resources ko check karein! 📚`,
-      autoMentioned: mention,
-    },
-  ];
+  return parseModelOutput('', mention);
 }
 
 /**
