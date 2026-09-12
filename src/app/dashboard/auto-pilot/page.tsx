@@ -107,19 +107,6 @@ export default function AutoPilotPage() {
         </div>
       )}
 
-      {/* 24/7 Cloud Background Sync Info */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 border border-emerald-500/30">
-        <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-1.5">
-          <Zap className="w-4 h-4 fill-emerald-400" />
-          24/7 Background Auto-Pilot (Cloud Autonomous Mode)
-        </div>
-        <p className="text-xs text-zinc-300 leading-relaxed max-w-2xl mb-3">
-          Auto-Pilot runs in the cloud continuously. Once enabled, comments are processed automatically without keeping this tab or your PC open.
-        </p>
-        <div className="p-3 bg-zinc-950 rounded-xl border border-zinc-800 text-[11px] font-mono text-zinc-400 flex items-center justify-between gap-2 overflow-x-auto">
-          <span>Background Webhook Endpoint: <strong className="text-white">https://www.swgayanbhumi.in/api/youtube/sync-auto-pilot</strong></span>
-        </div>
-      </div>
 
       {/* Auto-Pilot Rules & Information */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
