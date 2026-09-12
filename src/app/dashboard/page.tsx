@@ -95,13 +95,22 @@ export default function DashboardOverviewPage() {
             </div>
           </div>
 
-          <Link
-            href="/dashboard/comments"
-            className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-md shadow-rose-600/20"
-          >
-            <MessageSquareReply className="w-4 h-4" />
-            Open Unreplied Comments Feed
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/dashboard/playground"
+              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-all border border-zinc-700/50"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+              AI Playground
+            </Link>
+            <Link
+              href="/dashboard/comments"
+              className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-md shadow-rose-600/20"
+            >
+              <MessageSquareReply className="w-4 h-4" />
+              Open Comments Feed
+            </Link>
+          </div>
         </div>
       )}
 

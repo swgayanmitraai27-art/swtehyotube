@@ -22,6 +22,7 @@ export default function Sidebar() {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'AI Playground', href: '/dashboard/playground', icon: Sparkles, badge: 'NEW' },
     { name: 'Live Comments', href: '/dashboard/comments', icon: MessageSquareReply, badge: 'Copilot' },
     { name: 'Auto-Pilot Rules', href: '/dashboard/auto-pilot', icon: Bot, badge: profile?.autoPilotEnabled ? 'ON' : 'OFF' },
     { name: 'AI Persona & Tone', href: '/dashboard/settings', icon: Sliders },
