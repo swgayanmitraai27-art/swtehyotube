@@ -293,6 +293,23 @@ export default function PersonaSettings() {
             />
           </div>
         </div>
+
+        <div className="mt-4 pt-4 border-t border-zinc-800/80">
+          <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+            <span>Creator's Custom AI Instructions & Rules (विशेष निर्देश)</span>
+            <span className="text-[10px] text-rose-400 font-bold">Google Gemma 4 Strictly Follows</span>
+          </label>
+          <textarea
+            rows={3}
+            value={settings.customInstructions || ''}
+            onChange={(e) => setSettings({ ...settings, customInstructions: e.target.value })}
+            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 resize-none"
+            placeholder="e.g. 1. Hamesha student ko 'beta/bhai' kehkar motivate karo, 2. Har doubt me Telegram group join karne ko bolo, 3. Kabhi rude ya negative reply mat do, 4. Shuruat 'Namaste' se karo..."
+          />
+          <p className="text-[11px] text-zinc-500 mt-1">
+            Aap jo bhi niyam yahan likhenge, Google Gemma 4 AI har ek comment reply me unhe 100% follow karega.
+          </p>
+        </div>
       </div>
 
       {/* Quota & Spam Protection Rules */}

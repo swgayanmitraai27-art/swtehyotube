@@ -124,6 +124,7 @@ export interface CreatorPersonaConfig {
   targetAudience?: string;       // e.g. "Class 9th to 12th Board Exam Students"
   customSignature?: string;
   callToAction?: string;
+  customInstructions?: string;   // Creator's custom rules e.g. "Always start with Radhe Radhe, promote batch link"
   commonFaqs?: CommonFAQ[];
   blacklistKeywords: string[];
   autoLikeOnReply: boolean;

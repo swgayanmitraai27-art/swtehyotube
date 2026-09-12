@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { uid, commentText, authorName, videoTitle, videoDescription } = body;
+    const { uid, commentText, authorName, videoTitle, videoDescription, customInstructions } = body;
 
     if (!commentText || !authorName) {
       return NextResponse.json({ error: 'Missing commentText or authorName' }, { status: 400 });
@@ -39,7 +39,8 @@ export async function POST(req: NextRequest) {
       authorName,
       videoTitle || 'YouTube Video',
       videoDescription || '',
-      persona
+      persona,
+      customInstructions || ''
     );
 
     return NextResponse.json({

@@ -17,6 +17,7 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   appDownloadLink: '',
   courseOrWebsiteLink: '',
   callToAction: 'Video pasand aayi toh like and share karna mat bhoolna!',
+  customInstructions: '',
   blacklistKeywords: [
     'sub4sub',
     'subscribe my channel',

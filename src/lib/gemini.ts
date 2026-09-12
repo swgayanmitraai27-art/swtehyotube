@@ -78,7 +78,8 @@ export async function generateHinglishReplySuggestions(
   authorName: string,
   videoTitle: string = 'YouTube Video',
   videoDescription: string = '',
-  persona: CreatorPersonaConfig = DEFAULT_CREATOR_PERSONA
+  persona: CreatorPersonaConfig = DEFAULT_CREATOR_PERSONA,
+  oneTimeInstruction: string = ''
 ): Promise<AIReplySuggestion[]> {
   const mention = formatAuthorMention(authorName);
 
@@ -88,7 +89,7 @@ export async function generateHinglishReplySuggestions(
     nicheContext = `
 CATEGORY: 📚 EdTech / Board Exams / Online Education (e.g., SW Gyan Bhumi / Online Classes)
 - Target Students: ${persona.targetAudience || 'Class 9th, 10th, 11th, 12th Board Exam Students'}
-- App Name: "${persona.appName || 'SW Gyan Bhumi App'}"
+- App Name: "${persona.appName || 'Official App'}"
 - App Download Link: "${persona.appDownloadLink || ''}"
 - Course / Batch Link: "${persona.courseOrWebsiteLink || ''}"
 - NICHE RULES:
@@ -108,7 +109,18 @@ CATEGORY: 📈 Finance / Stock Market / Trading
 - NICHE RULES:
   * Professional, informative, educational tone.
 `;
+  } else if (persona.category === 'business_consulting') {
+    nicheContext = `
+CATEGORY: 💼 Business / Agency / Lead Generation
+- NICHE RULES:
+  * Helpful, authoritative. Guide serious clients to consultation link or contact info.
+`;
   }
+
+  const combinedCustomRules = [persona.customInstructions, oneTimeInstruction].filter(Boolean).join('; ');
+  const customRulesBlock = combinedCustomRules
+    ? `\nCREATOR'S MANDATORY CUSTOM INSTRUCTIONS / SPECIAL RULES:\n"${combinedCustomRules}"\n- You MUST strictly follow and embed these special creator rules in all reply variations!\n`
+    : '';
 
   const trimmedDescription = videoDescription ? videoDescription.substring(0, 700) : '';
 
@@ -128,9 +140,9 @@ COMMENTER & QUERY:
 - Viewer's Exact Comment: "${commentText}"
 
 ${nicheContext}
-
+${customRulesBlock}
 TASK:
-Deeply understand the viewer's exact question, doubt, or feedback in relation to the Video Title & Description.
+Deeply understand the viewer's exact question, doubt, or feedback in relation to the Video Title & Description and Creator's Special Instructions.
 Generate 4 distinct, intelligent, hyper-relevant Hinglish replies:
 1. "hinglish_friendly": Motivating, warm, brotherly/mentor response directly addressing their question.
 2. "quick_heart": Energetic, supportive confidence booster with emojis (1-2 lines).

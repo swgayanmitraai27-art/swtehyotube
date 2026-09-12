@@ -20,7 +20,8 @@ import {
   TrendingUp,
   Briefcase,
   Gamepad2,
-  Camera
+  Camera,
+  Sliders
 } from 'lucide-react';
 import { AIReplySuggestion } from '@/types';
 
@@ -33,6 +34,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'Download Chapterwise PDF Notes from our official app. Batch enrollment link: https://swgayanbhumi.in/batch',
     commenter: 'Rahul_Kumar_10th',
     comment: 'HELLO MERA MUJHE BOERD EXAM MAI 98 PARSENT LANA HAI MUJHE AAP GIDE AKR DIJIYE TIME BHUT KAM BAHA SIRF 4 MONTH HI BACHA HAI',
+    instruction: 'Hamesha student ko "Shaabaash beta" bolo, 4 months timetable recommend karo aur app link batao.',
   },
   {
     category: 'tech',
@@ -42,6 +44,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'Complete GitHub Source Code repository link in description. Join Discord for developer doubts.',
     commenter: 'Vikram_Dev_99',
     comment: 'Bhai tutorial bahut tagda tha! Is project ka GitHub source code aur installation commands kahan milengi?',
+    instruction: 'Friendly developer tone me reply karo aur bolo description me GitHub repo link pinned hai.',
   },
   {
     category: 'finance',
@@ -51,6 +54,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'Open Free Demat Account: https://broker.link/swtech. Join our Zero to Hero Trading Masterclass Batch.',
     commenter: 'Aakash_Investor',
     comment: 'Sir kya main ₹5,000 se start kar sakta hoon? Aur aapka complete trading batch kab shuru ho raha hai?',
+    instruction: 'Polite finance mentor tone me bolo ki ₹5,000 se SIP/learning start ho sakti hai aur masterclass link description me hai.',
   },
   {
     category: 'business_consulting',
@@ -60,6 +64,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'Book a 1-on-1 Growth Consultation call with our agency: https://swgayanbhumi.in/consult',
     commenter: 'Sneha_AgencyOwner',
     comment: 'Sir mujhe meri agency ke liye sales strategy me help chahiye. Kya aapse 1-on-1 consultation book kar sakte hain?',
+    instruction: 'Professional tone me welcome karo aur description me 1-on-1 booking link check karne ko bolo.',
   },
   {
     category: 'vlog_lifestyle',
@@ -69,6 +74,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'Follow me on Instagram for daily stories. Next Sunday big surprise video coming!',
     commenter: 'Priya_Vlogs_Fan',
     comment: 'Bhai ye cafe kahan par hai? Aur aapka video edit karne ka style ek number hai, Sunday ka intezar hai! ❤️🔥',
+    instruction: 'High energy grateful tone me cafe ki location batao aur Sunday video ka hype create karo.',
   },
   {
     category: 'gaming',
@@ -78,6 +84,7 @@ const SAMPLE_PRESETS = [
     videoDescription: 'BGMI Sensitivity code & iPad setup details in pinned comment. Live every night 9 PM.',
     commenter: 'Gamer_Rohit_Pro',
     comment: 'Bhai kya OP clutch mara! Aapka gyroscope sensitivity code share kar do please aur next live kab aao ge?',
+    instruction: 'OP streamer vibe me bolo daily night 9 PM live aate hain aur sensitivity pinned comment me hai.',
   },
 ];
 
@@ -88,6 +95,7 @@ export default function AIPlayground() {
   const [videoDescription, setVideoDescription] = useState(SAMPLE_PRESETS[0].videoDescription);
   const [authorName, setAuthorName] = useState(SAMPLE_PRESETS[0].commenter);
   const [commentText, setCommentText] = useState(SAMPLE_PRESETS[0].comment);
+  const [customInstructions, setCustomInstructions] = useState(SAMPLE_PRESETS[0].instruction || '');
   const [loading, setLoading] = useState(false);
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [suggestions, setSuggestions] = useState<AIReplySuggestion[] | null>(null);
@@ -100,6 +108,7 @@ export default function AIPlayground() {
     setVideoDescription(p.videoDescription);
     setAuthorName(p.commenter);
     setCommentText(p.comment);
+    setCustomInstructions(p.instruction || '');
     setSuggestions(null);
   };
 
@@ -119,6 +128,7 @@ export default function AIPlayground() {
           authorName,
           videoTitle,
           videoDescription,
+          customInstructions: customInstructions.trim() || undefined,
         }),
       });
 
@@ -153,7 +163,7 @@ export default function AIPlayground() {
           </div>
           <h2 className="text-xl font-extrabold text-white">Live AI Reply Simulation Lab</h2>
           <p className="text-xs text-zinc-400 mt-1 max-w-2xl leading-relaxed">
-            Test how Google Gemma 4 31B AI reads your <strong>Video Title</strong>, <strong>Video Description</strong>, and <strong>Channel Persona</strong> in real-time to generate natural, hyper-relevant Hinglish & Multilingual replies before posting to YouTube!
+            Test how Google Gemma 4 31B AI reads your <strong>Video Title</strong>, <strong>Video Description</strong>, and <strong>Custom Creator Instructions</strong> in real-time to generate natural, hyper-relevant Hinglish & Multilingual replies before posting to YouTube!
           </p>
         </div>
       </div>
@@ -242,11 +252,28 @@ export default function AIPlayground() {
           <div>
             <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Viewer's Comment</label>
             <textarea
-              rows={3}
+              rows={2}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-100 focus:outline-none focus:border-rose-500 resize-none font-mono"
               placeholder="Type any YouTube comment here..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-rose-400" />
+                Creator's Custom AI Instruction (विशेष निर्देश)
+              </span>
+              <span className="text-[10px] text-zinc-500">Optional Rule</span>
+            </label>
+            <input
+              type="text"
+              value={customInstructions}
+              onChange={(e) => setCustomInstructions(e.target.value)}
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-rose-500"
+              placeholder="e.g. Hamesha student ko motivate karo, batch link batao, polite raho..."
             />
           </div>
 
@@ -290,7 +317,7 @@ export default function AIPlayground() {
                 <div className="w-10 h-10 border-4 border-rose-500/20 border-t-rose-500 rounded-full animate-spin mx-auto" />
                 <p className="text-xs font-semibold text-zinc-300">Gemma 4 31B Reasoning in Progress...</p>
                 <p className="text-[11px] text-zinc-500 max-w-xs mx-auto">
-                  Analyzing Video Title, Description context, and drafting multi-tone Hinglish replies.
+                  Analyzing Video Title, Description, Commenter, and Custom Instructions to generate 4 multi-tone replies.
                 </p>
               </div>
             ) : suggestions && suggestions.length > 0 ? (
@@ -327,7 +354,7 @@ export default function AIPlayground() {
             ) : (
               <div className="py-16 text-center text-zinc-500 text-xs">
                 <BrainCircuit className="w-8 h-8 mx-auto mb-2 text-zinc-600" />
-                Click <strong>"Run Google Gemma 4 31B AI Simulation"</strong> to test live replies with your custom persona!
+                Click <strong>"Run Google Gemma 4 31B AI Simulation"</strong> to test live replies with your custom persona & instructions!
               </div>
             )}
           </div>
@@ -335,7 +362,7 @@ export default function AIPlayground() {
           <div className="mt-4 pt-4 border-t border-zinc-800/80 text-[11px] text-zinc-400 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <BrainCircuit className="w-3.5 h-3.5 text-rose-400" />
-              100% Dynamic Video Context
+              100% Dynamic Video & Custom Rules Context
             </span>
             <span className="text-emerald-400 font-medium">Free Playground Simulation</span>
           </div>
