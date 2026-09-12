@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import CommentCard from '@/components/dashboard/CommentCard';
@@ -15,7 +15,7 @@ import {
   Youtube
 } from 'lucide-react';
 
-export default function CommentsStudioPage() {
+function CommentsStudioContent() {
   const { user, profile, isYouTubeConnected, connectYouTubeChannel, refreshProfile } = useAuth();
   const searchParams = useSearchParams();
   const videoId = searchParams.get('videoId') || undefined;
@@ -213,3 +213,12 @@ export default function CommentsStudioPage() {
     </div>
   );
 }
+
+export default function CommentsStudioPage() {
+  return (
+    <Suspense fallback={<div className="p-12 text-center text-xs text-zinc-400">Loading Comments Studio...</div>}>
+      <CommentsStudioContent />
+    </Suspense>
+  );
+}
+
