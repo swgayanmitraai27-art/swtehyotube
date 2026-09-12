@@ -62,59 +62,59 @@ export interface IndianPricingTier {
 export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
   {
     id: 'starter',
-    name: '🚀 Starter',
+    name: '🚀 Starter (Value King)',
     badge: 'Micro Creators',
-    idealFor: 'New/Micro Creators (10k-50k Subs)',
+    idealFor: 'New & Micro Creators (10k-50k Subs)',
     monthlyPrice: 499,
     yearlyPrice: 4990, // Pay 10 months, get 12 months (2 Months Free)
-    monthlyCredits: 1000, // Upgraded from 500 to 1,000 replies
-    yearlyCredits: 12000,
+    monthlyCredits: 2000, // 2,000 replies / mo
+    yearlyCredits: 24000,
     features: [
-      '1,000 AI Replies / Month (12,000/yr)',
+      '2,000 AI Replies / Month (24,000/yr)',
       '1-Click YouTube Connect',
-      'Hinglish AI Natural Tone Engine',
-      'Copilot Review Mode',
+      'Google Gemma 4 31B Multi-Lingual Engine (140+ Languages)',
+      'Copilot Review Mode & Instant Post',
       'Basic Analytics & Reply History',
-      'Standard Rate Limiting'
+      'Spam & Emoji Pre-Filter Protection'
     ]
   },
   {
     id: 'pro',
-    name: '🔥 Pro',
+    name: '🔥 Pro (Market Grabber)',
     badge: 'Best Value',
     popular: true,
     idealFor: 'Growing Creators (50k-300k Subs)',
     monthlyPrice: 999,
     yearlyPrice: 9990, // 2 Months Free
-    monthlyCredits: 2500, // Upgraded from 1,500 to 2,500 replies
-    yearlyCredits: 30000,
+    monthlyCredits: 4000, // 4,000 replies / mo
+    yearlyCredits: 48000,
     features: [
-      '2,500 AI Replies / Month (30,000/yr)',
-      'Full Auto-Pilot Hands-Free Mode',
-      'Smart Filter (Skip Emoji-Only & Save Quota)',
-      'Custom Brand Voice (Friendly / Polite / Funny)',
+      '4,000 AI Replies / Month (48,000/yr)',
+      'Full 24/7 Hands-Free Auto-Pilot Mode',
+      'AI Toxic & Abusive Comment Auto-Delete',
+      'Custom Brand Voice (Friendly / Mentor / Polite)',
       'Auto-Mention @username Integration',
-      'Priority Fast Gemma 4 31B Queue',
-      '24/7 Background Comment Sync'
+      'Priority Fast Google Gemma 4 31B Queue',
+      'Custom Promotional CTA & Batch Links'
     ]
   },
   {
     id: 'enterprise',
-    name: '👑 Enterprise / Elite',
-    badge: 'Big Creators & Agencies',
-    idealFor: 'Big Creators / Agencies (300k+ Subs)',
+    name: '👑 Enterprise (The Vidyakul Special)',
+    badge: 'Big Creators & Institutes',
+    idealFor: 'Big Creators / Institutes & Agencies (300k+ Subs)',
     monthlyPrice: 2499,
     yearlyPrice: 24990, // 2 Months Free
-    monthlyCredits: 10000, // Upgraded from 4,000 to 10,000 replies
-    yearlyCredits: 120000,
+    monthlyCredits: 8000, // 8,000 replies / mo
+    yearlyCredits: 96000,
     features: [
-      '10,000 AI Replies / Month (120,000/yr)',
-      'Multi-Channel Linking (Up to 3 Channels)',
-      'Sentiment Analysis (Auto-Filter Toxic / Hate Comments)',
-      'Custom Finetuned Channel Persona & App Link',
-      'Dedicated Quota Management Guard',
+      '8,000 AI Replies / Month (96,000/yr)',
+      'Multi-Channel Linking (Up to 6 Channels)',
+      'Advanced Toxic / Hate Speech Auto-Purge',
+      'Custom Finetuned Channel Persona & App Links',
+      'Dedicated YouTube Quota Management Guard',
       'Direct WhatsApp 24/7 Priority Support',
-      'Custom Promotional CTA & Link Embedding'
+      'Custom Promotional Call-To-Action Embedding'
     ]
   }
 ];
