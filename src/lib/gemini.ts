@@ -3,8 +3,8 @@ import { DEFAULT_CREATOR_PERSONA } from './constants';
 
 const apiKey = process.env.GEMINI_API_KEY || '';
 
-// Prioritized active models: Gemma 4 31B IT as #1 Primary
-const GEMINI_MODELS = ['gemma-4-31b-it', 'gemma-4-26b-a4b-it', 'gemini-2.5-flash'];
+// Powered strictly by Google Gemma 4 Thinking Models
+const GEMMA_MODELS = ['gemma-4-31b-it', 'gemma-4-26b-a4b-it'];
 
 /**
  * Clean & format author handle for YouTube mentions
@@ -168,7 +168,7 @@ MANDATORY RULES:
 }
 `;
 
-  for (const model of GEMINI_MODELS) {
+  for (const model of GEMMA_MODELS) {
     try {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 

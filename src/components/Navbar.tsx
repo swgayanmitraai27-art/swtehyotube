@@ -20,7 +20,7 @@ export default function Navbar() {
             <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5">
               SW Tech <span className="text-rose-500 font-extrabold">AutoReply</span>
             </span>
-            <span className="text-[10px] text-zinc-400 block -mt-1">Hinglish AI YouTube Automation</span>
+            <span className="text-[10px] text-zinc-400 block -mt-1">Powered by Google Gemma 4 31B AI</span>
           </div>
         </Link>
 

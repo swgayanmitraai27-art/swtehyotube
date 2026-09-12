@@ -98,7 +98,24 @@ export interface CreatorPersonaConfig {
   channelName: string;
   creatorName: string;
   category: ChannelCategory;
-  languageMode: 'hinglish' | 'hindi' | 'english' | 'auto';
+  languageMode:
+    | 'hinglish'
+    | 'hindi'
+    | 'gujarati'
+    | 'bhojpuri'
+    | 'bengali'
+    | 'marathi'
+    | 'tamil'
+    | 'telugu'
+    | 'punjabi'
+    | 'urdu'
+    | 'english'
+    | 'spanish'
+    | 'french'
+    | 'german'
+    | 'japanese'
+    | 'arabic'
+    | 'auto';
   toneStyle: 'friendly_bro' | 'pro_mentor' | 'witty_energetic' | 'polite_support';
   personaBio: string;
   appName?: string;              // e.g. "Vidyakul App"

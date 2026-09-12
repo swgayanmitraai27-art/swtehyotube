@@ -14,9 +14,12 @@ import {
   CheckCircle2, 
   ArrowRight, 
   Gift,
-  Flame,
-  Crown,
-  Rocket
+  Globe2,
+  BrainCircuit,
+  Languages,
+  Layers,
+  Compass,
+  Check
 } from 'lucide-react';
 import { INDIAN_TIER_PLANS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
@@ -49,24 +52,34 @@ export default function LandingPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
+      <section className="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
         {/* Background Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-rose-600/15 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[380px] bg-gradient-to-r from-rose-600/20 via-red-600/15 to-amber-600/10 blur-[130px] rounded-full pointer-events-none" />
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-6 animate-pulse">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>India's 1st Hinglish YouTube AI Comment Automation</span>
+        {/* Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/25 text-rose-400 text-xs font-semibold shadow-inner">
+            <BrainCircuit className="w-4 h-4 text-rose-400 animate-pulse" />
+            <span>Powered by Google Gemma 4 31B IT Thinking Model</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+            <Globe2 className="w-3.5 h-3.5" />
+            <span>140+ Global Languages • 35+ Deep Mastery</span>
+          </div>
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-[1.15] max-w-4xl mx-auto">
-          Turn Every YouTube Comment Into a <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-red-500 to-amber-500">Superfan with AI.</span>
+        <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.12] max-w-5xl mx-auto">
+          Turn Every YouTube Comment Into a Superfan with{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-red-500 to-amber-500">
+            Google Gemma 4 31B AI.
+          </span>
         </h1>
 
-        <p className="mt-6 text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-          Non-stop automated <strong>Hinglish replies</strong> that sound 100% like you. 
-          Boost your YouTube algorithm ranking, engage every viewer, and safeguard your 10k daily API quota.
+        <p className="mt-6 text-base sm:text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed">
+          The next-generation <strong>Google AI Thinking Model</strong> that deeply analyzes your 
+          <strong> Video Title</strong>, <strong>Video Description</strong>, and <strong>Channel Persona</strong> before crafting 
+          hyper-relevant, natural Hinglish, Regional Indian & Global language replies that sound 100% like you.
         </p>
 
         {/* CTAs */}
@@ -92,60 +105,167 @@ export default function LandingPage() {
             <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 50 Free Trial Welcome Credits
           </span>
           <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" /> 10k Quota Saver Guard
+            <BrainCircuit className="w-4 h-4 text-rose-400" /> Google Gemma 4 31B Deep Reasoning
           </span>
           <span className="flex items-center gap-1.5">
-            <Bot className="w-4 h-4 text-rose-400" /> Gemini 1.5 Flash Speed
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> 10k Quota Saver Guard
           </span>
         </div>
 
         {/* Interactive Visual Preview */}
-        <div className="mt-14 max-w-4xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-6 shadow-2xl backdrop-blur-xl text-left">
+        <div className="mt-14 max-w-4xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900/70 p-4 sm:p-6 shadow-2xl backdrop-blur-xl text-left">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-rose-500/80" />
               <div className="w-3 h-3 rounded-full bg-amber-500/80" />
               <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-              <span className="text-xs font-semibold text-zinc-400 ml-2">Live Hinglish Comment Auto-Reply Engine</span>
+              <span className="text-xs font-semibold text-zinc-300 ml-2">
+                Live Google Gemma 4 31B Dynamic AI Reply Engine
+              </span>
             </div>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
-              Auto-Pilot Active
+            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold flex items-center gap-1">
+              <BrainCircuit className="w-3 h-3" /> Thinking Model Active
             </span>
           </div>
 
           <div className="space-y-4">
-            {/* Sample 1 */}
+            {/* Sample 1: Board Exam / EdTech */}
             <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-zinc-300">@rahul_coder99</span>
-                <span className="text-[10px] text-zinc-500">2 mins ago</span>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-zinc-300">@SWGYANBHUMI</span>
+                <span className="text-[10px] text-zinc-500">Video: 4 Months Board Exam Master Plan</span>
               </div>
-              <p className="text-sm text-zinc-200 mb-3">"Bhai kya mast video thi! Iska part 2 kab aayega please batado??"</p>
+              <p className="text-sm text-zinc-200 mb-3 font-medium">
+                "HELLO MERA MUJHE BOERD EXAM MAI 98 PARSENT LANA HAI MUJHE AAP GIDE AKR DIJIYE TIME BHUT KAM BAHA SIRF 4 MONTH HI BACHA HAI"
+              </p>
               
-              <div className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 text-xs text-rose-200 flex items-start gap-2.5">
+              <div className="p-3.5 rounded-xl bg-gradient-to-r from-rose-950/30 to-zinc-900/60 border border-rose-500/30 text-xs text-rose-200 flex items-start gap-2.5">
                 <Bot className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-[10px] text-rose-400 block uppercase">Gemini 1.5 Auto-Reply</span>
-                  <p>@rahul_coder99 Shukriya bhai! ❤️ Part 2 par kaam chal raha hai, Sunday ko shaam 6 baje live hoga! Stay tuned! 🔥</p>
+                  <span className="font-bold text-[10px] text-rose-400 block uppercase tracking-wider mb-0.5">
+                    Google Gemma 4 31B Context-Aware Reply
+                  </span>
+                  <p className="text-zinc-200 leading-relaxed">
+                    @SWGYANBHUMI 98% ka target set kiya hai, bahut badhiya! 🙌 4 mahine mein bhi aaram se achieve hoga: 
+                    1. NCERT line-by-line cover karo, 2. Pichle 10 saal ke PYQs solve karo, 3. Daily strict timetable follow karo. 
+                    Detailed chapterwise notes ke liye description me diya gaya App link check karein! All the best beta! 📚💪
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Sample 2 */}
+            {/* Sample 2: Regional Gujarati / Hindi */}
             <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-zinc-300">@tech_lover_india</span>
-                <span className="text-[10px] text-zinc-500">8 mins ago</span>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-zinc-300">@patel_gujarat_student</span>
+                <span className="text-[10px] text-zinc-500">Gujarati Board Exam Batch</span>
               </div>
-              <p className="text-sm text-zinc-200 mb-3">"OP Bhaiya! Dil khush kar diya systemm 🔥"</p>
+              <p className="text-sm text-zinc-200 mb-3 font-medium">
+                "સર નવો બેચ ક્યારે શરૂ થશે? અને મટીરીયલ ક્યાં મળશે?"
+              </p>
               
-              <div className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 text-xs text-rose-200 flex items-start gap-2.5">
-                <Bot className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/30 to-zinc-900/60 border border-emerald-500/30 text-xs text-emerald-200 flex items-start gap-2.5">
+                <Bot className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-[10px] text-rose-400 block uppercase">Gemini 1.5 Auto-Reply</span>
-                  <p>@tech_lover_india Love you brother! ❤️ Aise hi support banaye rakho, next video aur bhi dhamaakedaar hogi!</p>
+                  <span className="font-bold text-[10px] text-emerald-400 block uppercase tracking-wider mb-0.5">
+                    Google Gemma 4 31B Regional Language Reply (ગુજરાતી)
+                  </span>
+                  <p className="text-zinc-200 leading-relaxed">
+                    @patel_gujarat_student નમસ્તે ભાઈ! 🙏 નવો બેચ આગામી સોમવારથી શરૂ થઈ રહ્યો છે. બધા મટીરીયલ અને PDF નોટ્સ 
+                    ડિસ્ક્રિપ્શનમાં આપેલ એપ લિંક પરથી ડાઉનલોડ કરી શકો છો. મન લગાવીને તૈયારી કરો! 🎯
+                  </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Language & Intelligence Showcase Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-900">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
+            <Languages className="w-3.5 h-3.5" />
+            Global AI Multilingual Engine
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            140+ Languages Supported with <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-red-500 to-amber-500">
+              Deep Mastery in 35+ Major Languages
+            </span>
+          </h2>
+          <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Google Gemma 4 31B IT delivers breakthrough multilingual performance across Indian regional languages and international global markets.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Card 1: Indian & Hinglish */}
+          <div className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
+                <Languages className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">🇮🇳 Hindi, Hinglish & Regional</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                100% natural comprehension for Devanagari Hindi and conversational Hinglish (e.g. <em>"Sir naya batch kab aayega, please reply!"</em>).
+              </p>
+              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                {['Hinglish', 'हिन्दी (Hindi)', 'ગુજરાતી (Gujarati)', 'भोजपुरी (Bhojpuri)', 'বাংলা (Bengali)', 'मराठी (Marathi)', 'தமிழ் (Tamil)', 'తెలుగు (Telugu)', 'ਪੰਜਾਬੀ (Punjabi)', 'اردو (Urdu)'].map((lang) => (
+                  <span key={lang} className="px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 font-medium">
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-rose-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Tailored for Vidyakul & State Boards
+            </div>
+          </div>
+
+          {/* Card 2: European Languages */}
+          <div className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-amber-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4">
+                <Globe2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">🌍 European & Western Markets</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                Ready for international expansion with major European languages processed with high nuance and cultural context.
+              </p>
+              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                {['English (US/UK)', 'Español (Spanish)', 'Français (French)', 'Deutsch (German)', 'Italiano (Italian)', 'Nederlands (Dutch)', 'Dansk (Danish)'].map((lang) => (
+                  <span key={lang} className="px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 font-medium">
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-amber-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Global Stripe Billing Ready
+            </div>
+          </div>
+
+          {/* Card 3: Asian & Middle-Eastern */}
+          <div className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                <Compass className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">🌏 Asian & Middle-Eastern</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                Deep character, script, and vocabulary understanding across East Asia and Middle East languages.
+              </p>
+              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                {['日本語 (Japanese)', '한국어 (Korean)', '中文 (Mandarin)', 'العربية (Arabic)', 'فارسی (Persian/Farsi)'].map((lang) => (
+                  <span key={lang} className="px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 font-medium">
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> 140+ Worldwide Languages
             </div>
           </div>
         </div>
@@ -160,7 +280,7 @@ export default function LandingPage() {
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Choose Your Growth Plan</h2>
           <p className="text-sm text-zinc-400 mt-2">
-            Save hours every week. Safe Gemini AI limits keep your profit margins over 90%.
+            Save hours every week. Google Gemma 4 31B AI automation with guaranteed 90%+ profit margins.
           </p>
 
           {/* Monthly / Yearly Switch with 2 Months Free */}
@@ -271,7 +391,7 @@ export default function LandingPage() {
             <Link href="/privacy" className="hover:text-rose-400 transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-rose-400 transition-colors">Terms of Service</Link>
           </div>
-          <p>© {new Date().getFullYear()} SW Tech Solution. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} SW Tech Solution • Powered by Google Gemma 4 31B AI</p>
         </div>
       </footer>
 

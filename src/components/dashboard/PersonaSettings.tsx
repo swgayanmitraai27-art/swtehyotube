@@ -216,10 +216,29 @@ export default function PersonaSettings() {
               onChange={(e: any) => setSettings({ ...settings, languageMode: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
             >
-              <option value="hinglish">🇮🇳 Hinglish (Natural Indian Conversational - Recommended)</option>
-              <option value="hindi">🇮🇳 Shuddh Hindi</option>
-              <option value="english">🇺🇸 Casual English</option>
-              <option value="auto">🌐 Auto-Detect</option>
+              <optgroup label="🇮🇳 Indian & Regional Languages">
+                <option value="hinglish">🇮🇳 Hinglish (Natural Indian Conversational - Recommended)</option>
+                <option value="hindi">🇮🇳 हिन्दी (Pure Devanagari Hindi)</option>
+                <option value="gujarati">🇮🇳 ગુજરાતી (Gujarati - State Boards)</option>
+                <option value="bhojpuri">🇮🇳 भोजपुरी (Bhojpuri)</option>
+                <option value="bengali">🇮🇳 বাংলা (Bengali)</option>
+                <option value="marathi">🇮🇳 मराठी (Marathi)</option>
+                <option value="tamil">🇮🇳 தமிழ் (Tamil)</option>
+                <option value="telugu">🇮🇳 తెలుగు (Telugu)</option>
+                <option value="punjabi">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
+                <option value="urdu">🇮🇳 اردو (Urdu)</option>
+              </optgroup>
+              <optgroup label="🌍 Global & International Languages">
+                <option value="english">🇺🇸 English (US / UK)</option>
+                <option value="spanish">🇪🇸 Español (Spanish)</option>
+                <option value="french">🇫🇷 Français (French)</option>
+                <option value="german">🇩🇪 Deutsch (German)</option>
+                <option value="japanese">🇯🇵 日本語 (Japanese)</option>
+                <option value="arabic">🇸🇦 العربية (Arabic)</option>
+              </optgroup>
+              <optgroup label="🤖 Intelligent Mode">
+                <option value="auto">🌐 Auto-Detect (Google Gemma 4 140+ Languages)</option>
+              </optgroup>
             </select>
           </div>
 
