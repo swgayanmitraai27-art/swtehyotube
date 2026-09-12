@@ -101,7 +101,7 @@ export default function Sidebar() {
           className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition-colors"
         >
           <Sparkles className="w-3 h-3 text-rose-400" />
-          Upgrade to ₹499/mo
+          Upgrade / Top Up Plans →
         </Link>
       </div>
     </aside>
