@@ -129,6 +129,7 @@ export default function AIPlayground() {
           videoTitle,
           videoDescription,
           customInstructions: customInstructions.trim() || undefined,
+          category: SAMPLE_PRESETS[selectedPreset]?.category || 'edtech',
         }),
       });
 

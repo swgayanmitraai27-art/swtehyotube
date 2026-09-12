@@ -10,13 +10,16 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { uid, commentText, authorName, videoTitle, videoDescription, customInstructions } = body;
+    const { uid, commentText, authorName, videoTitle, videoDescription, customInstructions, category } = body;
 
     if (!commentText || !authorName) {
       return NextResponse.json({ error: 'Missing commentText or authorName' }, { status: 400 });
     }
 
-    let persona: CreatorPersonaConfig = DEFAULT_CREATOR_PERSONA;
+    let persona: CreatorPersonaConfig = {
+      ...DEFAULT_CREATOR_PERSONA,
+      category: category || DEFAULT_CREATOR_PERSONA.category,
+    };
 
     if (uid) {
       const userDoc = await adminDb.collection('users').doc(uid).get();

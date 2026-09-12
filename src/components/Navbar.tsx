@@ -26,8 +26,10 @@ export default function Navbar() {
 
         {/* Center Links */}
         <div className="hidden md:flex items-center gap-6 text-sm text-zinc-400">
-          <Link href="/#features" className="hover:text-white transition-colors">Features</Link>
-          <Link href="/#how-it-works" className="hover:text-white transition-colors">How It Works</Link>
+          <Link href="/playground" className="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1 transition-colors">
+            <Sparkles className="w-3.5 h-3.5" />
+            AI Playground (Live Demo)
+          </Link>
           <Link href="/#pricing" className="hover:text-white transition-colors">Pricing (₹499/mo)</Link>
         </div>
 

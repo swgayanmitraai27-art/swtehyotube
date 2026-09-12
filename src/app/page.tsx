@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { useAuth } from '@/context/AuthContext';
 import RazorpayModal from '@/components/dashboard/RazorpayModal';
+import AIPlayground from '@/components/dashboard/AIPlayground';
 import { 
   Youtube, 
   Sparkles, 
@@ -112,72 +113,9 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {/* Interactive Visual Preview */}
-        <div className="mt-14 max-w-4xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900/70 p-4 sm:p-6 shadow-2xl backdrop-blur-xl text-left">
-          <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-              <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-              <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-              <span className="text-xs font-semibold text-zinc-300 ml-2">
-                Live Google Gemma 4 31B Dynamic AI Reply Engine
-              </span>
-            </div>
-            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold flex items-center gap-1">
-              <BrainCircuit className="w-3 h-3" /> Thinking Model Active
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            {/* Sample 1: Board Exam / EdTech */}
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-bold text-zinc-300">@SWGYANBHUMI</span>
-                <span className="text-[10px] text-zinc-500">Video: 4 Months Board Exam Master Plan</span>
-              </div>
-              <p className="text-sm text-zinc-200 mb-3 font-medium">
-                "HELLO MERA MUJHE BOERD EXAM MAI 98 PARSENT LANA HAI MUJHE AAP GIDE AKR DIJIYE TIME BHUT KAM BAHA SIRF 4 MONTH HI BACHA HAI"
-              </p>
-              
-              <div className="p-3.5 rounded-xl bg-gradient-to-r from-rose-950/30 to-zinc-900/60 border border-rose-500/30 text-xs text-rose-200 flex items-start gap-2.5">
-                <Bot className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-[10px] text-rose-400 block uppercase tracking-wider mb-0.5">
-                    Google Gemma 4 31B Context-Aware Reply
-                  </span>
-                  <p className="text-zinc-200 leading-relaxed">
-                    @SWGYANBHUMI 98% ka target set kiya hai, bahut badhiya! 🙌 4 mahine mein bhi aaram se achieve hoga: 
-                    1. NCERT line-by-line cover karo, 2. Pichle 10 saal ke PYQs solve karo, 3. Daily strict timetable follow karo. 
-                    Detailed chapterwise notes ke liye description me diya gaya App link check karein! All the best beta! 📚💪
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Sample 2: Regional Gujarati / Hindi */}
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-bold text-zinc-300">@patel_gujarat_student</span>
-                <span className="text-[10px] text-zinc-500">Gujarati Board Exam Batch</span>
-              </div>
-              <p className="text-sm text-zinc-200 mb-3 font-medium">
-                "સર નવો બેચ ક્યારે શરૂ થશે? અને મટીરીયલ ક્યાં મળશે?"
-              </p>
-              
-              <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/30 to-zinc-900/60 border border-emerald-500/30 text-xs text-emerald-200 flex items-start gap-2.5">
-                <Bot className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-[10px] text-emerald-400 block uppercase tracking-wider mb-0.5">
-                    Google Gemma 4 31B Regional Language Reply (ગુજરાતી)
-                  </span>
-                  <p className="text-zinc-200 leading-relaxed">
-                    @patel_gujarat_student નમસ્તે ભાઈ! 🙏 નવો બેચ આગામી સોમવારથી શરૂ થઈ રહ્યો છે. બધા મટીરીયલ અને PDF નોટ્સ 
-                    ડિસ્ક્રિપ્શનમાં આપેલ એપ લિંક પરથી ડાઉનલોડ કરી શકો છો. મન લગાવીને તૈયારી કરો! 🎯
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Interactive Live AI Playground on Homepage */}
+        <div id="playground" className="mt-14 text-left">
+          <AIPlayground />
         </div>
       </section>
 
