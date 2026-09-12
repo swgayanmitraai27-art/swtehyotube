@@ -5,8 +5,8 @@ import { AuthProvider } from '@/context/AuthContext';
 export const metadata: Metadata = {
   title: 'SW Tech Solution - YouTube AI Auto-Reply & Auto-Mention Tool',
   description:
-    '1-Click automated Hinglish AI comment replies & mentions for Indian YouTube Creators. Maximize retention, engagement and save 10k YouTube quota units with Gemini 1.5 Flash.',
-  keywords: ['YouTube AI Reply', 'Hinglish AI', 'YouTube Auto Commenter', 'SW Tech Solution', 'Gemini AI YouTube', 'Indian Creators'],
+    '1-Click automated 140+ language AI comment replies & mentions for YouTube Creators. Powered by Google Gemma 4 31B IT Thinking AI.',
+  keywords: ['YouTube AI Reply', 'Gemma 4 31B', 'YouTube Auto Commenter', 'SW Tech Solution', 'Google AI YouTube', 'Content Creators'],
 };
 
 export default function RootLayout({

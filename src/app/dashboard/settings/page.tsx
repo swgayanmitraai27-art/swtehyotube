@@ -13,7 +13,7 @@ export default function SettingsPage() {
           AI Creator Persona & Quota Configuration
         </h1>
         <p className="text-xs text-zinc-400 mt-0.5">
-          Customize how Gemini 1.5 Flash speaks to your community, language presets, signatures, and spam rules.
+          Customize how Google Gemma 4 31B IT Thinking AI speaks to your community, language presets (140+ languages), signatures, and spam rules.
         </p>
       </div>
 

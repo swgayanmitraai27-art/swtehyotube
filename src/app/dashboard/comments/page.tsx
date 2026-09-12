@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 export default function CommentsStudioPage() {
-  const { user, isYouTubeConnected, connectYouTubeChannel, refreshProfile } = useAuth();
+  const { user, profile, isYouTubeConnected, connectYouTubeChannel, refreshProfile } = useAuth();
   const searchParams = useSearchParams();
   const videoId = searchParams.get('videoId') || undefined;
 
@@ -24,6 +24,8 @@ export default function CommentsStudioPage() {
   const [loading, setLoading] = useState(true);
   const [filterMode, setFilterMode] = useState<'all' | 'unreplied' | 'replied'>('unreplied');
   const [repliedCount, setRepliedCount] = useState(0);
+  const [autoSyncing, setAutoSyncing] = useState(false);
+  const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
 
   const loadComments = async () => {
     if (!user || !isYouTubeConnected) {
@@ -46,6 +48,27 @@ export default function CommentsStudioPage() {
       console.error('Failed to load comments:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRunAutoPilotNow = async () => {
+    if (!user || !isYouTubeConnected) return;
+    try {
+      setAutoSyncing(true);
+      setSyncStatusMsg(null);
+      const res = await fetch(`/api/youtube/sync-auto-pilot?uid=${user.uid}`);
+      const data = await res.json();
+      if (data.success) {
+        setSyncStatusMsg(`Auto-Pilot sent ${data.results?.[0]?.repliesSent || 0} automated replies!`);
+        await loadComments();
+        await refreshProfile();
+      } else {
+        setSyncStatusMsg(`Auto-Pilot sync note: ${data.error || 'Check logs'}`);
+      }
+    } catch (err: any) {
+      setSyncStatusMsg(`Error: ${err.message}`);
+    } finally {
+      setAutoSyncing(false);
     }
   };
 
@@ -85,7 +108,18 @@ export default function CommentsStudioPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {profile?.autoPilotEnabled && (
+            <button
+              onClick={handleRunAutoPilotNow}
+              disabled={autoSyncing || loading}
+              className="px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-semibold flex items-center gap-1.5 transition-all disabled:opacity-50"
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${autoSyncing ? 'animate-spin' : ''}`} />
+              {autoSyncing ? 'Auto-Replying in Background...' : '⚡ Run Auto-Pilot Sync Now'}
+            </button>
+          )}
+
           {/* Filter Pills */}
           <div className="flex bg-zinc-900 border border-zinc-800 p-1 rounded-xl text-xs">
             <button
@@ -126,6 +160,13 @@ export default function CommentsStudioPage() {
         </div>
       </div>
 
+      {syncStatusMsg && (
+        <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          {syncStatusMsg}
+        </div>
+      )}
+
       {!isYouTubeConnected ? (
         <div className="p-12 rounded-3xl bg-zinc-900/40 border border-zinc-800 text-center max-w-xl mx-auto space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-rose-600/10 text-rose-500 border border-rose-500/20 flex items-center justify-center mx-auto">
@@ -133,7 +174,7 @@ export default function CommentsStudioPage() {
           </div>
           <h3 className="text-lg font-bold text-white">Connect Channel to Fetch Comments</h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Click below to connect your YouTube channel and start replying to audience comments with Gemini 1.5 Flash.
+            Click below to connect your YouTube channel and start replying to audience comments with Google Gemma 4 31B IT Thinking AI.
           </p>
           <button
             onClick={connectYouTubeChannel}

@@ -58,7 +58,7 @@ export default function AutoPilotSwitch() {
             </div>
             <p className="text-xs text-zinc-400 mt-1 max-w-xl leading-relaxed">
               {enabled
-                ? 'Gemini 1.5 Flash scans your video comments every 20 mins, filters spam locally, and automatically posts engaging Hinglish replies on YouTube without needing your manual click.'
+                ? 'Google Gemma 4 31B IT Thinking AI automatically scans your video comments in the background, applies your creator tone in 140+ languages, filters spam, and posts intelligent replies on YouTube 24/7 without manual intervention.'
                 : 'You are currently in Copilot Mode. All suggested replies require your 1-click manual approval before being posted to YouTube.'}
             </p>
           </div>

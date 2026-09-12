@@ -1,3 +1,9 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/youtube/sync-auto-pilot",
+      "schedule": "*/10 * * * *"
+    }
+  ]
 }
