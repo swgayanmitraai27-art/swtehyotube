@@ -493,46 +493,40 @@ export default function PersonaSettings() {
           </div>
         </div>
 
-        {/* 3 Dedicated Project Blocks */}
+        {/* 3 Dedicated Project Blocks (OAuth Client ID & Client Secret) */}
         <div className="space-y-4 pt-2">
           {/* Project 1 */}
           <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
               <div className="flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
-                <span className="text-xs font-bold text-white">Google Cloud Project 1 (Primary Base Quota)</span>
+                <span className="text-xs font-bold text-white">Google Cloud Project 1 (Primary Dedicated Quota)</span>
               </div>
-              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (~6k replies/mo)</span>
+              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">10,000 Units/day (~6k replies/mo)</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 1 API Key</label>
-                <input
-                  type="text"
-                  value={settings.customApiKey1 || ''}
-                  onChange={(e) => setSettings({ ...settings, customApiKey1: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="AIzaSy..."
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 1 OAuth Client ID</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 1 OAuth Client ID
+                </label>
                 <input
                   type="text"
                   value={settings.customClientId || ''}
                   onChange={(e) => setSettings({ ...settings, customClientId: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="xxxx.apps.googleusercontent.com"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 1 Client Secret</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 1 Client Secret
+                </label>
                 <input
                   type="password"
                   value={settings.customClientSecret || ''}
                   onChange={(e) => setSettings({ ...settings, customClientSecret: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="GOCSPX-xxxx..."
                 />
               </div>
@@ -549,34 +543,28 @@ export default function PersonaSettings() {
               <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (Total 20k Quota)</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 2 API Key</label>
-                <input
-                  type="text"
-                  value={settings.customApiKey2 || ''}
-                  onChange={(e) => setSettings({ ...settings, customApiKey2: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="AIzaSy..."
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 2 OAuth Client ID</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 2 OAuth Client ID
+                </label>
                 <input
                   type="text"
                   value={settings.customClientId2 || ''}
                   onChange={(e) => setSettings({ ...settings, customClientId2: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="xxxx.apps.googleusercontent.com"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 2 Client Secret</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 2 Client Secret
+                </label>
                 <input
                   type="password"
                   value={settings.customClientSecret2 || ''}
                   onChange={(e) => setSettings({ ...settings, customClientSecret2: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="GOCSPX-xxxx..."
                 />
               </div>
@@ -593,34 +581,28 @@ export default function PersonaSettings() {
               <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (Total 30k Quota)</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 3 API Key</label>
-                <input
-                  type="text"
-                  value={settings.customApiKey3 || ''}
-                  onChange={(e) => setSettings({ ...settings, customApiKey3: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="AIzaSy..."
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 3 OAuth Client ID</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 3 OAuth Client ID
+                </label>
                 <input
                   type="text"
                   value={settings.customClientId3 || ''}
                   onChange={(e) => setSettings({ ...settings, customClientId3: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="xxxx.apps.googleusercontent.com"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Project 3 Client Secret</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
+                  Project 3 Client Secret
+                </label>
                 <input
                   type="password"
                   value={settings.customClientSecret3 || ''}
                   onChange={(e) => setSettings({ ...settings, customClientSecret3: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
                   placeholder="GOCSPX-xxxx..."
                 />
               </div>
