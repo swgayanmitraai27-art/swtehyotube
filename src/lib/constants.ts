@@ -21,7 +21,11 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   customClientId: '',
   customClientSecret: '',
   customApiKey1: '',
+  customClientId2: '',
+  customClientSecret2: '',
   customApiKey2: '',
+  customClientId3: '',
+  customClientSecret3: '',
   customApiKey3: '',
   blacklistKeywords: [
     'sub4sub',
@@ -76,7 +80,7 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 24000,
     features: [
       '2,000 AI Replies / Month (24,000/yr)',
-      '1-on-1 Live 5-Min Video Call Setup (Lifetime Help 📞)',
+      '1-Time 1-on-1 Live 5-Min Video Setup Call (Google Cloud Setup 📞)',
       '1-Click YouTube Connect + BYOK Quota Support',
       'Google Gemma 4 31B Multi-Lingual Engine (140+ Languages)',
       'Copilot Review Mode & Instant Post',
@@ -95,7 +99,7 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 48000,
     features: [
       '4,000 AI Replies / Month (48,000/yr)',
-      '1-on-1 Live 5-Min Video Call Setup (Founder Direct 📞)',
+      '1-Time 1-on-1 Live 5-Min Video Setup Call (Founder Direct 📞)',
       'Full 24/7 Hands-Free Auto-Pilot Mode',
       'AI Toxic & Abusive Comment Auto-Delete',
       'Dedicated BYOK Google Cloud Quota Integration',
@@ -114,11 +118,11 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 96000,
     features: [
       '8,000 AI Replies / Month (96,000/yr)',
-      '1-on-1 Live VIP Video Call Setup (Lifetime Guarantee 📞)',
+      '1-Time 1-on-1 Live VIP Video Setup Call (Founder Direct 📞)',
       'Multi-Channel Linking (Up to 6 Channels)',
       'Advanced Toxic / Hate Speech Auto-Purge',
       'Multi-Project BYOK Unlimited Quota Architecture',
-      'Direct WhatsApp 24/7 VIP Priority Support',
+      'Direct WhatsApp VIP Priority Setup Support',
       'Custom Promotional Call-To-Action Embedding'
     ]
   }

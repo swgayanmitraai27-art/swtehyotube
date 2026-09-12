@@ -126,10 +126,16 @@ export interface CreatorPersonaConfig {
   callToAction?: string;
   customInstructions?: string;   // Creator's custom rules e.g. "Always start with Radhe Radhe, promote batch link"
   commonFaqs?: CommonFAQ[];
-  customClientId?: string;       // BYOK: Dedicated Google Cloud OAuth Client ID
-  customClientSecret?: string;   // BYOK: Dedicated Google Cloud OAuth Client Secret
+  customClientId?: string;       // BYOK Project 1 OAuth Client ID
+  customClientSecret?: string;   // BYOK Project 1 OAuth Client Secret
   customApiKey1?: string;        // BYOK Project 1 API Key (10k Daily Quota = 6,000 replies/mo)
+  
+  customClientId2?: string;      // BYOK Project 2 OAuth Client ID
+  customClientSecret2?: string;  // BYOK Project 2 OAuth Client Secret
   customApiKey2?: string;        // BYOK Project 2 API Key (20k Total Quota = 12,000 replies/mo)
+  
+  customClientId3?: string;      // BYOK Project 3 OAuth Client ID
+  customClientSecret3?: string;  // BYOK Project 3 OAuth Client Secret
   customApiKey3?: string;        // BYOK Project 3 API Key (30k Total Quota = 18,000 replies/mo)
   blacklistKeywords: string[];
   autoDeleteToxicComments: boolean; // Auto-deletes abusive/hate comments from YouTube
