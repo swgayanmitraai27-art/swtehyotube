@@ -43,7 +43,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-lg font-bold text-white mb-2">2. Description of Service</h2>
               <p>
-                SW Tech AutoReply is a SaaS tool designed for YouTube creators to manage, analyze sentiment, and automate comment replies using Google Gemma and Gemini AI models in compliance with YouTube Data API v3 terms.
+                SW Tech AutoReply is a SaaS tool designed for YouTube creators to manage, analyze sentiment, and automate comment replies using Google Gemma 4 31B IT Thinking AI (Powered by Google AI) in compliance with YouTube Data API v3 terms.
               </p>
             </section>
 

@@ -56,7 +56,7 @@ export default function DashboardOverviewPage() {
             <div>
               <h2 className="text-lg font-bold text-white">Connect Your YouTube Channel</h2>
               <p className="text-xs text-zinc-400 mt-0.5 max-w-xl leading-relaxed">
-                Connect your YouTube channel in 1 click to let Gemini AI analyze comments and post replies automatically. No GCP setup needed.
+                Connect your YouTube channel in 1 click to let Google Gemma 4 31B IT Thinking AI analyze comments and post intelligent replies automatically. No GCP setup needed.
               </p>
             </div>
           </div>

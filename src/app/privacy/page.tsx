@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
               <p>Your data is used solely for the following operational purposes:</p>
               <ul className="list-disc pl-5 space-y-1 text-zinc-400">
                 <li>To display incoming unreplied comments on your creator studio dashboard.</li>
-                <li>To pass comment context into Google Gemma/Gemini AI for generating high-quality Hinglish replies.</li>
+                <li>To pass comment context into Google Gemma 4 31B IT Thinking AI (Powered by Google AI) for generating high-quality context-aware replies in 140+ languages.</li>
                 <li>To post replies directly to YouTube upon your click or via your configured auto-pilot rules.</li>
                 <li>To safeguard your channel's 10,000 daily YouTube API quota by pre-filtering spam and emoji-only comments locally.</li>
               </ul>
