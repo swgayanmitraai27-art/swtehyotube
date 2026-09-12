@@ -232,6 +232,26 @@ export async function fetchChannelComments(
 }
 
 /**
+ * Delete an abusive/hate comment from YouTube
+ */
+export async function deleteYouTubeComment(
+  userId: string,
+  commentId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const youtube = await getAuthenticatedYouTubeClient(userId);
+    await youtube.comments.delete({ id: commentId });
+    return { success: true };
+  } catch (error: any) {
+    console.error(`Failed to delete comment ${commentId}:`, error?.response?.data || error);
+    return {
+      success: false,
+      error: error?.response?.data?.error?.message || error?.message || 'Failed to delete comment',
+    };
+  }
+}
+
+/**
  * Post reply directly to YouTube comment thread via YouTube Data API v3
  * Costs 50 quota units on YouTube
  */
@@ -265,3 +285,4 @@ export async function postYouTubeReply(
     };
   }
 }
+

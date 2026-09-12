@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
-import { fetchChannelComments, postYouTubeReply } from '@/lib/youtube';
+import { fetchChannelComments, postYouTubeReply, deleteYouTubeComment } from '@/lib/youtube';
 import { generateSingleAutoPilotReply } from '@/lib/gemini';
 import { evaluateCommentEligibility } from '@/lib/quota-guard';
 import { DEFAULT_CREATOR_PERSONA } from '@/lib/constants';
@@ -79,7 +79,23 @@ export async function GET(req: NextRequest) {
         );
 
         if (!eligibility.shouldReply) {
-          // Log skipped reason
+          let commentAction = 'skipped';
+          let actionReason = eligibility.reason;
+
+          // Auto-Delete Toxic / Abusive / Defamatory comments from YouTube
+          if (eligibility.isToxic && persona.autoDeleteToxicComments !== false) {
+            try {
+              const deleteRes = await deleteYouTubeComment(userId, comment.id);
+              if (deleteRes.success) {
+                commentAction = 'deleted_toxic';
+                actionReason = 'Auto-deleted abusive / toxic comment from YouTube channel';
+              }
+            } catch (delErr) {
+              console.warn(`Failed to auto-delete toxic comment ${comment.id}:`, delErr);
+            }
+          }
+
+          // Log action in history
           await adminDb
             .collection('users')
             .doc(userId)
@@ -89,8 +105,8 @@ export async function GET(req: NextRequest) {
               commentId: comment.id,
               authorName: comment.authorDisplayName,
               originalComment: comment.textDisplay,
-              status: 'skipped',
-              reason: eligibility.reason,
+              status: commentAction,
+              reason: actionReason,
               timestamp: Date.now(),
             });
           continue;

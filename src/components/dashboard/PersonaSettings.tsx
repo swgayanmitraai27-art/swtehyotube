@@ -347,6 +347,20 @@ export default function PersonaSettings() {
               onChange={(e) => setSettings({ ...settings, filterRepetitiveSpam: e.target.checked })}
               className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />
+          <label className="flex items-center justify-between p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 cursor-pointer">
+            <div>
+              <div className="text-xs font-bold text-rose-300 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
+                Auto-Delete Toxic & Abusive Comments (AI YouTube Cleaner)
+              </div>
+              <div className="text-[10px] text-zinc-400">Instantly delete abusive, hate, or defamatory comments from your YouTube channel</div>
+            </div>
+            <input
+              type="checkbox"
+              checked={settings.autoDeleteToxicComments ?? true}
+              onChange={(e) => setSettings({ ...settings, autoDeleteToxicComments: e.target.checked })}
+              className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
+            />
           </label>
 
           <label className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 cursor-pointer">

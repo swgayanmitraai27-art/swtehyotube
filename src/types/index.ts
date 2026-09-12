@@ -127,6 +127,7 @@ export interface CreatorPersonaConfig {
   customInstructions?: string;   // Creator's custom rules e.g. "Always start with Radhe Radhe, promote batch link"
   commonFaqs?: CommonFAQ[];
   blacklistKeywords: string[];
+  autoDeleteToxicComments: boolean; // Auto-deletes abusive/hate comments from YouTube
   autoLikeOnReply: boolean;
   filterEmojiOnly: boolean;
   filterRepetitiveSpam: boolean;

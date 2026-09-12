@@ -28,10 +28,28 @@ export function isRepetitiveSpam(text: string): boolean {
   return repetitiveRegex.test(text);
 }
 
+/**
+ * Checks for abusive, toxic, or defamatory words
+ */
+const ABUSIVE_PATTERNS = [
+  /\b(gandu|chutiya|madarchod|bhenchod|behenchod|bsdk|harami|kutta|kutte|tatti|scam|scammer|fraud|chor|chutiye)\b/i,
+  /\b(fuck|bitch|bastard|asshole|idiot|crap|motherfucker)\b/i,
+];
+
+export function isToxicOrAbusive(text: string, customBlacklist: string[] = []): boolean {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  if (ABUSIVE_PATTERNS.some((pattern) => pattern.test(lower))) {
+    return true;
+  }
+  return containsBlacklistedWords(text, customBlacklist);
+}
+
 export interface FilterResult {
   shouldReply: boolean;
+  isToxic?: boolean;
   reason?: string;
-  category: 'valid' | 'emoji_only' | 'spam' | 'too_short' | 'blacklisted' | 'self_comment';
+  category: 'valid' | 'emoji_only' | 'spam' | 'too_short' | 'blacklisted' | 'toxic_abusive' | 'self_comment';
 }
 
 /**
@@ -54,7 +72,17 @@ export function evaluateCommentEligibility(
 
   const cleanText = commentText.trim();
 
-  // 2. Minimum length check
+  // 2. Toxic / Abusive Check (Highest Priority for Channel Protection)
+  if (isToxicOrAbusive(cleanText, persona.blacklistKeywords || [])) {
+    return {
+      shouldReply: false,
+      isToxic: true,
+      reason: 'Contains abusive, hate, or defamatory language',
+      category: 'toxic_abusive',
+    };
+  }
+
+  // 3. Minimum length check
   if (cleanText.length < (persona.minCommentLength || 2)) {
     return {
       shouldReply: false,
@@ -63,21 +91,12 @@ export function evaluateCommentEligibility(
     };
   }
 
-  // 3. Emoji-only filter
+  // 4. Emoji-only filter
   if (persona.filterEmojiOnly && isEmojiOnly(cleanText)) {
     return {
       shouldReply: false,
       reason: 'Comment contains only emojis (saved 50 quota units)',
       category: 'emoji_only',
-    };
-  }
-
-  // 4. Blacklist filter
-  if (containsBlacklistedWords(cleanText, persona.blacklistKeywords || [])) {
-    return {
-      shouldReply: false,
-      reason: 'Contains blacklisted or promotional spam words',
-      category: 'blacklisted',
     };
   }
 
@@ -92,6 +111,8 @@ export function evaluateCommentEligibility(
 
   return {
     shouldReply: true,
+    isToxic: false,
     category: 'valid',
   };
 }
+
