@@ -73,6 +73,7 @@ export interface YouTubeCommentItem {
   threadId: string;
   videoId: string;
   videoTitle?: string;
+  videoDescription?: string;
   authorDisplayName: string;
   authorProfileImageUrl: string;
   authorChannelUrl?: string;

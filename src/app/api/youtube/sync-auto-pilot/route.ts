@@ -114,6 +114,7 @@ export async function GET(req: NextRequest) {
             comment.textDisplay,
             comment.authorDisplayName,
             comment.videoTitle || 'Video',
+            comment.videoDescription || '',
             persona
           );
 

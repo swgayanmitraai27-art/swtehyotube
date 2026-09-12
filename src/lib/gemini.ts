@@ -2,7 +2,9 @@ import { AIReplySuggestion, CreatorPersonaConfig } from '@/types';
 import { DEFAULT_CREATOR_PERSONA } from './constants';
 
 const apiKey = process.env.GEMINI_API_KEY || '';
-const MODEL_ID = 'gemma-4-31b-it';
+
+// Prioritized supported active Gemini model versions
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-3.6-flash', 'gemini-flash-latest'];
 
 /**
  * Clean & format author handle for YouTube mentions
@@ -14,203 +16,177 @@ export function formatAuthorMention(authorDisplayName: string): string {
 }
 
 /**
- * Helper to safely extract responses from JSON or formatted bullet text
+ * Helper to parse and clean model suggestions
  */
-function parseModelOutput(rawText: string, mention: string): AIReplySuggestion[] {
-  // 1. Try strict JSON parse first
-  try {
-    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]);
-      if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-        return parsed.suggestions.map((s: any, idx: number) => ({
-          id: String(idx + 1),
-          tone: s.tone || 'hinglish_friendly',
-          toneLabel: s.toneLabel || 'Suggested Reply',
-          text: s.text.startsWith(mention) ? s.text : `${mention} ${s.text}`,
-          autoMentioned: mention,
-        }));
-      }
-    }
-  } catch (e) {
-    // Continue to fallback parser
+function normalizeSuggestions(suggestions: any[], mention: string): AIReplySuggestion[] {
+  if (!Array.isArray(suggestions) || suggestions.length === 0) {
+    return [];
   }
 
-  // 2. Fallback parser: extract lines with quotes or labels
-  const extracted: AIReplySuggestion[] = [];
-  const lines = rawText.split('\n');
-
-  for (const line of lines) {
-    const quoteMatch = line.match(/["']([^"']{10,300})["']/);
-    if (quoteMatch && quoteMatch[1]) {
-      let text = quoteMatch[1].trim();
-      if (!text.startsWith(mention)) {
-        text = `${mention} ${text}`;
-      }
-      extracted.push({
-        id: String(extracted.length + 1),
-        tone: extracted.length === 0 ? 'hinglish_friendly' : extracted.length === 1 ? 'quick_heart' : extracted.length === 2 ? 'support_detailed' : 'witty_meme',
-        toneLabel: extracted.length === 0 ? 'Friendly (Hinglish)' : extracted.length === 1 ? 'Quick Heart & Emojis' : extracted.length === 2 ? 'Helpful Guidance' : 'High-Energy',
-        text,
-        autoMentioned: mention,
-      });
-      if (extracted.length >= 4) break;
+  return suggestions.map((s: any, idx: number) => {
+    let text = (s.text || '').trim();
+    if (mention && !text.startsWith(mention)) {
+      text = `${mention} ${text}`;
     }
-  }
-
-  if (extracted.length > 0) {
-    return extracted;
-  }
-
-  // 3. Guaranteed safe fallback
-  return [
-    {
-      id: '1',
-      tone: 'hinglish_friendly',
-      toneLabel: 'Friendly (Hinglish)',
-      text: `${mention} Shukriya bhai! ❤️ Keep supporting and stay tuned for more updates!`,
+    return {
+      id: String(idx + 1),
+      tone: s.tone || (idx === 0 ? 'hinglish_friendly' : idx === 1 ? 'quick_heart' : idx === 2 ? 'support_detailed' : 'witty_meme'),
+      toneLabel: s.toneLabel || (idx === 0 ? 'Motivating Mentor' : idx === 1 ? 'Confidence Booster' : idx === 2 ? 'Actionable Guide' : 'High Hustle'),
+      text,
       autoMentioned: mention,
-    },
-    {
-      id: '2',
-      tone: 'quick_heart',
-      toneLabel: 'Quick Heart & Love',
-      text: `${mention} Thank you for watching! 🔥 Agla video jald hi live hoga.`,
-      autoMentioned: mention,
-    },
-    {
-      id: '3',
-      tone: 'support_detailed',
-      toneLabel: 'Helpful Guidance',
-      text: `${mention} Notes aur batches ke liye aap description me diye gaye App link ko check kar sakte hain! 📚`,
-      autoMentioned: mention,
-    }
-  ];
+    };
+  });
 }
 
 /**
- * Generate 3-4 multi-tone suggested replies tailored to the creator's niche (EdTech/Vidyakul, Tech, Finance, etc.)
- * Powered directly by Google Gemma 4 31B IT Model
+ * Generate 3-4 multi-tone suggested replies dynamically tailored to the video's Title, Description, and Channel Persona
+ * Powered directly by Google Gemini 2.5 Flash
  */
 export async function generateHinglishReplySuggestions(
   commentText: string,
   authorName: string,
   videoTitle: string = 'YouTube Video',
+  videoDescription: string = '',
   persona: CreatorPersonaConfig = DEFAULT_CREATOR_PERSONA
 ): Promise<AIReplySuggestion[]> {
   const mention = formatAuthorMention(authorName);
 
-  // Category specific context
-  let categoryContext = '';
+  // Category & Niche Guidelines
+  let nicheContext = '';
   if (persona.category === 'edtech') {
-    categoryContext = `
-CATEGORY: 📚 EdTech / Education / Online Coaching (e.g., Vidyakul / Board Exams / Classes)
-- Target Audience: ${persona.targetAudience || 'Students & Learners'}
-- Creator's App Name: "${persona.appName || 'Vidyakul App'}"
+    nicheContext = `
+CATEGORY: 📚 EdTech / Board Exams / Online Education (e.g., SW Gyan Bhumi / Vidyakul)
+- Target Students: ${persona.targetAudience || 'Class 9th, 10th, 11th, 12th Board Exam Students'}
+- App Name: "${persona.appName || 'Official App'}"
 - App Download Link: "${persona.appDownloadLink || ''}"
 - Course / Batch Link: "${persona.courseOrWebsiteLink || ''}"
 - NICHE RULES:
-  * If student asks for PDF notes, classes, batches, or study material: Guide them to download the ${persona.appName || 'Vidyakul App'} from description.
-  * If student expresses gratitude or understanding: Reply with encouraging, motivating teacher/mentor warmth (e.g. "Shaabaash beta! Khoob mehnat karo aur board me top karo! 🎯").
-  * Always be polite, motivating, and student-friendly.
+  * When a student asks about board exam strategy, 90%+/98% target, time management, or revision: Give genuine, realistic, step-by-step motivation (NCERT, PYQ, sample papers, daily schedule).
+  * When a student asks for notes, PDFs, or batches: Guide them to the app/batch link in description.
+  * Always speak with energetic teacher/mentor warmth ("Shaabaash beta", "Bilkul possible hai", "Full mehnat karo!").
 `;
   } else if (persona.category === 'tech') {
-    categoryContext = `
-CATEGORY: 💻 Tech / Coding / Gadgets
+    nicheContext = `
+CATEGORY: 💻 Tech / Coding / Software / Gadgets
 - NICHE RULES:
-  * Friendly developer/bro tone. If asking for source code: mention link in description.
+  * Friendly developer tone. If asked for GitHub / source code, guide them to video description.
 `;
   } else if (persona.category === 'finance') {
-    categoryContext = `
+    nicheContext = `
 CATEGORY: 📈 Finance / Stock Market / Trading
 - NICHE RULES:
-  * Professional, informative. Always maintain ethical context.
+  * Professional, informative, educational tone.
 `;
   }
+
+  // Trim video description for prompt context
+  const trimmedDescription = videoDescription ? videoDescription.substring(0, 700) : '';
 
   const prompt = `
-You are the AI Assistant for an Indian YouTube Content Creator named "${persona.creatorName}" (Channel: "${persona.channelName}").
-Channel Persona & Bio: "${persona.personaBio}".
-Language Mode: "${persona.languageMode}" (Natural Indian conversational Hinglish like "Bhai mast video thi" -> "Shukriya bhai ❤️").
-Optional Custom Signature: "${persona.customSignature || ''}".
-Optional CTA: "${persona.callToAction || ''}".
+You are the dynamic AI Community Mentor for an Indian YouTube Channel.
+Creator Name: "${persona.creatorName}"
+Channel Name: "${persona.channelName}"
+Persona / Bio: "${persona.personaBio}"
+Language Style: "${persona.languageMode}" (Natural, relatable, conversational Indian Hinglish).
 
-${categoryContext}
+VIDEO CONTEXT:
+- Video Title: "${videoTitle}"
+${trimmedDescription ? `- Video Description Details: "${trimmedDescription}"` : ''}
 
-Video Title: "${videoTitle}"
-Commenter: "${authorName}" (Mention tag: "${mention}")
-User's Comment: "${commentText}"
+COMMENTER & QUERY:
+- Viewer Name: "${authorName}" (Handle: "${mention}")
+- Viewer's Exact Comment: "${commentText}"
+
+${nicheContext}
 
 TASK:
-Analyze the sentiment and intent of the comment.
-Generate 4 distinct, human-like, high-retention creator replies matching these specific styles:
-1. "hinglish_friendly": Warm, brotherly, natural Hinglish style.
-2. "quick_heart": Short, sweet, energetic 1-liner with emojis.
-3. "support_detailed": Direct helpful answer tailored to the channel category (e.g., student guidance for EdTech, coding help for Tech).
-4. "witty_meme": Fun, high-energy, relatable Indian creator vibe.
+Deeply understand the viewer's exact question, doubt, or feedback in relation to the Video Title & Description.
+Generate 4 distinct, intelligent, hyper-relevant Hinglish replies:
+1. "hinglish_friendly": Motivating, warm, brotherly/mentor response directly addressing their question.
+2. "quick_heart": Energetic, supportive confidence booster with emojis (1-2 lines).
+3. "support_detailed": Step-by-step practical advice or actionable solution based on the video context.
+4. "witty_meme": High-energy, enthusiastic hustle boost to inspire action.
 
-CRITICAL RULES:
-- Always start or include the mention tag "${mention}".
-- Keep replies concise (1-3 sentences maximum).
-- Return ONLY a strict JSON object with this schema:
-
-{
-  "suggestions": [
-    {
-      "tone": "hinglish_friendly",
-      "toneLabel": "Friendly (Hinglish)",
-      "text": "..."
-    },
-    {
-      "tone": "quick_heart",
-      "toneLabel": "Quick Heart & Emojis",
-      "text": "..."
-    },
-    {
-      "tone": "support_detailed",
-      "toneLabel": "Helpful Guidance",
-      "text": "..."
-    },
-    {
-      "tone": "witty_meme",
-      "toneLabel": "High-Energy",
-      "text": "..."
-    }
-  ]
-}
+MANDATORY RULES:
+- Every suggestion text MUST start with the exact mention tag "${mention}".
+- Address the SPECIFIC topic of the comment (e.g., if they asked for board exam 98% in 4 months, address 4 months, NCERT, PYQs, and daily revision).
+- DO NOT give generic repetitive answers like "Thanks for watching". Make it 100% personalized!
 `;
 
-  try {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:generateContent?key=${apiKey}`;
-    
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: prompt }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.9,
-          maxOutputTokens: 800,
-        },
-      }),
-    });
+  for (const model of GEMINI_MODELS) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-    if (res.ok) {
-      const data = await res.json();
-      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      return parseModelOutput(rawText, mention);
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1200,
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: 'OBJECT',
+              properties: {
+                suggestions: {
+                  type: 'ARRAY',
+                  items: {
+                    type: 'OBJECT',
+                    properties: {
+                      tone: { type: 'STRING' },
+                      toneLabel: { type: 'STRING' },
+                      text: { type: 'STRING' },
+                    },
+                    required: ['tone', 'toneLabel', 'text'],
+                  },
+                },
+              },
+              required: ['suggestions'],
+            },
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (rawText) {
+          const parsed = JSON.parse(rawText);
+          if (parsed.suggestions && parsed.suggestions.length > 0) {
+            return normalizeSuggestions(parsed.suggestions, mention);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn(`Gemini model ${model} error, trying next fallback:`, error);
     }
-  } catch (error) {
-    console.error('Gemma 4 31B IT AI error:', error);
   }
 
-  return parseModelOutput('', mention);
+  // Context-aware smart fallback if all models fail
+  return [
+    {
+      id: '1',
+      tone: 'hinglish_friendly',
+      toneLabel: 'Motivating Mentor',
+      text: `${mention} Bilkul possible hai bhai! 💪 Mehnat aur consistent revision par focus karo, result zaroor aayega!`,
+      autoMentioned: mention,
+    },
+    {
+      id: '2',
+      tone: 'quick_heart',
+      toneLabel: 'Confidence Booster',
+      text: `${mention} Mehnat karte raho, hum aapke saath hain! 🔥 All the best!`,
+      autoMentioned: mention,
+    },
+    {
+      id: '3',
+      tone: 'support_detailed',
+      toneLabel: 'Study Guidance',
+      text: `${mention} NCERT aur previous year questions (PYQs) ko daily practice karein aur description me diye gaye resources ko check karein! 📚`,
+      autoMentioned: mention,
+    },
+  ];
 }
 
 /**
@@ -220,16 +196,23 @@ export async function generateSingleAutoPilotReply(
   commentText: string,
   authorName: string,
   videoTitle: string = 'YouTube Video',
+  videoDescription: string = '',
   persona: CreatorPersonaConfig = DEFAULT_CREATOR_PERSONA
 ): Promise<string> {
-  const suggestions = await generateHinglishReplySuggestions(commentText, authorName, videoTitle, persona);
-  
+  const suggestions = await generateHinglishReplySuggestions(
+    commentText,
+    authorName,
+    videoTitle,
+    videoDescription,
+    persona
+  );
+
   let chosen = suggestions[0]?.text;
   if (persona.toneStyle === 'witty_energetic') {
-    const witty = suggestions.find(s => s.tone === 'witty_meme');
+    const witty = suggestions.find((s) => s.tone === 'witty_meme');
     if (witty) chosen = witty.text;
   } else if (persona.toneStyle === 'polite_support') {
-    const support = suggestions.find(s => s.tone === 'support_detailed');
+    const support = suggestions.find((s) => s.tone === 'support_detailed');
     if (support) chosen = support.text;
   }
 

@@ -55,6 +55,7 @@ export default function CommentCard({ comment, onReplySuccess }: CommentCardProp
           commentText: comment.textDisplay,
           authorName: comment.authorDisplayName,
           videoTitle: comment.videoTitle,
+          videoDescription: comment.videoDescription,
         }),
       });
       const data = await res.json();

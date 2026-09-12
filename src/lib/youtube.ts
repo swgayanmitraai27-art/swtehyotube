@@ -177,14 +177,48 @@ export async function fetchChannelComments(
 
   const rawThreads = response.data.items || [];
 
+  // Batch fetch video snippets (title & description)
+  const videoIds = Array.from(
+    new Set(
+      rawThreads
+        .map((t) => t.snippet?.videoId || (videoId ? videoId : ''))
+        .filter((id): id is string => Boolean(id))
+    )
+  );
+
+  const videoMetaMap = new Map<string, { title: string; description: string }>();
+
+  if (videoIds.length > 0) {
+    try {
+      const videoRes = await youtube.videos.list({
+        part: ['snippet'],
+        id: videoIds.slice(0, 50),
+      });
+      (videoRes.data.items || []).forEach((v) => {
+        if (v.id && v.snippet) {
+          videoMetaMap.set(v.id, {
+            title: v.snippet.title || '',
+            description: v.snippet.description || '',
+          });
+        }
+      });
+    } catch (err) {
+      console.warn('Could not fetch video snippet metadata for comments:', err);
+    }
+  }
+
   return rawThreads.map((thread) => {
     const topComment = thread.snippet?.topLevelComment?.snippet;
     const totalReplies = thread.snippet?.totalReplyCount || 0;
+    const itemVideoId = thread.snippet?.videoId || videoId || '';
+    const meta = videoMetaMap.get(itemVideoId);
 
     return {
       id: thread.snippet?.topLevelComment?.id || thread.id || '',
       threadId: thread.id || '',
-      videoId: thread.snippet?.videoId || videoId || '',
+      videoId: itemVideoId,
+      videoTitle: meta?.title || '',
+      videoDescription: meta?.description || '',
       authorDisplayName: topComment?.authorDisplayName || 'YouTube User',
       authorProfileImageUrl: topComment?.authorProfileImageUrl || '',
       authorChannelUrl: topComment?.authorChannelUrl || '',
