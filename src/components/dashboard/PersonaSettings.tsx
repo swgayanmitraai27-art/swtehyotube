@@ -18,8 +18,16 @@ import {
   Gamepad2, 
   Smartphone,
   BookOpen,
-  BrainCircuit
+  BrainCircuit,
+  Key,
+  PhoneCall,
+  Video,
+  ExternalLink,
+  Layers,
+  Crown,
+  Lock
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function PersonaSettings() {
   const { user, profile } = useAuth();
@@ -421,6 +429,141 @@ export default function PersonaSettings() {
                 </button>
               </span>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Multi-Project BYOK Quota Pool Card (Dedicated High Volume Setup) */}
+      <div className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold mb-2">
+              <Layers className="w-3.5 h-3.5" />
+              Multi-Project BYOK Quota Pooling (Optional & Free)
+            </div>
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Key className="w-4 h-4 text-amber-400" />
+              Dedicated Google Cloud Project Quota Keys
+            </h3>
+            <p className="text-xs text-zinc-400 mt-1 max-w-xl">
+              By default, your account runs on our shared high-speed server quota. For high-volume channels (Pro/Enterprise 4k–8k+ replies), you can pool your own Google Cloud projects to get up to <strong>30,000 daily quota units (~18,000 replies/month)</strong>.
+            </p>
+          </div>
+
+          {/* 1-on-1 WhatsApp Live Call CTA (Paid Subscribers Only) */}
+          {profile?.plan && profile?.plan !== 'free' ? (
+            <a
+              href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                `Hello SW Tech Team! I am an active paid member (${profile?.plan} plan). I want to schedule my 1-on-1 5-Minute Live Video Setup Call with the Founder on WhatsApp. Channel: ${settings.channelName || 'Creator'}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 text-xs font-bold transition-all shadow-lg shadow-emerald-950/50"
+            >
+              <PhoneCall className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span>Book 5-Min Live Setup Call 📞</span>
+            </a>
+          ) : (
+            <Link
+              href="/dashboard/billing"
+              className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-800 hover:bg-rose-600 border border-zinc-700 text-zinc-300 hover:text-white text-xs font-bold transition-all shadow-lg"
+            >
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span>Upgrade to Unlock Live Setup Call 🔒</span>
+            </Link>
+          )}
+        </div>
+
+        {/* Quota Math Badge Matrix */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-0.5">1 Project Key</span>
+            <div className="text-sm font-black text-white">10,000 Units/day</div>
+            <div className="text-[11px] text-zinc-400">~6,000 AI Replies/mo</div>
+          </div>
+          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
+            <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider block mb-0.5">2 Project Keys (Pro)</span>
+            <div className="text-sm font-black text-white">20,000 Units/day</div>
+            <div className="text-[11px] text-zinc-400">~12,000 AI Replies/mo</div>
+          </div>
+          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
+            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-0.5">3 Project Keys (Enterprise)</span>
+            <div className="text-sm font-black text-white">30,000 Units/day</div>
+            <div className="text-[11px] text-zinc-400">~18,000 AI Replies/mo</div>
+          </div>
+        </div>
+
+        {/* Inputs */}
+        <div className="space-y-4 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                Custom Google Cloud OAuth Client ID (Optional)
+              </label>
+              <input
+                type="text"
+                value={settings.customClientId || ''}
+                onChange={(e) => setSettings({ ...settings, customClientId: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                placeholder="xxxx.apps.googleusercontent.com"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                Custom Google Cloud Client Secret (Optional)
+              </label>
+              <input
+                type="password"
+                value={settings.customClientSecret || ''}
+                onChange={(e) => setSettings({ ...settings, customClientSecret: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                placeholder="GOCSPX-xxxx..."
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-zinc-800/60">
+            <div>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+                <span>Project 1 API Key</span>
+                <span className="text-[10px] text-emerald-400 font-bold">+10k Quota</span>
+              </label>
+              <input
+                type="text"
+                value={settings.customApiKey1 || ''}
+                onChange={(e) => setSettings({ ...settings, customApiKey1: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                placeholder="AIzaSy..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+                <span>Project 2 API Key</span>
+                <span className="text-[10px] text-rose-400 font-bold">+20k Quota</span>
+              </label>
+              <input
+                type="text"
+                value={settings.customApiKey2 || ''}
+                onChange={(e) => setSettings({ ...settings, customApiKey2: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                placeholder="AIzaSy..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+                <span>Project 3 API Key</span>
+                <span className="text-[10px] text-amber-400 font-bold">+30k Quota</span>
+              </label>
+              <input
+                type="text"
+                value={settings.customApiKey3 || ''}
+                onChange={(e) => setSettings({ ...settings, customApiKey3: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
+                placeholder="AIzaSy..."
+              />
+            </div>
           </div>
         </div>
       </div>

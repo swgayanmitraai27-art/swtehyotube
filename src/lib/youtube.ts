@@ -10,15 +10,19 @@ const redirectUri = `${appUrl}/api/auth/google-callback`;
 /**
  * Creates a configured OAuth2 client
  */
-export function getOAuth2Client() {
-  return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+export function getOAuth2Client(customId?: string, customSecret?: string) {
+  return new google.auth.OAuth2(
+    customId?.trim() || clientId,
+    customSecret?.trim() || clientSecret,
+    redirectUri
+  );
 }
 
 /**
  * Generate Google OAuth Consent URL with YouTube Scopes
  */
-export function getGoogleOAuthUrl(stateUserId: string): string {
-  const oauth2Client = getOAuth2Client();
+export function getGoogleOAuthUrl(stateUserId: string, customId?: string, customSecret?: string): string {
+  const oauth2Client = getOAuth2Client(customId, customSecret);
 
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
@@ -39,7 +43,12 @@ export function getGoogleOAuthUrl(stateUserId: string): string {
  * Get authenticated YouTube API client for a specific user, refreshing tokens automatically
  */
 export async function getAuthenticatedYouTubeClient(userId: string) {
-  const oauth2Client = getOAuth2Client();
+  // Fetch user settings to check for BYOK custom client ID/secret
+  const userDoc = await adminDb.collection('users').doc(userId).get();
+  const userData = userDoc.data();
+  const persona = userData?.settings || {};
+
+  const oauth2Client = getOAuth2Client(persona.customClientId, persona.customClientSecret);
 
   // Fetch stored tokens from Firestore
   const tokenDoc = await adminDb.collection('users').doc(userId).collection('tokens').doc('youtube').get();

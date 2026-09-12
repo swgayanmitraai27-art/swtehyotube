@@ -17,7 +17,9 @@ import {
   TrendingUp,
   Crown,
   Flame,
-  Rocket
+  Rocket,
+  PhoneCall,
+  Video
 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -168,6 +170,44 @@ export default function BillingPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* 1-on-1 Founder Live Video Call Guarantee Banner */}
+      <div className="p-6 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold mb-2">
+            <PhoneCall className="w-3.5 h-3.5" />
+            Lifetime Founder Setup & Multi-Project BYOK Quota Guarantee
+          </div>
+          <h3 className="text-base font-bold text-white mb-1">
+            Need Help Connecting Your Channel or Expanding Quota to 30,000 Units/day?
+          </h3>
+          <p className="text-xs text-zinc-300 leading-relaxed">
+            All paid plans include direct 1-on-1 live 5-minute video call support on WhatsApp (<strong>8303994616</strong>). Our founder & technical team will personally walk you through custom prompt configuration, toxic comment filter setup, and Google Cloud project quota pooling.
+          </p>
+        </div>
+
+        {profile?.plan && profile?.plan !== 'free' ? (
+          <a
+            href={`https://wa.me/918303994616?text=${encodeURIComponent(
+              `Hello SW Tech Team! I am an active paid member (${profile?.plan} plan). I want to schedule my 1-on-1 5-Minute Live Video Setup Call with the Founder on WhatsApp. Channel: ${profile?.channelTitle || 'My Channel'}`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-600/30 flex items-center gap-2"
+          >
+            <Video className="w-4 h-4" />
+            <span>Book 5-Min Live Call on WhatsApp 📞</span>
+          </a>
+        ) : (
+          <button
+            onClick={() => openCheckout('starter')}
+            className="shrink-0 px-5 py-3 rounded-2xl bg-zinc-800 hover:bg-rose-600 text-zinc-200 hover:text-white text-xs font-bold transition-all border border-zinc-700 flex items-center gap-2 shadow-lg"
+          >
+            <Crown className="w-4 h-4 text-amber-400" />
+            <span>Upgrade to Unlock Founder Live Call 🔒</span>
+          </button>
+        )}
       </div>
 
       {/* Pay-as-you-go Credit Packs */}

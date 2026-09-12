@@ -18,6 +18,11 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   courseOrWebsiteLink: '',
   callToAction: 'Video pasand aayi toh like and share karna mat bhoolna!',
   customInstructions: '',
+  customClientId: '',
+  customClientSecret: '',
+  customApiKey1: '',
+  customApiKey2: '',
+  customApiKey3: '',
   blacklistKeywords: [
     'sub4sub',
     'subscribe my channel',
@@ -71,10 +76,10 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 24000,
     features: [
       '2,000 AI Replies / Month (24,000/yr)',
-      '1-Click YouTube Connect',
+      '1-on-1 Live 5-Min Video Call Setup (Lifetime Help 📞)',
+      '1-Click YouTube Connect + BYOK Quota Support',
       'Google Gemma 4 31B Multi-Lingual Engine (140+ Languages)',
       'Copilot Review Mode & Instant Post',
-      'Basic Analytics & Reply History',
       'Spam & Emoji Pre-Filter Protection'
     ]
   },
@@ -90,11 +95,11 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 48000,
     features: [
       '4,000 AI Replies / Month (48,000/yr)',
+      '1-on-1 Live 5-Min Video Call Setup (Founder Direct 📞)',
       'Full 24/7 Hands-Free Auto-Pilot Mode',
       'AI Toxic & Abusive Comment Auto-Delete',
-      'Custom Brand Voice (Friendly / Mentor / Polite)',
+      'Dedicated BYOK Google Cloud Quota Integration',
       'Auto-Mention @username Integration',
-      'Priority Fast Google Gemma 4 31B Queue',
       'Custom Promotional CTA & Batch Links'
     ]
   },
@@ -109,11 +114,11 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     yearlyCredits: 96000,
     features: [
       '8,000 AI Replies / Month (96,000/yr)',
+      '1-on-1 Live VIP Video Call Setup (Lifetime Guarantee 📞)',
       'Multi-Channel Linking (Up to 6 Channels)',
       'Advanced Toxic / Hate Speech Auto-Purge',
-      'Custom Finetuned Channel Persona & App Links',
-      'Dedicated YouTube Quota Management Guard',
-      'Direct WhatsApp 24/7 Priority Support',
+      'Multi-Project BYOK Unlimited Quota Architecture',
+      'Direct WhatsApp 24/7 VIP Priority Support',
       'Custom Promotional Call-To-Action Embedding'
     ]
   }

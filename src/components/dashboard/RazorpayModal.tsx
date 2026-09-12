@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket } from 'lucide-react';
+import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video } from 'lucide-react';
 import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
@@ -112,10 +112,6 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
             if (verifyData.success) {
               setSuccess(true);
               await refreshProfile();
-              setTimeout(() => {
-                onClose();
-                setSuccess(false);
-              }, 2500);
             } else {
               throw new Error(verifyData.error || 'Payment signature verification failed');
             }
@@ -144,19 +140,59 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
       <div className="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-xl w-full p-5 sm:p-6 relative shadow-2xl my-auto">
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            setSuccess(false);
+          }}
           className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-900 z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {success ? (
-          <div className="text-center py-8">
+          <div className="text-center py-6">
             <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4 animate-bounce">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold text-white mb-1">Payment Successful! 🎉</h3>
-            <p className="text-sm text-zinc-400">Your AI reply credits have been added to your YouTube studio.</p>
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto mb-6">
+              Your AI reply credits have been credited to your channel. Your auto-pilot is ready to engage with your students & audience!
+            </p>
+
+            {/* 1-on-1 WhatsApp Live Video Setup Call Banner */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/30 text-left mb-6 shadow-xl">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="p-1 rounded-md bg-emerald-500/20 text-emerald-400">
+                  <PhoneCall className="w-4 h-4" />
+                </span>
+                <h4 className="text-sm font-bold text-white">Book Your 1-on-1 Live 5-Min Video Setup Call</h4>
+              </div>
+              <p className="text-xs text-zinc-300 mb-4">
+                Want our founder & engineering team to personally walk you through custom persona prompts, BYOK quota keys, or edtech app conversion tricks?
+              </p>
+
+              <a
+                href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                  `🎉 Hey SW Tech Team! I just purchased a plan for my YouTube Channel (${user.displayName || 'Creator'}). I want to book my 5-minute Live Video Setup Call with the Founder directly on WhatsApp!`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/30"
+              >
+                <Video className="w-4 h-4" />
+                <span>Book 5-Min Live Setup Call on WhatsApp 📞</span>
+              </a>
+            </div>
+
+            <button
+              onClick={() => {
+                onClose();
+                setSuccess(false);
+              }}
+              className="px-6 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all"
+            >
+              Continue to Dashboard 🚀
+            </button>
           </div>
         ) : (
           <div>
