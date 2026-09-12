@@ -219,7 +219,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-rose-400 font-semibold flex items-center gap-1">
-              <Check className="w-3.5 h-3.5" /> Tailored for Vidyakul & State Boards
+              <Check className="w-3.5 h-3.5" /> Tailored for Educators, Creators & State Boards
             </div>
           </div>
 

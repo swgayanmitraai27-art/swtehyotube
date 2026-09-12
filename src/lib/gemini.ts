@@ -86,7 +86,7 @@ export async function generateHinglishReplySuggestions(
   let nicheContext = '';
   if (persona.category === 'edtech') {
     nicheContext = `
-CATEGORY: 📚 EdTech / Board Exams / Online Education (e.g., SW Gyan Bhumi / Vidyakul)
+CATEGORY: 📚 EdTech / Board Exams / Online Education (e.g., SW Gyan Bhumi / Online Classes)
 - Target Students: ${persona.targetAudience || 'Class 9th, 10th, 11th, 12th Board Exam Students'}
 - App Name: "${persona.appName || 'SW Gyan Bhumi App'}"
 - App Download Link: "${persona.appDownloadLink || ''}"

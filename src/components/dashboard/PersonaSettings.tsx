@@ -17,7 +17,8 @@ import {
   TrendingUp, 
   Gamepad2, 
   Smartphone,
-  BookOpen
+  BookOpen,
+  BrainCircuit
 } from 'lucide-react';
 
 export default function PersonaSettings() {
@@ -100,16 +101,16 @@ export default function PersonaSettings() {
       {/* Category / Niche Selection */}
       <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6">
         <h3 className="text-base font-bold text-white flex items-center gap-2 mb-1">
-          <BookOpen className="w-4 h-4 text-rose-500" />
-          Channel Niche & Category Intelligence
+          <GraduationCap className="w-4 h-4 text-rose-500" />
+          Channel Niche & Category
         </h3>
         <p className="text-xs text-zinc-400 mb-4">
-          Select your channel category so Gemini AI automatically understands your audience context (e.g. Students asking for PDF notes vs Developers asking for code).
+          Select your channel category so Google Gemma 4 AI automatically understands your audience context (e.g. Students asking for notes vs Developers asking for code).
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { id: 'edtech', name: '📚 EdTech / Coaching (Vidyakul / Classes)', desc: 'For Teachers, Students, Courses & Notes' },
+            { id: 'edtech', name: '📚 EdTech / Coaching', desc: 'For Teachers, Students, Courses & Notes' },
             { id: 'tech', name: '💻 Tech & Coding', desc: 'Tutorials, Projects & Reviews' },
             { id: 'finance', name: '📈 Finance & Trading', desc: 'Stock Market & Business' },
             { id: 'gaming', name: '🎮 Gaming & Esports', desc: 'Streams, High Energy & Fun' },
@@ -141,13 +142,13 @@ export default function PersonaSettings() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Your App Name</label>
+              <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Your App / Brand Name</label>
               <input
                 type="text"
                 value={settings.appName || ''}
                 onChange={(e) => setSettings({ ...settings, appName: e.target.value })}
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-                placeholder="e.g. Vidyakul App"
+                placeholder="e.g. My Official App"
               />
             </div>
 
@@ -158,7 +159,7 @@ export default function PersonaSettings() {
                 value={settings.appDownloadLink || ''}
                 onChange={(e) => setSettings({ ...settings, appDownloadLink: e.target.value })}
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-                placeholder="https://bit.ly/vidyakul-app"
+                placeholder="https://play.google.com/store/apps/details?id=..."
               />
             </div>
 
@@ -169,7 +170,7 @@ export default function PersonaSettings() {
                 value={settings.targetAudience || ''}
                 onChange={(e) => setSettings({ ...settings, targetAudience: e.target.value })}
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-                placeholder="e.g. Class 10th & 12th Board Students"
+                placeholder="e.g. Class 10th & 12th Board Students / Tech Enthusiasts"
               />
             </div>
           </div>
@@ -179,11 +180,11 @@ export default function PersonaSettings() {
       {/* Persona Tone & Bio */}
       <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6">
         <h3 className="text-base font-bold text-white flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-rose-500" />
-          AI Creator Persona & Indian Hinglish Tone
+          <BrainCircuit className="w-4 h-4 text-rose-500" />
+          Google Gemma 4 AI Creator Persona & Tone
         </h3>
         <p className="text-xs text-zinc-400">
-          Configure how Gemini speaks to your viewers and students.
+          Configure how Google Gemma 4 AI speaks to your viewers and community.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -194,7 +195,7 @@ export default function PersonaSettings() {
               value={settings.creatorName}
               onChange={(e) => setSettings({ ...settings, creatorName: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. Aman Sir / SW Tech"
+              placeholder="e.g. Aman / Rohit / SW Tech"
             />
           </div>
 
@@ -205,7 +206,7 @@ export default function PersonaSettings() {
               value={settings.channelName}
               onChange={(e) => setSettings({ ...settings, channelName: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. Vidyakul Hindi Medium / SW Tech"
+              placeholder="e.g. SW Gyan Bhumi / Tech Guide"
             />
           </div>
 
@@ -249,7 +250,7 @@ export default function PersonaSettings() {
               onChange={(e: any) => setSettings({ ...settings, toneStyle: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
             >
-              <option value="pro_mentor">🎓 Encouraging Teacher & Mentor (Polite, Guiding, Motivating)</option>
+              <option value="pro_mentor">🎓 Encouraging Mentor (Polite, Guiding, Motivating)</option>
               <option value="friendly_bro">🤝 Friendly Bhai/Bro (Colloquial & Relatable)</option>
               <option value="witty_energetic">🔥 Witty & High-Energy (OP Vibe)</option>
               <option value="polite_support">🛡️ Polite & Support Oriented</option>
@@ -266,7 +267,7 @@ export default function PersonaSettings() {
             value={settings.personaBio}
             onChange={(e) => setSettings({ ...settings, personaBio: e.target.value })}
             className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 resize-none"
-            placeholder="Describe what your channel teaches (e.g., Hindi medium board exam classes, PDF notes on app)..."
+            placeholder="Describe what your channel teaches (e.g., educational classes, programming guides, finance strategies)..."
           />
         </div>
 
@@ -278,7 +279,7 @@ export default function PersonaSettings() {
               value={settings.customSignature || ''}
               onChange={(e) => setSettings({ ...settings, customSignature: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. — Team Vidyakul ❤️"
+              placeholder="e.g. — Team SW Tech ❤️"
             />
           </div>
           <div>
@@ -288,7 +289,7 @@ export default function PersonaSettings() {
               value={settings.callToAction || ''}
               onChange={(e) => setSettings({ ...settings, callToAction: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. PDF notes ke liye App download karein!"
+              placeholder="e.g. Resources ke liye description check karein!"
             />
           </div>
         </div>
@@ -298,73 +299,90 @@ export default function PersonaSettings() {
       <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6">
         <h3 className="text-base font-bold text-white flex items-center gap-2 mb-1">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          YouTube Quota Saver & Spam Rules
+          Smart Filters & Quota Saver Guard
         </h3>
-        <p className="text-xs text-zinc-400 mb-4">
-          Protect your 10,000 daily quota limit from being wasted on emojis and bots.
+        <p className="text-xs text-zinc-400 mb-6">
+          Pre-filter low-value comments before calling YouTube API to conserve your 10,000 daily quota units.
         </p>
 
-        <div className="space-y-3">
-          <label className="flex items-center gap-3 cursor-pointer">
+        <div className="space-y-4">
+          <label className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 cursor-pointer">
+            <div>
+              <div className="text-xs font-bold text-zinc-200">Skip Emoji-Only Comments</div>
+              <div className="text-[10px] text-zinc-400">Save quota by ignoring single-emoji comments (e.g. '🔥', '❤️')</div>
+            </div>
             <input
               type="checkbox"
               checked={settings.filterEmojiOnly}
               onChange={(e) => setSettings({ ...settings, filterEmojiOnly: e.target.checked })}
-              className="w-4 h-4 accent-rose-600 rounded bg-zinc-950"
+              className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />
-            <div>
-              <span className="text-sm font-medium text-zinc-200">Filter Emoji-Only Comments</span>
-              <p className="text-[11px] text-zinc-400">Skips comments with only 🔥, ❤️, etc. to save 50 write units per comment.</p>
-            </div>
           </label>
 
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 cursor-pointer">
+            <div>
+              <div className="text-xs font-bold text-zinc-200">Spam & Self-Promotion Filter</div>
+              <div className="text-[10px] text-zinc-400">Auto-skip comments matching blacklisted keywords</div>
+            </div>
             <input
               type="checkbox"
               checked={settings.filterRepetitiveSpam}
               onChange={(e) => setSettings({ ...settings, filterRepetitiveSpam: e.target.checked })}
-              className="w-4 h-4 accent-rose-600 rounded bg-zinc-950"
+              className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />
+          </label>
+
+          <label className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 cursor-pointer">
             <div>
-              <span className="text-sm font-medium text-zinc-200">Filter Repetitive Spammers</span>
-              <p className="text-[11px] text-zinc-400">Filters bot patterns with 7+ repeated letters.</p>
+              <div className="text-xs font-bold text-zinc-200">Auto-Like Comment on AI Reply</div>
+              <div className="text-[10px] text-zinc-400">Automatically heart/like the comment when reply is posted</div>
             </div>
+            <input
+              type="checkbox"
+              checked={settings.autoLikeOnReply}
+              onChange={(e) => setSettings({ ...settings, autoLikeOnReply: e.target.checked })}
+              className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
+            />
           </label>
         </div>
 
-        {/* Blacklisted Keywords */}
-        <div className="mt-6">
+        {/* Blacklist Keywords Management */}
+        <div className="mt-6 pt-5 border-t border-zinc-800/80">
           <label className="block text-xs font-semibold text-zinc-300 mb-2">Blacklisted Spam Keywords</label>
           <div className="flex gap-2 mb-3">
             <input
               type="text"
               value={newKeyword}
               onChange={(e) => setNewKeyword(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addBlacklistWord())}
-              placeholder="e.g. sub4sub, free crypto, telegram"
-              className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addBlacklistWord();
+                }
+              }}
+              className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 focus:outline-none focus:border-rose-500"
+              placeholder="Type keyword and press Enter (e.g. telegram link, sub4sub)"
             />
             <button
               type="button"
               onClick={addBlacklistWord}
-              className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold rounded-xl flex items-center gap-1"
             >
-              <Plus className="w-3.5 h-3.5" />
-              Add
+              <Plus className="w-3.5 h-3.5" /> Add
             </button>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {settings.blacklistKeywords.map((word) => (
               <span
                 key={word}
-                className="px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-300 flex items-center gap-1.5"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-[11px] text-zinc-300"
               >
                 {word}
                 <button
                   type="button"
                   onClick={() => removeBlacklistWord(word)}
-                  className="text-zinc-500 hover:text-red-400"
+                  className="text-zinc-500 hover:text-rose-400"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -377,19 +395,20 @@ export default function PersonaSettings() {
       {/* Save Button */}
       <div className="flex items-center justify-between pt-2">
         {savedMessage ? (
-          <span className="text-xs text-emerald-400 flex items-center gap-1.5 font-semibold">
-            <CheckCircle2 className="w-4 h-4" />
-            Persona & Category Settings Saved!
-          </span>
-        ) : <span />}
+          <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-950/20 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
+            <CheckCircle2 className="w-4 h-4" /> Persona Settings Saved Successfully!
+          </div>
+        ) : (
+          <div />
+        )}
 
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-sm font-semibold shadow-md shadow-rose-600/20 disabled:opacity-50 transition-all"
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-xs shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2 disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
-          {saving ? 'Saving...' : 'Save Settings'}
+          {saving ? 'Saving...' : 'Save Persona Settings'}
         </button>
       </div>
     </form>

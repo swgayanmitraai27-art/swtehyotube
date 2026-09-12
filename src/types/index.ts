@@ -2,7 +2,7 @@ export type PlanType = 'free' | 'starter' | 'pro' | 'enterprise';
 export type BillingCycle = 'monthly' | 'yearly';
 
 export type ChannelCategory = 
-  | 'edtech'             // Education / Vidyakul / Coaching / Classes
+  | 'edtech'             // Education / Online Coaching / Courses / Classes
   | 'tech'               // Coding / Software / Gadgets
   | 'finance'            // Trading / Investing / Crypto
   | 'gaming'             // Esports / Live Streaming
@@ -118,7 +118,7 @@ export interface CreatorPersonaConfig {
     | 'auto';
   toneStyle: 'friendly_bro' | 'pro_mentor' | 'witty_energetic' | 'polite_support';
   personaBio: string;
-  appName?: string;              // e.g. "Vidyakul App"
+  appName?: string;              // e.g. "Official App / Course App"
   appDownloadLink?: string;      // e.g. "https://play.google.com/store/apps/..."
   courseOrWebsiteLink?: string;  // e.g. Batch enrollment link
   targetAudience?: string;       // e.g. "Class 9th to 12th Board Exam Students"
