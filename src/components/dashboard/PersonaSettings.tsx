@@ -347,6 +347,8 @@ export default function PersonaSettings() {
               onChange={(e) => setSettings({ ...settings, filterRepetitiveSpam: e.target.checked })}
               className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />
+          </label>
+
           <label className="flex items-center justify-between p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 cursor-pointer">
             <div>
               <div className="text-xs font-bold text-rose-300 flex items-center gap-1.5">
