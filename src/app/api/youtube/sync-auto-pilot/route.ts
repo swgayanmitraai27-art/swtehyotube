@@ -9,18 +9,6 @@ import * as admin from 'firebase-admin';
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET;
-
-    // Verify secret for automated cron runs if configured
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      const { searchParams } = new URL(req.url);
-      const uid = searchParams.get('uid');
-      if (!uid) {
-        return NextResponse.json({ error: 'Unauthorized cron request' }, { status: 401 });
-      }
-    }
-
     const { searchParams } = new URL(req.url);
     const targetUid = searchParams.get('uid');
 
