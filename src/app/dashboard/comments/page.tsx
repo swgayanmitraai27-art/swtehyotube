@@ -4,7 +4,9 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import CommentCard from '@/components/dashboard/CommentCard';
+import CommentSummaryModal from '@/components/dashboard/CommentSummaryModal';
 import { YouTubeCommentItem } from '@/types';
+import { VideoCommentSummary } from '@/lib/gemini';
 import { 
   MessageSquareReply, 
   RefreshCw, 
@@ -12,7 +14,9 @@ import {
   Sparkles, 
   CheckCircle2, 
   AlertCircle,
-  Youtube
+  Youtube,
+  BrainCircuit,
+  Lightbulb
 } from 'lucide-react';
 
 function CommentsStudioContent() {
@@ -26,6 +30,11 @@ function CommentsStudioContent() {
   const [repliedCount, setRepliedCount] = useState(0);
   const [autoSyncing, setAutoSyncing] = useState(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
+
+  // AI Summary State
+  const [summaryModalOpen, setSummaryModalOpen] = useState(false);
+  const [summaryLoading, setSummaryLoading] = useState(false);
+  const [summaryData, setSummaryData] = useState<VideoCommentSummary | null>(null);
 
   const loadComments = async () => {
     if (!user || !isYouTubeConnected) {
@@ -88,6 +97,35 @@ function CommentsStudioContent() {
     refreshProfile();
   };
 
+  const handleGenerateSummary = async () => {
+    if (comments.length === 0) return;
+    try {
+      setSummaryLoading(true);
+      setSummaryModalOpen(true);
+      const res = await fetch('/api/ai/summarize-comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          videoTitle: comments[0]?.videoTitle || (videoId ? `Video ${videoId}` : 'Recent Videos'),
+          channelName: profile?.channelTitle || profile?.displayName || 'Creator',
+          comments: comments.map((c) => ({
+            textDisplay: c.textDisplay,
+            authorDisplayName: c.authorDisplayName,
+            likeCount: c.likeCount,
+          })),
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.summary) {
+        setSummaryData(data.summary);
+      }
+    } catch (err) {
+      console.error('Failed to generate comment summary:', err);
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
   const filteredComments = comments.filter((c) => {
     if (filterMode === 'unreplied') return !c.isReplied && c.status !== 'filtered_out';
     if (filterMode === 'replied') return c.isReplied;
@@ -109,6 +147,19 @@ function CommentsStudioContent() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* AI Comment Summary Button */}
+          {comments.length > 0 && (
+            <button
+              onClick={handleGenerateSummary}
+              disabled={loading || summaryLoading}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600/20 via-rose-600/10 to-amber-600/10 hover:from-rose-600/30 hover:to-amber-600/20 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-rose-950/40 disabled:opacity-50"
+              title="Summarize all comments, extract main points, and get next video ideas with AI"
+            >
+              <BrainCircuit className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+              <span>✨ AI Comment Summary & Key Insights</span>
+            </button>
+          )}
+
           {profile?.autoPilotEnabled && (
             <button
               onClick={handleRunAutoPilotNow}
@@ -210,6 +261,15 @@ function CommentsStudioContent() {
           </p>
         </div>
       )}
+
+      {/* AI Comment Summary Modal */}
+      <CommentSummaryModal
+        isOpen={summaryModalOpen}
+        onClose={() => setSummaryModalOpen(false)}
+        summary={summaryData}
+        loading={summaryLoading}
+        videoTitle={comments[0]?.videoTitle || (videoId ? `Video ${videoId}` : 'Channel Comments')}
+      />
     </div>
   );
 }

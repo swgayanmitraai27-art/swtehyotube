@@ -119,6 +119,88 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 4-Pillar Features Showcase Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-900">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
+            <Sparkles className="w-3.5 h-3.5" />
+            Everything Creators Need to Scale
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            Built for Serious YouTubers & EdTech Creators
+          </h2>
+          <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Stop spending 3 hours daily typing repetitive replies. Let AI handle community engagement, student questions, and spam cleaning 24/7.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Pillar 1: AI Comment Summary */}
+          <div className="p-6 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4">
+                <BrainCircuit className="w-6 h-6 animate-pulse" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">🧠 AI Video Comment Summary</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                1-Click analyze 1,000+ comments per video. AI instantly extracts core student talking points, top doubts, and recommends high-demand next video ideas.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-amber-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Audience Intelligence
+            </div>
+          </div>
+
+          {/* Pillar 2: Auto-Mention & App Promotion */}
+          <div className="p-6 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">🏷️ Auto-Mention & App Links</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Tags every commenter with their unique @username and intelligently embeds your Play Store app download link or course batch link in replies.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-rose-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> 3x Higher CTR & Downloads
+            </div>
+          </div>
+
+          {/* Pillar 3: Toxic Comment Auto-Cleaner */}
+          <div className="p-6 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">🛡️ Abusive Comment Auto-Delete</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Instantly detects vulgar abuses, hate speech, Telegram spam, and scam links, and automatically wipes them off YouTube to protect your brand.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Clean Channel Reputation
+            </div>
+          </div>
+
+          {/* Pillar 4: BYOK Multi-Project Quota */}
+          <div className="p-6 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
+                <Layers className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">⚡ BYOK Quota Pooling</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Connect your own Google Cloud projects to pool 10k, 20k, or 30k daily quota units (~18,000 replies/month) with zero server bottlenecks.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-purple-400 font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Unlimited Scale & Reliability
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Language & Intelligence Showcase Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-900">
         <div className="text-center max-w-3xl mx-auto mb-16">
