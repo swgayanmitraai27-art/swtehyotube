@@ -316,6 +316,53 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SEO-Rich FAQ Section */}
+      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-3">
+            <Compass className="w-3.5 h-3.5" />
+            Frequently Asked Questions
+          </div>
+          <h2 className="text-3xl font-extrabold text-white">Everything You Need to Know</h2>
+          <p className="text-xs text-zinc-400 mt-2">
+            Clear answers about Google Gemma 4 AI, YouTube quota, safety, and app download conversions.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              q: 'How does the YouTube AI Auto-Reply & Auto-Mention tool work?',
+              a: 'Our platform connects to your YouTube channel via Google OAuth and constantly monitors incoming comments. Google Gemma 4 31B AI analyzes your video title, description, and custom persona prompt to generate hyper-relevant replies in natural Hinglish or regional languages, tags the commenter with @mention, and attaches your official App / Course download link.',
+            },
+            {
+              q: 'Is it 100% safe and compliant with YouTube Community Guidelines?',
+              a: 'Yes, 100%. We strictly use the official Google YouTube Data API v3 and Google Generative AI with strict rate-limiting, intelligent quota caching, and anti-spam delays. Your channel credentials and tokens are encrypted with enterprise-grade security.',
+            },
+            {
+              q: 'Can it automatically delete abusive and toxic comments?',
+              a: 'Yes! Our built-in Toxic Comment Filter scans for vulgar abuses, scams, sub4sub links, and derogatory keywords, and automatically deletes them from YouTube to protect your channel brand image.',
+            },
+            {
+              q: 'How does the BYOK Multi-Project Quota Pooling work?',
+              a: 'For high-volume coaching institutes and creators (4,000 to 18,000+ monthly replies), you can pool your own Google Cloud projects (10k, 20k, 30k daily units) in Settings. This gives you dedicated unlimited quota directly from Google without server rate-limits.',
+            },
+            {
+              q: 'How do I get the 1-on-1 Live 5-Minute Setup Video Call with the Founder?',
+              a: 'All paid members get direct access to book a 5-minute live screen-share setup call on WhatsApp (+91 8303994616). Our technical team will personally walk you through custom persona prompts, app promotion setup, and Google Cloud project keys.',
+            },
+          ].map((faq, i) => (
+            <div
+              key={i}
+              className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-left transition-all hover:border-zinc-700"
+            >
+              <h3 className="text-sm sm:text-base font-bold text-white mb-2">{faq.q}</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-zinc-900 bg-zinc-950 py-10 px-4 text-xs text-zinc-400 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
