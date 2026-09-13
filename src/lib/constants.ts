@@ -71,9 +71,9 @@ export interface IndianPricingTier {
 export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
   {
     id: 'starter',
-    name: '🚀 Starter (Value King)',
-    badge: 'Micro Creators',
-    idealFor: 'New & Micro Creators (10k-50k Subs)',
+    name: '🚀 Starter Plan',
+    badge: 'Starter',
+    idealFor: 'Creators & Growing Channels (10k-50k Subs)',
     monthlyPrice: 499,
     yearlyPrice: 4990, // Pay 10 months, get 12 months (2 Months Free)
     monthlyCredits: 2000, // 2,000 replies / mo
@@ -89,10 +89,10 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
   },
   {
     id: 'pro',
-    name: '🔥 Pro (Market Grabber)',
-    badge: 'Best Value',
+    name: '🔥 Pro Plan',
+    badge: 'Most Popular',
     popular: true,
-    idealFor: 'Growing Creators (50k-300k Subs)',
+    idealFor: 'High-Growth Channels & Educators (50k-300k Subs)',
     monthlyPrice: 999,
     yearlyPrice: 9990, // 2 Months Free
     monthlyCredits: 4000, // 4,000 replies / mo
@@ -109,9 +109,9 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
   },
   {
     id: 'enterprise',
-    name: '👑 Enterprise (The Vidyakul Special)',
-    badge: 'Big Creators & Institutes',
-    idealFor: 'Big Creators / Institutes & Agencies (300k+ Subs)',
+    name: '👑 Enterprise Plan',
+    badge: 'Institutes & Large Channels',
+    idealFor: 'Large Channels, Coaching Institutes & Media Teams (300k+ Subs)',
     monthlyPrice: 2499,
     yearlyPrice: 24990, // 2 Months Free
     monthlyCredits: 8000, // 8,000 replies / mo

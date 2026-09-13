@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     let amount = 49900; // Default ₹499 in paise
-    let description = '🚀 Starter (Value King) Plan (₹499/Month)';
+    let description = '🚀 Starter Plan (₹499/Month)';
     let creditsToAdd = 2000;
     let purchaseType = 'subscription';
 

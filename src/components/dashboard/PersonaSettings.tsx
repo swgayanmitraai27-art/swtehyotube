@@ -576,7 +576,7 @@ export default function PersonaSettings() {
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
               <div className="flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
-                <span className="text-xs font-bold text-white">Google Cloud Project 3 (Enterprise Vidyakul Pool)</span>
+                <span className="text-xs font-bold text-white">Google Cloud Project 3 (Enterprise High-Volume Pool)</span>
               </div>
               <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (Total 30k Quota)</span>
             </div>
