@@ -44,9 +44,18 @@ export function getGoogleOAuthUrl(stateUserId: string, customId?: string, custom
  */
 export async function getAuthenticatedYouTubeClient(userId: string) {
   // Fetch user settings to check for BYOK custom client ID/secret
-  const userDoc = await adminDb.collection('users').doc(userId).get();
-  const userData = userDoc.data();
-  const persona = userData?.settings || {};
+  let persona: any = {};
+  try {
+    const personaDoc = await adminDb.collection('users').doc(userId).collection('settings').doc('persona').get();
+    if (personaDoc.exists) {
+      persona = personaDoc.data() || {};
+    } else {
+      const userDoc = await adminDb.collection('users').doc(userId).get();
+      persona = userDoc.data()?.settings || {};
+    }
+  } catch (e) {
+    console.warn('Could not fetch persona for youtube client:', e);
+  }
 
   const oauth2Client = getOAuth2Client(persona.customClientId, persona.customClientSecret);
 

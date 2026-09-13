@@ -21,11 +21,19 @@ export async function GET(req: NextRequest) {
 
     if (stateUid && !stateUid.startsWith('user_')) {
       try {
-        const userDoc = await adminDb.collection('users').doc(stateUid).get();
-        const userData = userDoc.data();
-        const settings = userData?.settings || {};
-        if (settings.customClientId) customId = settings.customClientId;
-        if (settings.customClientSecret) customSecret = settings.customClientSecret;
+        const personaDoc = await adminDb.collection('users').doc(stateUid).collection('settings').doc('persona').get();
+        if (personaDoc.exists) {
+          const settings = personaDoc.data() || {};
+          if (settings.customClientId) customId = settings.customClientId;
+          if (settings.customClientSecret) customSecret = settings.customClientSecret;
+        }
+
+        if (!customId) {
+          const userDoc = await adminDb.collection('users').doc(stateUid).get();
+          const settings = userDoc.data()?.settings || {};
+          if (settings.customClientId) customId = settings.customClientId;
+          if (settings.customClientSecret) customSecret = settings.customClientSecret;
+        }
       } catch (docErr) {
         console.warn('Could not fetch custom client settings in callback:', docErr);
       }

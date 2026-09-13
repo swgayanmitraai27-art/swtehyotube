@@ -30,12 +30,35 @@ import {
 import Link from 'next/link';
 
 export default function PersonaSettings() {
-  const { user, profile } = useAuth();
+  const { user, profile, connectYouTubeChannel } = useAuth();
   const [settings, setSettings] = useState<CreatorPersonaConfig>(DEFAULT_CREATOR_PERSONA);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
   const [newKeyword, setNewKeyword] = useState('');
+
+  const handleSaveAndConnect = async () => {
+    if (!user) return;
+    try {
+      setSaving(true);
+      const res = await fetch('/api/user/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          settings,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        connectYouTubeChannel();
+      }
+    } catch (err) {
+      console.error('Failed to save settings and connect:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -607,6 +630,22 @@ export default function PersonaSettings() {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Quick Action: Save & Connect YouTube */}
+          <div className="mt-4 pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[11px] text-zinc-400">
+              💡 <span className="text-zinc-200 font-semibold">Ready to connect?</span> Enter your Client ID & Secret, then click below to connect with your own Google Cloud app name and zero quota limits!
+            </p>
+            <button
+              type="button"
+              onClick={handleSaveAndConnect}
+              disabled={saving}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 shrink-0 disabled:opacity-50"
+            >
+              <Youtube className="w-4 h-4 text-white" />
+              {saving ? 'Saving...' : 'Save & Connect YouTube'}
+            </button>
           </div>
         </div>
       </div>
