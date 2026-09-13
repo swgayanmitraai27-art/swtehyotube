@@ -1,7 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, signInWithCustomToken, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
+import { 
+  User, 
+  signInWithCustomToken, 
+  signOut as firebaseSignOut, 
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile as firebaseUpdateProfile
+} from 'firebase/auth';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { UserProfile } from '@/types';
@@ -12,6 +20,8 @@ interface AuthContextType {
   loading: boolean;
   isYouTubeConnected: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInWithEmail: (email: string, pass: string) => Promise<void>;
+  signUpWithEmail: (email: string, pass: string, name?: string) => Promise<void>;
   connectYouTubeChannel: () => void;
   logout: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -94,6 +104,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signInWithEmail = async (email: string, pass: string) => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email.trim(), pass);
+    } catch (error: any) {
+      console.error('Sign in with email error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signUpWithEmail = async (email: string, pass: string, name?: string) => {
+    try {
+      setLoading(true);
+      const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
+      if (name && cred.user) {
+        await firebaseUpdateProfile(cred.user, { displayName: name });
+      }
+    } catch (error: any) {
+      console.error('Sign up with email error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const connectYouTubeChannel = () => {
     if (!user) {
       window.location.href = '/api/auth/google-url';
@@ -127,6 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         isYouTubeConnected,
         signInWithGoogle,
+        signInWithEmail,
+        signUpWithEmail,
         connectYouTubeChannel,
         logout,
         refreshProfile,

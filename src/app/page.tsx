@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import { useAuth } from '@/context/AuthContext';
 import RazorpayModal from '@/components/dashboard/RazorpayModal';
 import AIPlayground from '@/components/dashboard/AIPlayground';
+import AuthModal from '@/components/dashboard/AuthModal';
 import { 
   Youtube, 
   Sparkles, 
@@ -26,8 +27,9 @@ import { INDIAN_TIER_PLANS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
 export default function LandingPage() {
-  const { user, signInWithGoogle } = useAuth();
+  const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('pro');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
 
@@ -35,14 +37,14 @@ export default function LandingPage() {
     if (user) {
       window.location.href = '/dashboard';
     } else {
-      signInWithGoogle();
+      setAuthModalOpen(true);
     }
   };
 
   const handlePlanSelect = (planId: string) => {
     setSelectedPlan(planId);
     if (!user) {
-      signInWithGoogle();
+      setAuthModalOpen(true);
     } else {
       setModalOpen(true);
     }
@@ -467,6 +469,13 @@ export default function LandingPage() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         selectedPlanId={selectedPlan}
+      />
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        defaultTab="register"
       />
     </div>
   );
