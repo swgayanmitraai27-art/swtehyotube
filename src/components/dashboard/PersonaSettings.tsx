@@ -25,7 +25,8 @@ import {
   ExternalLink,
   Layers,
   Crown,
-  Lock
+  Lock,
+  Youtube
 } from 'lucide-react';
 import Link from 'next/link';
 
