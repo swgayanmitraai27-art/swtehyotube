@@ -19,7 +19,8 @@ import {
   Flame,
   Rocket,
   PhoneCall,
-  Video
+  Video,
+  MessageSquare
 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -170,6 +171,57 @@ export default function BillingPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* Custom Bulk Volume & Multi-Channel Agency Plan */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/40 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            💼 Custom Bulk Volume & Multi-Channel Plan
+          </div>
+          <h3 className="text-xl font-bold text-white mb-1.5">
+            Need 20,000 to 5,00,000+ Monthly Replies or Multiple Channels?
+          </h3>
+          <p className="text-xs text-zinc-300 leading-relaxed mb-4">
+            Custom high-volume packages tailored for large coaching institutes, YouTube media networks, and creators with multiple active channels. Includes dedicated multi-project BYOK quota setup and VIP live support directly with the founder.
+          </p>
+          <div className="flex flex-wrap gap-4 text-xs text-zinc-300">
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              Custom High Reply Quota (20k - 500k+/mo)
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              Multi-Channel Network (MCN) Linking
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              Direct Founder WhatsApp Live Setup
+            </div>
+          </div>
+        </div>
+
+        <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto">
+          <a
+            href={`https://wa.me/918303994616?text=${encodeURIComponent(
+              `Hello SW Tech Team! I want to inquire about the Custom / Bulk Plan for my YouTube channel(s). Channel: ${profile?.channelTitle || 'My Channel'}`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-950/60 flex items-center justify-center gap-2"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>Chat on WhatsApp (+91 8303994616)</span>
+          </a>
+          <a
+            href="tel:+918303994616"
+            className="px-6 py-3 rounded-2xl bg-zinc-800/80 hover:bg-zinc-700/80 border border-zinc-700 text-zinc-200 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+          >
+            <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Direct Call: 8303994616</span>
+          </a>
+        </div>
       </div>
 
       {/* 1-Time Live Setup Video Call Assistance Banner */}

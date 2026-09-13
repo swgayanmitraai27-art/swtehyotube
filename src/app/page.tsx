@@ -21,7 +21,9 @@ import {
   Languages,
   Layers,
   Compass,
-  Check
+  Check,
+  PhoneCall,
+  MessageSquare
 } from 'lucide-react';
 import { INDIAN_TIER_PLANS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
@@ -397,6 +399,55 @@ export default function LandingPage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Custom / Bulk Volume Plan Card */}
+        <div className="mt-10 rounded-3xl p-8 bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/30 text-left flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              Custom Bulk & Agency Volume Plan
+            </div>
+            <h3 className="text-2xl font-black text-white">Need Custom High-Volume AI Replies or Multiple Channels?</h3>
+            <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
+              For Large Media Networks, Coaching Institutes, and Creator Agencies needing <strong>20,000 to 5,00,000+ Monthly AI Replies</strong>, Multi-Channel BYOK Quota Architecture, or Custom AI Fine-Tuning. Connect directly with the founder for custom enterprise pricing & instant live setup.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-4 text-xs text-zinc-300">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Custom Reply Quota (20k - 500k+/mo)
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Unlimited Multi-Channel Support
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Direct WhatsApp VIP Support & Setup
+              </div>
+            </div>
+          </div>
+
+          <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto">
+            <a
+              href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                'Hello SW Tech Team! I am interested in the Custom / Bulk Plan for my YouTube channel(s). Please share custom bulk pricing & setup details.'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-xl shadow-emerald-950/60 transition-all flex items-center justify-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Chat on WhatsApp (+91 8303994616)</span>
+            </a>
+            <a
+              href="tel:+918303994616"
+              className="px-6 py-3 rounded-xl bg-zinc-800/80 hover:bg-zinc-700/80 border border-zinc-700 text-zinc-200 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+            >
+              <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Direct Call: 8303994616</span>
+            </a>
+          </div>
         </div>
       </section>
 

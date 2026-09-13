@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video } from 'lucide-react';
+import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video, MessageSquare } from 'lucide-react';
 import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
@@ -357,6 +357,24 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
               <Sparkles className="w-4 h-4" />
               {loading ? 'Opening Razorpay...' : 'Proceed to Razorpay (UPI / Cards / NetBanking)'}
             </button>
+
+            {/* Custom Bulk Plan Direct Contact */}
+            <div className="mt-4 p-3 rounded-xl bg-zinc-900/70 border border-zinc-800 text-center">
+              <span className="text-[11px] text-zinc-400 block mb-1.5">
+                Need a <strong>Custom Bulk Plan (20,000 to 5,00,000+ replies)</strong> or Multi-Channel Agency setup?
+              </span>
+              <a
+                href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                  'Hello SW Tech Team! I want to inquire about a Custom Bulk Plan for my YouTube channels.'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Chat with Founder on WhatsApp (+91 8303994616)</span>
+              </a>
+            </div>
 
             <div className="flex items-center justify-center gap-2 mt-3 text-[11px] text-zinc-500">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
