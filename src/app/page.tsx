@@ -431,7 +431,7 @@ export default function LandingPage() {
             },
             {
               q: 'How do I get the 1-on-1 Live 5-Minute Setup Video Call with the Founder?',
-              a: 'All paid members get direct access to book a 5-minute live screen-share setup call on WhatsApp (+91 8303994616). Our technical team will personally walk you through custom persona prompts, app promotion setup, and Google Cloud project keys.',
+              a: 'All paid members get instant access to book a 1-Time 5-minute live screen-share setup call on WhatsApp directly from their dashboard. Our founder will personally walk you through Google Cloud project creation, OAuth Client ID/Secret setup, and custom persona configuration.',
             },
           ].map((faq, i) => (
             <div

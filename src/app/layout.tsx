@@ -116,7 +116,6 @@ export default function RootLayout({
         logo: 'https://swgayanbhumi.in/logo.png',
         contactPoint: {
           '@type': 'ContactPoint',
-          telephone: '+91-8303994616',
           contactType: 'customer support',
           areaServed: 'IN',
           availableLanguage: ['Hindi', 'English'],
