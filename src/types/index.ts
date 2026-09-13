@@ -143,6 +143,7 @@ export interface CreatorPersonaConfig {
   filterEmojiOnly: boolean;
   filterRepetitiveSpam: boolean;
   minCommentLength: number;
+  maxCommentAgeHours?: number; // Only reply to fresh comments within X hours (e.g. 24, 48, 168)
 }
 
 export interface AutoPilotLog {

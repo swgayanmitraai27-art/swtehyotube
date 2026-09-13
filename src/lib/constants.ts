@@ -53,6 +53,7 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   filterEmojiOnly: true,
   filterRepetitiveSpam: true,
   minCommentLength: 3,
+  maxCommentAgeHours: 48,
 };
 
 export interface IndianPricingTier {

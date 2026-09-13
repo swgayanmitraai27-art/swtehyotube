@@ -409,6 +409,32 @@ export default function PersonaSettings() {
               className="w-4 h-4 accent-rose-500 rounded cursor-pointer"
             />
           </label>
+
+          {/* Comment Freshness / Max Age Filter (Credit Protection) */}
+          <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 col-span-1 md:col-span-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="text-xs font-bold text-zinc-200 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  Smart Credit Saver: Only Reply to Fresh Comments
+                </div>
+                <div className="text-[10px] text-zinc-400">
+                  Protects your credits by skipping old/dead comments from months ago. Only fresh active viewers get replies!
+                </div>
+              </div>
+              <select
+                value={settings.maxCommentAgeHours || 48}
+                onChange={(e) => setSettings({ ...settings, maxCommentAgeHours: Number(e.target.value) })}
+                className="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500 font-semibold shrink-0"
+              >
+                <option value={24}>Fresh Only (Last 24 Hours)</option>
+                <option value={48}>Recommended (Last 48 Hours)</option>
+                <option value={72}>Last 3 Days</option>
+                <option value={168}>Last 7 Days</option>
+                <option value={720}>Last 30 Days</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Blacklist Keywords Management */}

@@ -70,6 +70,29 @@ export async function GET(req: NextRequest) {
 
         if (existingReply.exists) continue;
 
+        // Skip old comments to protect credits (default: only reply to comments from last 48 hours)
+        const maxAgeHours = persona.maxCommentAgeHours || 48;
+        if (comment.publishedAt) {
+          const commentTime = new Date(comment.publishedAt).getTime();
+          const ageHours = (Date.now() - commentTime) / (1000 * 60 * 60);
+          if (ageHours > maxAgeHours) {
+            await adminDb
+              .collection('users')
+              .doc(userId)
+              .collection('replies')
+              .doc(comment.id)
+              .set({
+                commentId: comment.id,
+                authorName: comment.authorDisplayName,
+                originalComment: comment.textDisplay,
+                status: 'skipped',
+                reason: `Comment is older than ${maxAgeHours} hours (${Math.round(ageHours)} hrs old). Skipped to save credits.`,
+                timestamp: Date.now(),
+              });
+            continue;
+          }
+        }
+
         // Quota Guard check
         const eligibility = evaluateCommentEligibility(
           comment.textDisplay,
