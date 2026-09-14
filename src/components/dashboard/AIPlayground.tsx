@@ -53,8 +53,8 @@ const SAMPLE_PRESETS = [
     videoTitle: 'Top 3 High Growth Stocks for 2026 | Stock Market Basics',
     videoDescription: 'Open Free Demat Account: https://broker.link/swtech. Join our Zero to Hero Trading Masterclass Batch.',
     commenter: 'Aakash_Investor',
-    comment: 'Sir kya main ₹5,000 se start kar sakta hoon? Aur aapka complete trading batch kab shuru ho raha hai?',
-    instruction: 'Polite finance mentor tone me bolo ki ₹5,000 se SIP/learning start ho sakti hai aur masterclass link description me hai.',
+    comment: 'Can I start with $500? And when is your next trading batch starting?',
+    instruction: 'Polite finance mentor tone: confirm $500 is great for starting and mention masterclass link is in the description.',
   },
   {
     category: 'business_consulting',

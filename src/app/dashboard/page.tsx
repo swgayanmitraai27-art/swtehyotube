@@ -163,7 +163,7 @@ export default function DashboardOverviewPage() {
             </div>
           </div>
           <div className="text-2xl font-black text-white capitalize">
-            {profile?.plan === 'pro' ? 'Pro (₹999/mo)' : profile?.plan === 'starter' ? 'Starter (₹499/mo)' : profile?.plan === 'enterprise' ? 'Enterprise (₹2,499/mo)' : 'Free Trial'}
+            {profile?.plan === 'pro' ? 'Pro ($39/mo)' : profile?.plan === 'starter' ? 'Starter ($19/mo)' : profile?.plan === 'enterprise' ? 'Enterprise ($99/mo)' : profile?.plan === 'custom_bulk' ? 'VIP Custom' : 'Free Trial'}
           </div>
           <Link href="/dashboard/billing" className="text-[11px] text-rose-400 hover:underline mt-1 block">
             Manage Subscription →

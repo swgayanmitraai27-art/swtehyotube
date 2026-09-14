@@ -39,7 +39,7 @@ export default function Navbar() {
               <Sparkles className="w-3.5 h-3.5" />
               AI Playground (Live Demo)
             </Link>
-            <Link href="/#pricing" className="hover:text-white transition-colors">Pricing (₹499/mo)</Link>
+            <Link href="/#pricing" className="hover:text-white transition-colors">Pricing ($19/mo)</Link>
             <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
           </div>
 

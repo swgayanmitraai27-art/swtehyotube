@@ -199,29 +199,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                 <span className="p-1.5 rounded-lg bg-rose-600/10 text-rose-500 border border-rose-500/20">
                   <Zap className="w-4 h-4" />
                 </span>
-                <h3 className="text-lg font-extrabold text-white">Select Your Growth Plan</h3>
-              </div>
-
-              {/* Modal Currency Switcher */}
-              <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setCurrency('USD')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
-                    currency === 'USD' ? 'bg-rose-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  $ USD
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency('INR')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
-                    currency === 'INR' ? 'bg-emerald-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  ₹ INR
-                </button>
+                <h3 className="text-lg font-extrabold text-white">Select Your Growth Plan ($ USD)</h3>
               </div>
             </div>
             <p className="text-xs text-zinc-400 mb-4">
