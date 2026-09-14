@@ -365,7 +365,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
               className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 disabled:opacity-50 transition-all hover:scale-[1.02]"
             >
               <Sparkles className="w-4 h-4" />
-              {loading ? 'Opening Razorpay...' : 'Proceed to Razorpay (UPI / Cards / NetBanking)'}
+              {loading ? 'Processing Secure Checkout...' : 'Proceed to Secure Checkout (Credit / Debit Cards)'}
             </button>
 
             {/* Custom Bulk Plan Direct Contact */}

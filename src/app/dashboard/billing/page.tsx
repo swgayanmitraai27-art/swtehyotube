@@ -44,7 +44,7 @@ export default function BillingPage() {
           Billing & AI Reply Credits (Global USD Plans)
         </h1>
         <p className="text-xs text-zinc-400 mt-0.5">
-          Upgrade your plan with instant checkout (Cards, UPI, Global Payment Methods) or top up reply credits.
+          Upgrade your plan with instant secure checkout (Credit / Debit Cards & Global Methods) or top up reply credits.
         </p>
       </div>
 
@@ -353,10 +353,10 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* Razorpay Trust Badge */}
+      {/* Security & Trust Badge */}
       <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-center gap-3 text-xs text-zinc-400">
         <ShieldCheck className="w-4 h-4 text-emerald-400" />
-        All transactions processed securely via Razorpay with instant UPI, Credit/Debit cards & NetBanking.
+        All transactions processed with 256-bit SSL encryption supporting Visa, Mastercard, AMEX & Global Cards.
       </div>
 
       {/* Checkout Modal */}
