@@ -126,6 +126,24 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
       'Direct WhatsApp VIP Priority Setup Support',
       'Custom Promotional Call-To-Action Embedding'
     ]
+  },
+  {
+    id: 'custom_bulk',
+    name: '💼 Custom Bulk / VIP Calling Plan',
+    badge: 'Custom Volume & Direct Call',
+    idealFor: 'Large Coaching Institutes, Media Houses & Agencies (20k to 5,00,000+ Replies)',
+    monthlyPrice: 0, // Custom Quote
+    yearlyPrice: 0,
+    monthlyCredits: 50000,
+    yearlyCredits: 600000,
+    features: [
+      'Custom AI Reply Volume (20,000 to 5,00,000+ / Month)',
+      'Direct Phone & WhatsApp Calling (Founder: +91 8303994616 📞)',
+      '1-on-1 VIP Screen Share Setup & Google Cloud Architecture',
+      'Unlimited Multi-Channel Support & MCN Linking',
+      'Dedicated High-Speed Gemma 4 31B AI Cloud Instance',
+      'Custom Promotional Call-To-Action & Fine-Tuning'
+    ]
   }
 ];
 

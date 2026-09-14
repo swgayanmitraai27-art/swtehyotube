@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -87,11 +87,11 @@ export default function LoginPage() {
       <div className="bg-zinc-900/60 border border-zinc-800 rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl z-10 backdrop-blur-md">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-black text-white">
-            {tab === 'register' ? 'Get 50 Free AI Replies' : 'Welcome Back'}
+            {tab === 'register' ? '🎁 Start 7-Day Free Trial' : 'Welcome Back'}
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
             {tab === 'register'
-              ? 'Create your free account to automate your YouTube channel'
+              ? 'Includes 100 Free AI Reply credits • No credit card required'
               : 'Sign in to access your YouTube Creator Studio'}
           </p>
         </div>

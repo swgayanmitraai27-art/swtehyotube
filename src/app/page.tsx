@@ -93,27 +93,30 @@ export default function LandingPage() {
             onClick={handleGetStarted}
             className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-base shadow-xl shadow-rose-600/25 flex items-center justify-center gap-2.5 transition-all hover:scale-105"
           >
-            <Youtube className="w-5 h-5 fill-white" />
-            1-Click Connect YouTube Channel
+            <Sparkles className="w-5 h-5 text-amber-300" />
+            Start 7-Day Free Trial (1-Click Connect)
           </button>
           <Link
             href="#pricing"
             className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-semibold text-base transition-all"
           >
-            View Pricing (From ₹499/mo)
+            View Plans & Pricing
           </Link>
         </div>
 
         {/* Trust Badges */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-400">
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 50 Free Trial Welcome Credits
+          <span className="flex items-center gap-1.5 font-bold text-emerald-400">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 🎁 7-Day Full Free Trial
+          </span>
+          <span className="flex items-center gap-1.5 font-semibold text-zinc-300">
+            <Sparkles className="w-4 h-4 text-amber-400" /> 100 Free AI Reply Credits
           </span>
           <span className="flex items-center gap-1.5">
-            <BrainCircuit className="w-4 h-4 text-rose-400" /> Google Gemma 4 31B Deep Reasoning
+            <BrainCircuit className="w-4 h-4 text-rose-400" /> Google Gemma 4 31B AI
           </span>
           <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" /> 10k Quota Saver Guard
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> No Credit Card Required
           </span>
         </div>
 
@@ -304,7 +307,7 @@ export default function LandingPage() {
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Choose Your Growth Plan</h2>
           <p className="text-sm text-zinc-400 mt-2">
-            Save hours every week. Google Gemma 4 31B AI automation with guaranteed 90%+ profit margins.
+            Save hours every week. All plans include a <strong>7-Day Full Free Trial</strong> with 100 free AI replies and zero upfront commitment.
           </p>
 
           {/* Monthly / Yearly Switch with 2 Months Free */}
@@ -331,71 +334,110 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* 3 Tier Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 4 Tier Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {INDIAN_TIER_PLANS.map((plan) => {
             const isYearly = billingCycle === 'yearly';
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
+            const isCustom = plan.id === 'custom_bulk';
 
             return (
               <div
                 key={plan.id}
-                className={`rounded-3xl p-8 border text-left flex flex-col justify-between relative transition-all ${
+                className={`rounded-3xl p-6 border text-left flex flex-col justify-between relative transition-all ${
                   plan.popular
                     ? 'bg-gradient-to-b from-zinc-900 to-zinc-950 border-rose-500 shadow-2xl shadow-rose-950/40 ring-1 ring-rose-500 scale-[1.02]'
+                    : isCustom
+                    ? 'bg-gradient-to-b from-emerald-950/40 to-zinc-950 border-emerald-500/50 shadow-xl shadow-emerald-950/30'
                     : 'bg-zinc-950 border-zinc-800 hover:border-zinc-700'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-lg">
-                    🔥 Best Value (Most Popular)
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg">
+                    🔥 Most Popular
+                  </div>
+                )}
+                {isCustom && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg">
+                    📞 Direct Call / VIP
                   </div>
                 )}
 
                 <div>
-                  <h3 className="text-xl font-extrabold text-white">{plan.name}</h3>
-                  <span className="text-xs text-zinc-400 font-medium block mt-1">
+                  <h3 className="text-lg font-extrabold text-white">{plan.name}</h3>
+                  <span className="text-[11px] text-zinc-400 font-medium block mt-1 line-clamp-2">
                     {plan.idealFor}
                   </span>
 
-                  <div className="mt-5 flex items-baseline gap-1">
-                    <span className="text-4xl font-black text-white">₹{price.toLocaleString()}</span>
-                    <span className="text-sm text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    {isCustom ? (
+                      <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
+                    ) : (
+                      <>
+                        <span className="text-3xl font-black text-white">₹{price.toLocaleString()}</span>
+                        <span className="text-xs text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
+                      </>
+                    )}
                   </div>
 
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-lg">
-                      {credits.toLocaleString()} AI Replies {isYearly ? '/ yr' : '/ mo'}
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${
+                      isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                    }`}>
+                      {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
                     </span>
-                    {isYearly && (
-                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                    {!isCustom && isYearly && (
+                      <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
                         2 Mo Free
                       </span>
                     )}
                   </div>
 
-                  <ul className="mt-6 space-y-3 text-xs text-zinc-300 border-t border-zinc-800/80 pt-5">
+                  <ul className="mt-5 space-y-2.5 text-xs text-zinc-300 border-t border-zinc-800/80 pt-4">
                     {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                        {feature}
+                      <li key={feature} className="flex items-start gap-2">
+                        <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isCustom ? 'text-emerald-400' : 'text-emerald-400'}`} />
+                        <span className="leading-snug text-[11px]">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <button
-                  onClick={() => handlePlanSelect(plan.id)}
-                  className={`mt-8 w-full py-3.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
-                    plan.popular
-                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/25'
-                      : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                  }`}
-                >
-                  Choose {plan.name} (₹{price.toLocaleString()})
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isCustom ? (
+                  <div className="mt-6 flex flex-col gap-2">
+                    <a
+                      href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                        'Hello SW Tech Team! I am interested in the Custom Bulk / VIP Calling Plan for my YouTube channel(s). Please share pricing & call setup details.'
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>WhatsApp (+91 8303994616)</span>
+                    </a>
+                    <a
+                      href="tel:+918303994616"
+                      className="w-full py-2.5 rounded-xl bg-zinc-850 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <PhoneCall className="w-3 h-3 text-emerald-400" />
+                      <span>Direct Call: 8303994616</span>
+                    </a>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handlePlanSelect(plan.id)}
+                    className={`mt-6 w-full py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
+                      plan.popular
+                        ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/25'
+                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                    }`}
+                  >
+                    Start 7-Day Free Trial
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             );
           })}

@@ -71,10 +71,10 @@ export default function Navbar() {
                 </button>
                 <button
                   onClick={() => openAuth('register')}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition-all"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition-all hover:scale-105"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  Get Started Free
+                  Start 7-Day Free Trial
                 </button>
               </div>
             )}

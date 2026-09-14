@@ -63,22 +63,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const unsubDoc = onSnapshot(userDocRef, async (snap) => {
           if (snap.exists()) {
-            setProfile(snap.data() as UserProfile);
+            const data = snap.data() as UserProfile;
+            setProfile(data);
+            if (!data.channelId && currentUser.uid) {
+              fetch(`/api/youtube/channel?uid=${currentUser.uid}`).catch(() => {});
+            }
           } else {
-            // Auto-provision initial 50 Free Trial Credits
+            // Auto-provision initial 100 Free Trial Credits (7-Day Free Trial)
             const initialProfile: UserProfile = {
               uid: currentUser.uid,
               email: currentUser.email || '',
               displayName: currentUser.displayName || 'Creator',
               photoURL: currentUser.photoURL || '',
-              credits: 50,
-              plan: 'free',
+              credits: 100,
+              plan: 'free_trial',
               autoPilotEnabled: false,
               createdAt: Date.now(),
               updatedAt: Date.now(),
             };
             await setDoc(userDocRef, initialProfile);
             setProfile(initialProfile);
+            fetch(`/api/youtube/channel?uid=${currentUser.uid}`).catch(() => {});
           }
           setLoading(false);
         });

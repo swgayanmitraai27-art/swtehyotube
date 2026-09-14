@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -93,11 +93,11 @@ export default function AuthModal({
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <h3 className="text-xl font-bold text-white">
-            {tab === 'register' ? 'Create Creator Account' : 'Welcome Back'}
+            {tab === 'register' ? '🎁 Start 7-Day Free Trial' : 'Welcome Back'}
           </h3>
           <p className="text-xs text-zinc-400 mt-1">
             {tab === 'register' 
-              ? 'Get 50 Free AI Comment Reply credits instantly!' 
+              ? 'Includes 100 Free AI Comment Reply credits • No credit card needed!' 
               : 'Sign in to access your YouTube AI studio'}
           </p>
         </div>

@@ -102,13 +102,14 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* 3 Tier Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 4 Tier Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {INDIAN_TIER_PLANS.map((plan) => {
           const isCurrent = profile?.plan === plan.id;
           const isYearly = billingCycle === 'yearly';
           const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
           const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
+          const isCustom = plan.id === 'custom_bulk';
 
           return (
             <div
@@ -116,6 +117,8 @@ export default function BillingPage() {
               className={`p-6 rounded-3xl border flex flex-col justify-between transition-all ${
                 plan.popular
                   ? 'bg-gradient-to-b from-zinc-900 to-zinc-950 border-rose-500 shadow-xl ring-1 ring-rose-500'
+                  : isCustom
+                  ? 'bg-gradient-to-b from-emerald-950/40 to-zinc-950 border-emerald-500/50 shadow-xl shadow-emerald-950/30'
                   : 'bg-zinc-900/50 border-zinc-800'
               }`}
             >
@@ -127,19 +130,32 @@ export default function BillingPage() {
                       Active
                     </span>
                   )}
+                  {isCustom && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      VIP Calling
+                    </span>
+                  )}
                 </div>
-                <span className="text-[11px] text-zinc-400 block mb-3">{plan.idealFor}</span>
+                <span className="text-[11px] text-zinc-400 block mb-3 line-clamp-2">{plan.idealFor}</span>
 
                 <div className="flex items-baseline gap-1 mt-2">
-                  <span className="text-3xl font-black text-white">₹{price.toLocaleString()}</span>
-                  <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
+                  {isCustom ? (
+                    <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
+                  ) : (
+                    <>
+                      <span className="text-3xl font-black text-white">₹{price.toLocaleString()}</span>
+                      <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
+                    </>
+                  )}
                 </div>
 
                 <div className="mt-2 flex items-center gap-2 mb-4">
-                  <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md">
-                    {credits.toLocaleString()} AI Replies {isYearly ? '/ yr' : '/ mo'}
+                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
+                    isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                  }`}>
+                    {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
                   </span>
-                  {isYearly && (
+                  {!isCustom && isYearly && (
                     <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
                       2 Mo Free
                     </span>
@@ -148,26 +164,49 @@ export default function BillingPage() {
 
                 <ul className="space-y-2 text-xs text-zinc-300 border-t border-zinc-800/80 pt-4">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      {f}
+                    <li key={f} className="flex items-start gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span className="text-[11px] leading-snug">{f}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <button
-                onClick={() => openCheckout(plan.id)}
-                className={`mt-6 w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
-                  plan.popular
-                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20'
-                    : isCurrent
-                    ? 'bg-zinc-800 text-zinc-400'
-                    : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                }`}
-              >
-                {isCurrent ? 'Current Tier' : `Select ${plan.name} (₹${price.toLocaleString()})`}
-              </button>
+              {isCustom ? (
+                <div className="mt-6 flex flex-col gap-2">
+                  <a
+                    href={`https://wa.me/918303994616?text=${encodeURIComponent(
+                      `Hello SW Tech Team! I want to inquire about the Custom Bulk / VIP Calling Plan for my YouTube channel(s). Channel: ${profile?.channelTitle || 'My Channel'}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/50 flex items-center justify-center gap-1.5"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>WhatsApp (+91 8303994616)</span>
+                  </a>
+                  <a
+                    href="tel:+918303994616"
+                    className="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <PhoneCall className="w-3 h-3 text-emerald-400" />
+                    <span>Direct Call: 8303994616</span>
+                  </a>
+                </div>
+              ) : (
+                <button
+                  onClick={() => openCheckout(plan.id)}
+                  className={`mt-6 w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
+                    plan.popular
+                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20'
+                      : isCurrent
+                      ? 'bg-zinc-800 text-zinc-400'
+                      : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                  }`}
+                >
+                  {isCurrent ? 'Current Tier' : `Select ${plan.name} (₹${price.toLocaleString()})`}
+                </button>
+              )}
             </div>
           );
         })}
