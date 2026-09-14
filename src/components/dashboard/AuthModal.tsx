@@ -188,7 +188,7 @@ export default function AuthModal({
               <span>Processing...</span>
             ) : (
               <>
-                <span>{tab === 'register' ? 'Get Started Free (50 Credits)' : 'Sign In to Studio'}</span>
+                <span>{tab === 'register' ? 'Start 7-Day Free Trial (100 Credits)' : 'Sign In to Studio'}</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

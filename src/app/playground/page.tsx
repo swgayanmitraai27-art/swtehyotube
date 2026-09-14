@@ -27,7 +27,7 @@ export default function PublicPlaygroundPage() {
               Ready to Automate Your Real YouTube Channel?
             </h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Connect your YouTube channel in 1 click to get <strong>50 Free Trial Credits</strong>, automatic background sync, and smart quota protection!
+              Connect your YouTube channel in 1 click to start your <strong>7-Day Free Trial (100 Free AI Reply Credits)</strong>, automatic background sync, and smart quota protection!
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               {user ? (
@@ -43,8 +43,8 @@ export default function PublicPlaygroundPage() {
                   onClick={signInWithGoogle}
                   className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/25 flex items-center gap-2 transition-all hover:scale-105"
                 >
-                  <Youtube className="w-4 h-4 fill-white" />
-                  1-Click Connect YouTube Channel (Free Trial)
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  Start 7-Day Free Trial (100 Credits)
                 </button>
               )}
             </div>
