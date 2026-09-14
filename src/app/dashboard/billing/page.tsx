@@ -222,7 +222,7 @@ export default function BillingPage() {
                       : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
                   }`}
                 >
-                  {isCurrent ? 'Current Tier' : `Select ${plan.name} (${currencySymbol}${price.toLocaleString()})`}
+                  {isCurrent ? 'Current Tier' : `Select ${plan.name} ($${price?.toLocaleString?.() ?? price})`}
                 </button>
               )}
             </div>

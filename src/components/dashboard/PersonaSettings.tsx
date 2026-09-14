@@ -249,28 +249,25 @@ export default function PersonaSettings() {
               onChange={(e: any) => setSettings({ ...settings, languageMode: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
             >
-              <optgroup label="🇮🇳 Indian & Regional Languages">
-                <option value="hinglish">🇮🇳 Hinglish (Natural Indian Conversational - Recommended)</option>
-                <option value="hindi">🇮🇳 हिन्दी (Pure Devanagari Hindi)</option>
-                <option value="gujarati">🇮🇳 ગુજરાતી (Gujarati - State Boards)</option>
-                <option value="bhojpuri">🇮🇳 भोजपुरी (Bhojpuri)</option>
+              <optgroup label="🌍 Global & Major World Languages (Recommended)">
+                <option value="english">🇺🇸 English (US / UK / Global - High Conversion)</option>
+                <option value="spanish">🇪🇸 Español (Spanish - Latin America / Spain)</option>
+                <option value="french">🇫🇷 Français (French - Canada / Europe)</option>
+                <option value="german">🇩🇪 Deutsch (German)</option>
+                <option value="japanese">🇯🇵 日本語 (Japanese)</option>
+                <option value="arabic">🇸🇦 العربية (Arabic)</option>
+              </optgroup>
+              <optgroup label="🤖 Universal Auto-Detection">
+                <option value="auto">🌐 Auto-Detect & Match Commenter Language (140+ Languages)</option>
+              </optgroup>
+              <optgroup label="🇮🇳 Regional Languages">
+                <option value="hinglish">🇮🇳 Hinglish (Conversational)</option>
+                <option value="hindi">🇮🇳 हिन्दी (Hindi)</option>
                 <option value="bengali">🇮🇳 বাংলা (Bengali)</option>
                 <option value="marathi">🇮🇳 मराठी (Marathi)</option>
                 <option value="tamil">🇮🇳 தமிழ் (Tamil)</option>
                 <option value="telugu">🇮🇳 తెలుగు (Telugu)</option>
                 <option value="punjabi">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
-                <option value="urdu">🇮🇳 اردو (Urdu)</option>
-              </optgroup>
-              <optgroup label="🌍 Global & International Languages">
-                <option value="english">🇺🇸 English (US / UK)</option>
-                <option value="spanish">🇪🇸 Español (Spanish)</option>
-                <option value="french">🇫🇷 Français (French)</option>
-                <option value="german">🇩🇪 Deutsch (German)</option>
-                <option value="japanese">🇯🇵 日本語 (Japanese)</option>
-                <option value="arabic">🇸🇦 العربية (Arabic)</option>
-              </optgroup>
-              <optgroup label="🤖 Intelligent Mode">
-                <option value="auto">🌐 Auto-Detect (Google Gemma 4 140+ Languages)</option>
               </optgroup>
             </select>
           </div>
@@ -278,7 +275,7 @@ export default function PersonaSettings() {
           <div>
             <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
               <span>🎭 AI Voice Tone & Personality</span>
-              <span className="text-[10px] text-rose-400 font-normal">Gemma 4 Persona</span>
+              <span className="text-[10px] text-rose-400 font-normal">Google Gemma 4</span>
             </label>
             <select
               value={settings.toneStyle}
@@ -286,16 +283,12 @@ export default function PersonaSettings() {
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 font-medium"
             >
               <optgroup label="🎭 Creator Voice & Personality Tones">
-                <option value="witty_funny">🎭 Witty / Funny (मजाकिया • Humorous, Sarcastic & Witty Comebacks)</option>
-                <option value="professional_educator">🎓 Professional / Educator (गंभीर/शिक्षक • Academic, Authoritative & Formal)</option>
-                <option value="casual_friendly">🤝 Casual / Friendly (दोस्ताना • Warm, Approachable & Best-Friend Vibe)</option>
-                <option value="hype_energetic">⚡ Hype / Energetic (उत्साही • High-Octane Emojis & Unstoppable Hype)</option>
-                <option value="supportive_mentor">💖 Supportive / Mentor (प्रेरक • Empathetic, Patient & Reassuring)</option>
-                <option value="short_crisp">🎯 Short & Crisp (सटीक 1-Liner • Punchy, Direct & Zero Fluff)</option>
-              </optgroup>
-              <optgroup label="🇮🇳 Regional / Indian Modes">
-                <option value="pro_mentor">🎓 Encouraging Mentor (Polite Hinglish Guidance)</option>
-                <option value="friendly_bro">🤝 Friendly Bhai/Bro (Desi Colloquial Bhai Vibe)</option>
+                <option value="witty_funny">🎭 Witty / Funny (Humorous, Sarcastic & Witty Comebacks)</option>
+                <option value="professional_educator">🎓 Professional / Educator (Academic, Authoritative & Formal)</option>
+                <option value="casual_friendly">🤝 Casual / Friendly (Warm, Approachable & Best-Friend Vibe)</option>
+                <option value="hype_energetic">⚡ Hype / Energetic (High-Octane Emojis & Unstoppable Hype)</option>
+                <option value="supportive_mentor">💖 Supportive / Mentor (Empathetic, Patient & Reassuring)</option>
+                <option value="short_crisp">🎯 Short & Crisp (Punchy 1-Liner, Direct & Zero Fluff)</option>
               </optgroup>
             </select>
           </div>
@@ -310,7 +303,7 @@ export default function PersonaSettings() {
             value={settings.personaBio}
             onChange={(e) => setSettings({ ...settings, personaBio: e.target.value })}
             className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 resize-none"
-            placeholder="Describe what your channel teaches (e.g., educational classes, programming guides, finance strategies)..."
+            placeholder="Describe what your channel is about (e.g., tech tutorials, gaming walkthroughs, finance advice, lifestyle vlogs)..."
           />
         </div>
 
@@ -322,24 +315,24 @@ export default function PersonaSettings() {
               value={settings.customSignature || ''}
               onChange={(e) => setSettings({ ...settings, customSignature: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. — Team SW Tech ❤️"
+              placeholder="e.g. — Alex & The Studio Team ❤️"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Default CTA</label>
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Default Call-To-Action (CTA)</label>
             <input
               type="text"
               value={settings.callToAction || ''}
               onChange={(e) => setSettings({ ...settings, callToAction: e.target.value })}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
-              placeholder="e.g. Resources ke liye description check karein!"
+              placeholder="e.g. Check the link in description for free resources & template!"
             />
           </div>
         </div>
 
         <div className="mt-4 pt-4 border-t border-zinc-800/80">
           <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
-            <span>Creator's Custom AI Instructions & Rules (विशेष निर्देश)</span>
+            <span>Creator's Custom AI Instructions & Rules</span>
             <span className="text-[10px] text-rose-400 font-bold">Google Gemma 4 Strictly Follows</span>
           </label>
           <textarea
@@ -347,10 +340,10 @@ export default function PersonaSettings() {
             value={settings.customInstructions || ''}
             onChange={(e) => setSettings({ ...settings, customInstructions: e.target.value })}
             className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 resize-none"
-            placeholder="e.g. 1. Hamesha student ko 'beta/bhai' kehkar motivate karo, 2. Har doubt me Telegram group join karne ko bolo, 3. Kabhi rude ya negative reply mat do, 4. Shuruat 'Namaste' se karo..."
+            placeholder="e.g. 1. Always be welcoming and thank the viewer, 2. Recommend our newsletter link in description, 3. Keep responses punchy under 2 sentences, 4. Never give financial advice..."
           />
           <p className="text-[11px] text-zinc-500 mt-1">
-            Aap jo bhi niyam yahan likhenge, Google Gemma 4 AI har ek comment reply me unhe 100% follow karega.
+            Google Gemma 4 AI will strictly enforce all custom guidelines across every automated reply.
           </p>
         </div>
       </div>

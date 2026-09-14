@@ -84,7 +84,7 @@ export default function LandingView() {
         <p className="mt-6 text-base sm:text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed">
           The next-generation <strong>Google AI Thinking Model</strong> that deeply analyzes your 
           <strong> Video Title</strong>, <strong>Video Description</strong>, and <strong>Channel Persona</strong> before crafting 
-          hyper-relevant, natural Hinglish, Regional Indian & Global language replies that sound 100% like you.
+          hyper-relevant, high-converting replies in English & 140+ global languages that sound 100% like you.
         </p>
 
         {/* CTAs */}
@@ -100,7 +100,7 @@ export default function LandingView() {
             href="#pricing"
             className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-semibold text-base transition-all"
           >
-            View Plans & Pricing
+            View Plans & Pricing ($ USD)
           </Link>
         </div>
 
@@ -131,13 +131,13 @@ export default function LandingView() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
             <Sparkles className="w-3.5 h-3.5" />
-            Everything Creators Need to Scale
+            Everything Modern YouTubers Need to Scale
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Built for Serious YouTubers & EdTech Creators
+            Built for Top YouTubers, Podcasters & Creator Agencies
           </h2>
           <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
-            Stop spending 3 hours daily typing repetitive replies. Let AI handle community engagement, student questions, and spam cleaning 24/7.
+            Stop spending 3+ hours daily typing repetitive replies. Let AI handle community engagement, fan questions, product link placements, and spam cleaning 24/7 on auto-pilot.
           </p>
         </div>
 
@@ -150,7 +150,7 @@ export default function LandingView() {
               </div>
               <h3 className="text-base font-bold text-white mb-2">🧠 AI Video Comment Summary</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                1-Click analyze 1,000+ comments per video. AI instantly extracts core student talking points, top doubts, and recommends high-demand next video ideas.
+                1-Click analyze 1,000+ comments per video. AI instantly extracts audience sentiment, top viewer questions, and high-converting next video ideas.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-amber-400 font-semibold flex items-center gap-1">
@@ -164,13 +164,13 @@ export default function LandingView() {
               <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
                 <Zap className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2">🏷️ Auto-Mention & App Links</h3>
+              <h3 className="text-base font-bold text-white mb-2">🏷️ Auto-Mention & Product Links</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Tags every commenter with their unique @username and intelligently embeds your Play Store app download link or course batch link in replies.
+                Tags every commenter with their unique @username and intelligently embeds your newsletter, affiliate link, app, or course in replies.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-rose-400 font-semibold flex items-center gap-1">
-              <Check className="w-3.5 h-3.5" /> 3x Higher CTR & Downloads
+              <Check className="w-3.5 h-3.5" /> 3x Higher CTR & Conversions
             </div>
           </div>
 
@@ -180,9 +180,9 @@ export default function LandingView() {
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2">🛡️ Abusive Comment Auto-Delete</h3>
+              <h3 className="text-base font-bold text-white mb-2">🛡️ Abusive & Spam Auto-Delete</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Instantly detects vulgar abuses, hate speech, Telegram spam, and scam links, and automatically wipes them off YouTube to protect your brand.
+                Instantly detects hate speech, toxic harassment, sub4sub spam, and scam bots, automatically wiping them off YouTube 24/7.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
@@ -218,27 +218,27 @@ export default function LandingView() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
             140+ Languages Supported with <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-red-500 to-amber-500">
-              Deep Mastery in 35+ Major Languages
+              Native Nuance in 35+ Major Languages
             </span>
           </h2>
           <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
-            Google Gemma 4 31B IT delivers breakthrough multilingual performance across Indian regional languages and international global markets.
+            Google Gemma 4 31B IT delivers breakthrough multilingual accuracy across North America, Europe, Asia, Latin America, and global markets.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Card 1: Indian & Hinglish */}
+          {/* Card 1: English & Americas */}
           <div className="p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
             <div>
               <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
-                <Languages className="w-6 h-6" />
+                <Globe2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">🇮🇳 Hindi, Hinglish & Regional</h3>
+              <h3 className="text-lg font-bold text-white mb-2">🇺🇸 English & Americas</h3>
               <p className="text-xs text-zinc-400 leading-relaxed mb-4">
-                100% natural comprehension for Devanagari Hindi and conversational Hinglish (e.g. <em>"Sir naya batch kab aayega, please reply!"</em>).
+                Ultra-natural conversational English across US, UK, Canada, Australia, and Latin America.
               </p>
               <div className="flex flex-wrap gap-1.5 text-[11px]">
-                {['Hinglish', 'हिन्दी (Hindi)', 'ગુજરાતી (Gujarati)', 'भोजपुरी (Bhojpuri)', 'বাংলা (Bengali)', 'मराठी (Marathi)', 'தமிழ் (Tamil)', 'తెలుగు (Telugu)', 'ਪੰਜਾਬੀ (Punjabi)', 'اردو (Urdu)'].map((lang) => (
+                {['English (US)', 'English (UK)', 'English (Australia)', 'Español (Latin America)', 'Português (Brasil)', 'Français (Canada)'].map((lang) => (
                   <span key={lang} className="px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 font-medium">
                     {lang}
                   </span>
@@ -246,7 +246,7 @@ export default function LandingView() {
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-rose-400 font-semibold flex items-center gap-1">
-              <Check className="w-3.5 h-3.5" /> Tailored for Educators, Creators & State Boards
+              <Check className="w-3.5 h-3.5" /> High-Retention YouTube Slang & Tone
             </div>
           </div>
 
@@ -527,7 +527,7 @@ export default function LandingView() {
           {[
             {
               q: 'How does the YouTube AI Auto-Reply & Auto-Mention tool work?',
-              a: 'Our platform connects to your YouTube channel via Google OAuth and constantly monitors incoming comments. Google Gemma 4 31B AI analyzes your video title, description, and custom persona prompt to generate hyper-relevant replies in natural Hinglish or regional languages, tags the commenter with @mention, and attaches your official App / Course download link.',
+              a: 'Our platform connects to your YouTube channel via Google OAuth and constantly monitors incoming comments. Google Gemma 4 31B AI analyzes your video title, description, and custom channel persona to generate hyper-relevant replies in natural English and 140+ global languages, tags the commenter with @mention, and attaches your official product, link, or newsletter.',
             },
             {
               q: 'Is it 100% safe and compliant with YouTube Community Guidelines?',
@@ -535,15 +535,15 @@ export default function LandingView() {
             },
             {
               q: 'Can it automatically delete abusive and toxic comments?',
-              a: 'Yes! Our built-in Toxic Comment Filter scans for vulgar abuses, scams, sub4sub links, and derogatory keywords, and automatically deletes them from YouTube to protect your channel brand image.',
+              a: 'Yes! Our built-in Toxic Comment Filter scans for vulgar abuses, scams, sub4sub links, and derogatory keywords, and automatically deletes them from YouTube to protect your channel brand reputation 24/7.',
             },
             {
               q: 'How does the BYOK Multi-Project Quota Pooling work?',
-              a: 'For high-volume coaching institutes and creators (4,000 to 18,000+ monthly replies), you can pool your own Google Cloud projects (10k, 20k, 30k daily units) in Settings. This gives you dedicated unlimited quota directly from Google without server rate-limits.',
+              a: 'For high-growth channels and agencies (4,000 to 18,000+ monthly replies), you can pool your own Google Cloud projects (10k, 20k, 30k daily units) in Settings. This gives you dedicated unlimited quota directly from Google without server rate-limits.',
             },
             {
               q: 'How do I get the 1-on-1 Live 5-Minute Setup Video Call with the Founder?',
-              a: 'All paid members get instant access to book a 1-Time 5-minute live screen-share setup call on WhatsApp directly from their dashboard. Our founder will personally walk you through Google Cloud project creation, OAuth Client ID/Secret setup, and custom persona configuration.',
+              a: 'All Pro & Enterprise members get instant access to book a 1-Time 5-minute live screen-share setup call on WhatsApp / Google Meet directly from their dashboard. Our founder will personally walk you through Google Cloud project creation, OAuth setup, and custom persona configuration.',
             },
           ].map((faq, i) => (
             <div
