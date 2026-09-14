@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { useAuth } from '@/context/AuthContext';
@@ -25,15 +25,37 @@ import {
   PhoneCall,
   MessageSquare
 } from 'lucide-react';
-import { INDIAN_TIER_PLANS } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CurrencyType } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
-export default function LandingPage() {
+export default function LandingView() {
   const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('pro');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+  const [currency, setCurrency] = useState<CurrencyType>('USD');
+
+  // Smart Geo-Location & Timezone Auto-Detector (India -> INR, USA/Global -> USD)
+  useEffect(() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const lang = navigator.language || '';
+      if (
+        tz.includes('Calcutta') || 
+        tz.includes('Kolkata') || 
+        tz.includes('India') || 
+        lang.toLowerCase().includes('hi') || 
+        lang.toLowerCase() === 'en-in'
+      ) {
+        setCurrency('INR');
+      } else {
+        setCurrency('USD');
+      }
+    } catch (e) {
+      setCurrency('USD');
+    }
+  }, []);
 
   const handleGetStarted = () => {
     if (user) {
@@ -298,39 +320,68 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3-Tier Pricing Section */}
+      {/* Global 4-Tier Pricing Section */}
       <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center">
-        <div className="max-w-3xl mx-auto mb-12">
+        <div className="max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
-            <Zap className="w-3.5 h-3.5" />
-            3-Tier Creator Pricing (For Indian YouTubers)
+            <Globe2 className="w-3.5 h-3.5" />
+            Global Creator & Agency Pricing ({currency === 'USD' ? 'USD $' : 'INR ₹'})
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Choose Your Growth Plan</h2>
           <p className="text-sm text-zinc-400 mt-2">
             Save hours every week. All plans include a <strong>7-Day Full Free Trial</strong> with 100 free AI replies and zero upfront commitment.
           </p>
 
-          {/* Monthly / Yearly Switch with 2 Months Free */}
-          <div className="inline-flex items-center gap-3 bg-zinc-900/80 border border-zinc-800 p-1.5 rounded-2xl mt-8">
-            <button
-              onClick={() => setBillingCycle('monthly')}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                billingCycle === 'monthly' ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              Monthly Billing
-            </button>
-            <button
-              onClick={() => setBillingCycle('yearly')}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                billingCycle === 'yearly'
-                  ? 'bg-gradient-to-r from-rose-600 to-red-500 text-white shadow-lg shadow-rose-600/20'
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              <Gift className="w-3.5 h-3.5" />
-              <span>Pay Yearly (Get 2 Months Free 🎁)</span>
-            </button>
+          {/* Currency Switcher + Billing Cycle Controls */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            {/* Currency Selector (USD $ by default for global visitors, INR for India) */}
+            <div className="inline-flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1.5 rounded-2xl shadow-inner">
+              <button
+                onClick={() => setCurrency('USD')}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                  currency === 'USD'
+                    ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                <span>🇺🇸 USD ($)</span>
+                <span className="text-[10px] bg-rose-500/30 px-1.5 py-0.5 rounded font-semibold text-rose-200">Global</span>
+              </button>
+              <button
+                onClick={() => setCurrency('INR')}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                  currency === 'INR'
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                <span>🇮🇳 INR (₹)</span>
+                <span className="text-[10px] bg-emerald-500/30 px-1.5 py-0.5 rounded font-semibold text-emerald-200">India</span>
+              </button>
+            </div>
+
+            {/* Monthly / Yearly Switch with 2 Months Free */}
+            <div className="inline-flex items-center gap-1.5 bg-zinc-900/90 border border-zinc-800 p-1.5 rounded-2xl">
+              <button
+                onClick={() => setBillingCycle('monthly')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  billingCycle === 'monthly' ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingCycle('yearly')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  billingCycle === 'yearly'
+                    ? 'bg-gradient-to-r from-rose-600 to-red-500 text-white shadow-lg shadow-rose-600/20'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                <Gift className="w-3.5 h-3.5" />
+                <span>Pay Yearly (Get 2 Months Free 🎁)</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -338,7 +389,11 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {INDIAN_TIER_PLANS.map((plan) => {
             const isYearly = billingCycle === 'yearly';
-            const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+            const isUSD = currency === 'USD';
+            const price = isUSD
+              ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
+              : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
+            const currencySymbol = isUSD ? '$' : '₹';
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
             const isCustom = plan.id === 'custom_bulk';
 
@@ -354,12 +409,12 @@ export default function LandingPage() {
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg">
-                    🔥 Most Popular
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg whitespace-nowrap">
+                    🔥 Best Value • Most Popular
                   </div>
                 )}
                 {isCustom && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg whitespace-nowrap">
                     📞 Direct Call / VIP
                   </div>
                 )}
@@ -375,7 +430,7 @@ export default function LandingPage() {
                       <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
                     ) : (
                       <>
-                        <span className="text-3xl font-black text-white">₹{price.toLocaleString()}</span>
+                        <span className="text-3xl font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
                         <span className="text-xs text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
                       </>
                     )}
@@ -394,13 +449,27 @@ export default function LandingPage() {
                     )}
                   </div>
 
-                  <ul className="mt-5 space-y-2.5 text-xs text-zinc-300 border-t border-zinc-800/80 pt-4">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isCustom ? 'text-emerald-400' : 'text-emerald-400'}`} />
-                        <span className="leading-snug text-[11px]">{feature}</span>
-                      </li>
-                    ))}
+                  <ul className="mt-5 space-y-2 text-xs text-zinc-300 border-t border-zinc-800/80 pt-4">
+                    {plan.features.map((feature) => {
+                      const isToxicHighlight = feature.includes('Toxic') || feature.includes('Spam') || feature.includes('Hate Speech');
+                      return (
+                        <li
+                          key={feature}
+                          className={`flex items-start gap-2 rounded-xl transition-all ${
+                            isToxicHighlight
+                              ? 'bg-rose-500/15 border border-rose-500/30 p-2 text-rose-200 font-semibold shadow-sm'
+                              : 'p-1'
+                          }`}
+                        >
+                          <CheckCircle2
+                            className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                              isToxicHighlight ? 'text-rose-400 animate-pulse' : 'text-emerald-400'
+                            }`}
+                          />
+                          <span className="leading-snug text-[11px]">{feature}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 

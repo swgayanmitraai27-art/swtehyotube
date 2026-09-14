@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video, MessageSquare } from 'lucide-react';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS, CurrencyType } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
 interface RazorpayModalProps {
@@ -22,11 +22,33 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
   const { user, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<'plan' | 'credits'>('plan');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+  const [currency, setCurrency] = useState<CurrencyType>('USD');
   const [selectedPlan, setSelectedPlan] = useState(selectedPlanId);
   const [selectedPack, setSelectedPack] = useState(CREDIT_PACKS[0]?.id || 'pack_200');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // Auto-detect country timezone for currency
+  React.useEffect(() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const lang = navigator.language || '';
+      if (
+        tz.includes('Calcutta') || 
+        tz.includes('Kolkata') || 
+        tz.includes('India') || 
+        lang.toLowerCase().includes('hi') || 
+        lang.toLowerCase() === 'en-in'
+      ) {
+        setCurrency('INR');
+      } else {
+        setCurrency('USD');
+      }
+    } catch (e) {
+      setCurrency('USD');
+    }
+  }, []);
 
   if (!isOpen) return null;
 
@@ -196,14 +218,38 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
           </div>
         ) : (
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="p-1.5 rounded-lg bg-rose-600/10 text-rose-500 border border-rose-500/20">
-                <Zap className="w-4 h-4" />
-              </span>
-              <h3 className="text-lg font-extrabold text-white">Select Your Creator Plan</h3>
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-lg bg-rose-600/10 text-rose-500 border border-rose-500/20">
+                  <Zap className="w-4 h-4" />
+                </span>
+                <h3 className="text-lg font-extrabold text-white">Select Your Growth Plan</h3>
+              </div>
+
+              {/* Modal Currency Switcher */}
+              <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-[11px] font-bold">
+                <button
+                  type="button"
+                  onClick={() => setCurrency('USD')}
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    currency === 'USD' ? 'bg-rose-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  $ USD
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('INR')}
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    currency === 'INR' ? 'bg-emerald-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  ₹ INR
+                </button>
+              </div>
             </div>
             <p className="text-xs text-zinc-400 mb-4">
-              Specially priced for Indian Content Creators with instant UPI checkout.
+              Instant activation with 7-Day Free Trial & dedicated Google Gemma 4 AI quota.
             </p>
 
             {/* Tab: Plan vs Credit Packs */}
@@ -261,8 +307,13 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                 {INDIAN_TIER_PLANS.map((plan) => {
                   const isSelected = selectedPlan === plan.id;
                   const isYearly = billingCycle === 'yearly';
-                  const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+                  const isUSD = currency === 'USD';
+                  const price = isUSD
+                    ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
+                    : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
+                  const currencySymbol = isUSD ? '$' : '₹';
                   const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
+                  const isCustom = plan.id === 'custom_bulk';
 
                   return (
                     <div
@@ -286,16 +337,24 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                           <span className="text-[11px] text-zinc-400 block">{plan.idealFor}</span>
                         </div>
                         <div className="text-right">
-                          <span className="text-lg font-black text-white">₹{price.toLocaleString()}</span>
-                          <span className="text-[10px] text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
+                          {isCustom ? (
+                            <span className="text-base font-black text-emerald-400">Custom Quote</span>
+                          ) : (
+                            <>
+                              <span className="text-lg font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
+                              <span className="text-[10px] text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
+                            </>
+                          )}
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 mt-1 mb-2">
-                        <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md">
-                          {credits.toLocaleString()} AI Replies
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
+                          isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                        }`}>
+                          {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies`}
                         </span>
-                        {isYearly && (
+                        {!isCustom && isYearly && (
                           <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md">
                             🎁 2 Months Free Applied
                           </span>
@@ -321,6 +380,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
               <div className="space-y-2.5 mb-5">
                 {CREDIT_PACKS.map((pack) => {
                   const isSelected = selectedPack === pack.id;
+                  const packPrice = currency === 'USD' ? `$${pack.priceUSD}` : `₹${pack.priceINR}`;
                   return (
                     <div
                       key={pack.id}
@@ -335,7 +395,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                         <div className="font-bold text-sm text-white">{pack.name}</div>
                         <span className="text-xs text-zinc-400">{pack.credits.toLocaleString()} AI comment replies</span>
                       </div>
-                      <span className="text-base font-extrabold text-rose-400">₹{pack.price}</span>
+                      <span className="text-base font-extrabold text-rose-400">{packPrice}</span>
                     </div>
                   );
                 })}

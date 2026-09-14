@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import RazorpayModal from '@/components/dashboard/RazorpayModal';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS, CurrencyType } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 import { 
   CreditCard, 
@@ -20,7 +20,8 @@ import {
   Rocket,
   PhoneCall,
   Video,
-  MessageSquare
+  MessageSquare,
+  Globe2
 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -28,6 +29,28 @@ export default function BillingPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState('pro');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+  const [currency, setCurrency] = useState<CurrencyType>('USD');
+
+  // Smart Geo-Location & Timezone Auto-Detector (India -> INR, USA/Global -> USD)
+  useEffect(() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const lang = navigator.language || '';
+      if (
+        tz.includes('Calcutta') || 
+        tz.includes('Kolkata') || 
+        tz.includes('India') || 
+        lang.toLowerCase().includes('hi') || 
+        lang.toLowerCase() === 'en-in'
+      ) {
+        setCurrency('INR');
+      } else {
+        setCurrency('USD');
+      }
+    } catch (e) {
+      setCurrency('USD');
+    }
+  }, []);
 
   const openCheckout = (planId: string) => {
     setSelectedPlanId(planId);
@@ -69,36 +92,59 @@ export default function BillingPage() {
         </button>
       </div>
 
-      {/* Monthly / Yearly Switch */}
+      {/* Monthly / Yearly Switch & Currency Switcher */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            4-Tier Creator & Custom Bulk Plans
+            4-Tier Global & Regional Growth Plans
           </h3>
-          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size.</p>
+          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size ({currency === 'USD' ? 'USD $' : 'INR ₹'}).</p>
         </div>
 
-        <div className="inline-flex items-center gap-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-bold">
-          <button
-            onClick={() => setBillingCycle('monthly')}
-            className={`px-4 py-1.5 rounded-lg transition-all ${
-              billingCycle === 'monthly' ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle('yearly')}
-            className={`px-4 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-              billingCycle === 'yearly'
-                ? 'bg-gradient-to-r from-rose-600 to-red-500 text-white shadow-md shadow-rose-600/20'
-                : 'text-zinc-400 hover:text-zinc-200'
-            }`}
-          >
-            <Gift className="w-3.5 h-3.5" />
-            <span>Yearly (2 Months Free 🎁)</span>
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Currency Switcher */}
+          <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-bold">
+            <button
+              onClick={() => setCurrency('USD')}
+              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
+                currency === 'USD' ? 'bg-rose-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <span>🇺🇸 USD ($)</span>
+            </button>
+            <button
+              onClick={() => setCurrency('INR')}
+              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
+                currency === 'INR' ? 'bg-emerald-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <span>🇮🇳 INR (₹)</span>
+            </button>
+          </div>
+
+          {/* Billing Cycle Switch */}
+          <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-bold">
+            <button
+              onClick={() => setBillingCycle('monthly')}
+              className={`px-3.5 py-1.5 rounded-lg transition-all ${
+                billingCycle === 'monthly' ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingCycle('yearly')}
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                billingCycle === 'yearly'
+                  ? 'bg-gradient-to-r from-rose-600 to-red-500 text-white shadow-md shadow-rose-600/20'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <Gift className="w-3.5 h-3.5" />
+              <span>Yearly (2 Mo Free 🎁)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -107,7 +153,11 @@ export default function BillingPage() {
         {INDIAN_TIER_PLANS.map((plan) => {
           const isCurrent = profile?.plan === plan.id;
           const isYearly = billingCycle === 'yearly';
-          const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+          const isUSD = currency === 'USD';
+          const price = isUSD
+            ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
+            : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
+          const currencySymbol = isUSD ? '$' : '₹';
           const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
           const isCustom = plan.id === 'custom_bulk';
 
@@ -143,7 +193,7 @@ export default function BillingPage() {
                     <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
                   ) : (
                     <>
-                      <span className="text-3xl font-black text-white">₹{price.toLocaleString()}</span>
+                      <span className="text-3xl font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
                       <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
                     </>
                   )}
@@ -163,12 +213,26 @@ export default function BillingPage() {
                 </div>
 
                 <ul className="space-y-2 text-xs text-zinc-300 border-t border-zinc-800/80 pt-4">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                      <span className="text-[11px] leading-snug">{f}</span>
-                    </li>
-                  ))}
+                  {plan.features.map((f) => {
+                    const isToxicHighlight = f.includes('Toxic') || f.includes('Spam') || f.includes('Hate Speech');
+                    return (
+                      <li
+                        key={f}
+                        className={`flex items-start gap-2 rounded-xl transition-all ${
+                          isToxicHighlight
+                            ? 'bg-rose-500/15 border border-rose-500/30 p-2 text-rose-200 font-semibold shadow-sm'
+                            : 'p-0.5'
+                        }`}
+                      >
+                        <CheckCircle2
+                          className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                            isToxicHighlight ? 'text-rose-400 animate-pulse' : 'text-emerald-400'
+                          }`}
+                        />
+                        <span className="text-[11px] leading-snug">{f}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
@@ -204,7 +268,7 @@ export default function BillingPage() {
                       : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
                   }`}
                 >
-                  {isCurrent ? 'Current Tier' : `Select ${plan.name} (₹${price.toLocaleString()})`}
+                  {isCurrent ? 'Current Tier' : `Select ${plan.name} (${currencySymbol}${price.toLocaleString()})`}
                 </button>
               )}
             </div>
@@ -309,26 +373,29 @@ export default function BillingPage() {
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          {CREDIT_PACKS.map((pack) => (
-            <div
-              key={pack.id}
-              className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800 flex flex-col justify-between"
-            >
-              <div>
-                <span className="font-bold text-sm text-white block">{pack.name}</span>
-                <span className="text-xs text-zinc-400">{pack.credits.toLocaleString()} Replies</span>
+          {CREDIT_PACKS.map((pack) => {
+            const packPrice = currency === 'USD' ? `$${pack.priceUSD}` : `₹${pack.priceINR}`;
+            return (
+              <div
+                key={pack.id}
+                className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800 flex flex-col justify-between"
+              >
+                <div>
+                  <span className="font-bold text-sm text-white block">{pack.name}</span>
+                  <span className="text-xs text-zinc-400">{pack.credits.toLocaleString()} Replies</span>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-base font-bold text-rose-400">{packPrice}</span>
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-rose-600 hover:text-white text-xs font-semibold text-zinc-200 transition-colors"
+                  >
+                    Buy Pack
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-base font-bold text-rose-400">₹{pack.price}</span>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-rose-600 hover:text-white text-xs font-semibold text-zinc-200 transition-colors"
-                >
-                  Buy Pack
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

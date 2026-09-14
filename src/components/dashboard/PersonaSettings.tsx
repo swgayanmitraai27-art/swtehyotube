@@ -276,16 +276,27 @@ export default function PersonaSettings() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">Reply Tone</label>
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5 flex items-center justify-between">
+              <span>🎭 AI Voice Tone & Personality</span>
+              <span className="text-[10px] text-rose-400 font-normal">Gemma 4 Persona</span>
+            </label>
             <select
               value={settings.toneStyle}
               onChange={(e: any) => setSettings({ ...settings, toneStyle: e.target.value })}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-rose-500 font-medium"
             >
-              <option value="pro_mentor">🎓 Encouraging Mentor (Polite, Guiding, Motivating)</option>
-              <option value="friendly_bro">🤝 Friendly Bhai/Bro (Colloquial & Relatable)</option>
-              <option value="witty_energetic">🔥 Witty & High-Energy (OP Vibe)</option>
-              <option value="polite_support">🛡️ Polite & Support Oriented</option>
+              <optgroup label="🎭 Creator Voice & Personality Tones">
+                <option value="witty_funny">🎭 Witty / Funny (मजाकिया • Humorous, Sarcastic & Witty Comebacks)</option>
+                <option value="professional_educator">🎓 Professional / Educator (गंभीर/शिक्षक • Academic, Authoritative & Formal)</option>
+                <option value="casual_friendly">🤝 Casual / Friendly (दोस्ताना • Warm, Approachable & Best-Friend Vibe)</option>
+                <option value="hype_energetic">⚡ Hype / Energetic (उत्साही • High-Octane Emojis & Unstoppable Hype)</option>
+                <option value="supportive_mentor">💖 Supportive / Mentor (प्रेरक • Empathetic, Patient & Reassuring)</option>
+                <option value="short_crisp">🎯 Short & Crisp (सटीक 1-Liner • Punchy, Direct & Zero Fluff)</option>
+              </optgroup>
+              <optgroup label="🇮🇳 Regional / Indian Modes">
+                <option value="pro_mentor">🎓 Encouraging Mentor (Polite Hinglish Guidance)</option>
+                <option value="friendly_bro">🤝 Friendly Bhai/Bro (Desi Colloquial Bhai Vibe)</option>
+              </optgroup>
             </select>
           </div>
         </div>

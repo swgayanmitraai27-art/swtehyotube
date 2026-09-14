@@ -124,12 +124,41 @@ CATEGORY: 💼 Business / Agency / Lead Generation
 
   const trimmedDescription = videoDescription ? videoDescription.substring(0, 700) : '';
 
+  // AI Tone Style Context
+  let toneStyleInstruction = '';
+  switch (persona.toneStyle) {
+    case 'witty_funny':
+    case 'witty_energetic':
+      toneStyleInstruction = 'CREATOR VOICE TONE: 🎭 Witty, funny, sarcastic humor, and playful banter. Use light jokes or entertaining comebacks that delight the audience while remaining respectful.';
+      break;
+    case 'professional_educator':
+    case 'pro_mentor':
+      toneStyleInstruction = 'CREATOR VOICE TONE: 🎓 Professional Educator & Academic Mentor. Formal, structured, highly knowledgeable, polite, and pedagogical.';
+      break;
+    case 'casual_friendly':
+    case 'friendly_bro':
+      toneStyleInstruction = 'CREATOR VOICE TONE: 🤝 Casual & Friendly. Warm, conversational, feels like talking to a close friend or approachable brother.';
+      break;
+    case 'hype_energetic':
+      toneStyleInstruction = 'CREATOR VOICE TONE: ⚡ Hype & Super Energetic! Full of excitement, hype-beast energy, emojis (🔥🚀💯), and unstoppable motivation.';
+      break;
+    case 'supportive_mentor':
+    case 'polite_support':
+      toneStyleInstruction = 'CREATOR VOICE TONE: 💖 Supportive & Empathetic Mentor. Deeply encouraging, patient, reassuring students/viewers through their doubts.';
+      break;
+    case 'short_crisp':
+      toneStyleInstruction = 'CREATOR VOICE TONE: 🎯 Short, Crisp & Punchy. Max 1-2 short sentences (under 15 words). Direct answer with zero fluff.';
+      break;
+    default:
+      toneStyleInstruction = 'CREATOR VOICE TONE: 🎓 Encouraging Mentor. Warm, insightful, and motivating.';
+  }
+
   const prompt = `
-You are the dynamic AI Community Mentor for an Indian YouTube Channel.
+You are the dynamic AI Community Mentor for YouTube Channel: "${persona.channelName}".
 Creator Name: "${persona.creatorName}"
-Channel Name: "${persona.channelName}"
 Persona / Bio: "${persona.personaBio}"
-Language Style: "${persona.languageMode}" (Natural, relatable, conversational Indian Hinglish).
+Target Language: "${persona.languageMode}" (Supports English, natural Hinglish, and 140+ languages).
+${toneStyleInstruction}
 
 VIDEO CONTEXT:
 - Video Title: "${videoTitle}"
@@ -142,12 +171,12 @@ COMMENTER & QUERY:
 ${nicheContext}
 ${customRulesBlock}
 TASK:
-Deeply understand the viewer's exact question, doubt, or feedback in relation to the Video Title & Description and Creator's Special Instructions.
-Generate 4 distinct, intelligent, hyper-relevant Hinglish replies:
-1. "hinglish_friendly": Motivating, warm, brotherly/mentor response directly addressing their question.
+Deeply understand the viewer's exact question, doubt, or feedback in relation to the Video Title & Description, Creator Tone, and Special Instructions.
+Generate 4 distinct, intelligent, hyper-relevant replies:
+1. "tone_primary": Tailored specifically to the creator's chosen tone (${persona.toneStyle || 'friendly'}).
 2. "quick_heart": Energetic, supportive confidence booster with emojis (1-2 lines).
 3. "support_detailed": Step-by-step practical advice or actionable solution based on the video context.
-4. "witty_meme": High-energy, enthusiastic hustle boost to inspire action.
+4. "witty_meme": High-energy, humorous/witty comeback or hype boost to inspire engagement.
 
 MANDATORY RULES:
 - Every suggestion text MUST start with the exact mention tag "${mention}".
@@ -157,8 +186,8 @@ MANDATORY RULES:
 {
   "suggestions": [
     {
-      "tone": "hinglish_friendly",
-      "toneLabel": "Motivating Mentor",
+      "tone": "tone_primary",
+      "toneLabel": "Primary Voice",
       "text": "${mention} ..."
     },
     {
@@ -168,12 +197,12 @@ MANDATORY RULES:
     },
     {
       "tone": "support_detailed",
-      "toneLabel": "4-Month Study Plan",
+      "toneLabel": "Detailed Solution",
       "text": "${mention} ..."
     },
     {
       "tone": "witty_meme",
-      "toneLabel": "Hustle Booster",
+      "toneLabel": "Witty / Hype",
       "text": "${mention} ..."
     }
   ]
@@ -237,12 +266,18 @@ export async function generateSingleAutoPilotReply(
   );
 
   let chosen = suggestions[0]?.text;
-  if (persona.toneStyle === 'witty_energetic') {
-    const witty = suggestions.find((s) => s.tone === 'witty_meme');
+  if (persona.toneStyle === 'witty_funny' || persona.toneStyle === 'witty_energetic') {
+    const witty = suggestions.find((s) => s.tone === 'witty_meme' || s.tone === 'tone_primary');
     if (witty) chosen = witty.text;
-  } else if (persona.toneStyle === 'polite_support') {
-    const support = suggestions.find((s) => s.tone === 'support_detailed');
+  } else if (persona.toneStyle === 'professional_educator' || persona.toneStyle === 'pro_mentor') {
+    const pro = suggestions.find((s) => s.tone === 'support_detailed' || s.tone === 'tone_primary');
+    if (pro) chosen = pro.text;
+  } else if (persona.toneStyle === 'supportive_mentor' || persona.toneStyle === 'polite_support') {
+    const support = suggestions.find((s) => s.tone === 'support_detailed' || s.tone === 'quick_heart');
     if (support) chosen = support.text;
+  } else if (persona.toneStyle === 'short_crisp') {
+    const shortOne = suggestions.find((s) => s.tone === 'quick_heart' || s.tone === 'tone_primary');
+    if (shortOne) chosen = shortOne.text;
   }
 
   if (persona.customSignature && !chosen.includes(persona.customSignature)) {

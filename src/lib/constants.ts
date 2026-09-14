@@ -56,75 +56,94 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   maxCommentAgeHours: 48,
 };
 
-export interface IndianPricingTier {
+export type CurrencyType = 'USD' | 'INR';
+
+export interface PricingTier {
   id: string;
   name: string;
   badge?: string;
   popular?: boolean;
   idealFor: string;
-  monthlyPrice: number;
-  yearlyPrice: number; // 2 Months Free
+  monthlyPriceUSD: number;
+  yearlyPriceUSD: number; // 2 Months Free ($190 vs $228, $390 vs $468, $990 vs $1188)
+  monthlyPriceINR: number;
+  yearlyPriceINR: number; // 2 Months Free
+  monthlyPrice: number; // alias for backwards compatibility
+  yearlyPrice: number;
   monthlyCredits: number;
   yearlyCredits: number;
+  highlightFeature?: string;
   features: string[];
 }
 
-export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
+export const INDIAN_TIER_PLANS: PricingTier[] = [
   {
     id: 'starter',
     name: '🚀 Starter Plan',
     badge: 'Starter',
     idealFor: 'Creators & Growing Channels (10k-50k Subs)',
+    monthlyPriceUSD: 19,
+    yearlyPriceUSD: 190, // $15.8/mo (2 Months Free)
+    monthlyPriceINR: 499,
+    yearlyPriceINR: 4990,
     monthlyPrice: 499,
-    yearlyPrice: 4990, // Pay 10 months, get 12 months (2 Months Free)
+    yearlyPrice: 4990,
     monthlyCredits: 2000, // 2,000 replies / mo
     yearlyCredits: 24000,
     features: [
       '2,000 AI Replies / Month (24,000/yr)',
-      '1-Time 1-on-1 Live 5-Min Video Setup Call (Google Cloud Setup 📞)',
-      '1-Click YouTube Connect + BYOK Quota Support',
-      'Google Gemma 4 31B Multi-Lingual Engine (140+ Languages)',
-      'Copilot Review Mode & Instant Post',
-      'Spam & Emoji Pre-Filter Protection'
+      '1-Click YouTube Connect (Instant Sync)',
+      'Google Gemma 4 31B AI Engine (140+ Languages)',
+      'BYOK Google Cloud Quota Support',
+      '1-Time 1-on-1 Live 5-Min Video Setup Call (📞)',
+      'Copilot Review Mode & Instant Auto-Post'
     ]
   },
   {
     id: 'pro',
-    name: '🔥 Pro Plan',
-    badge: 'Most Popular',
+    name: '🔥 Pro Plan (Best Value)',
+    badge: '🔥 Best Value • Most Popular',
     popular: true,
-    idealFor: 'High-Growth Channels & Educators (50k-300k Subs)',
+    idealFor: 'High-Growth Channels & Global Creators (50k-300k Subs)',
+    monthlyPriceUSD: 39,
+    yearlyPriceUSD: 390, // $32.5/mo (2 Months Free)
+    monthlyPriceINR: 999,
+    yearlyPriceINR: 9990,
     monthlyPrice: 999,
-    yearlyPrice: 9990, // 2 Months Free
+    yearlyPrice: 9990,
     monthlyCredits: 4000, // 4,000 replies / mo
     yearlyCredits: 48000,
+    highlightFeature: '🛡️ Auto-Delete Toxic, Abusive & Spam Comments 24/7',
     features: [
+      '🛡️ Auto-Delete Toxic, Abusive & Spam Comments 24/7 (High Priority)',
       '4,000 AI Replies / Month (48,000/yr)',
-      '1-Time 1-on-1 Live 5-Min Video Setup Call (Founder Direct 📞)',
-      'Full 24/7 Hands-Free Auto-Pilot Mode',
-      'AI Toxic & Abusive Comment Auto-Delete',
-      'Dedicated BYOK Google Cloud Quota Integration',
-      'Auto-Mention @username Integration',
-      'Custom Promotional CTA & Batch Links'
+      '24/7 Hands-Free Auto-Pilot Mode (No tab needs to be open)',
+      'Smart @username Auto-Mention & App Promotion Links',
+      'Dedicated BYOK Multi-Project Quota Integration',
+      '1-Time 1-on-1 Live Video Setup Call with Founder (📞)'
     ]
   },
   {
     id: 'enterprise',
     name: '👑 Enterprise Plan',
-    badge: 'Institutes & Large Channels',
-    idealFor: 'Large Channels, Coaching Institutes & Media Teams (300k+ Subs)',
+    badge: 'Large Teams & Global MCNs',
+    idealFor: 'Large Creators, Media Networks & Coaching Institutes (300k+ Subs)',
+    monthlyPriceUSD: 99,
+    yearlyPriceUSD: 990, // $82.5/mo (2 Months Free)
+    monthlyPriceINR: 2499,
+    yearlyPriceINR: 24990,
     monthlyPrice: 2499,
-    yearlyPrice: 24990, // 2 Months Free
+    yearlyPrice: 24990,
     monthlyCredits: 8000, // 8,000 replies / mo
     yearlyCredits: 96000,
+    highlightFeature: '🛡️ Advanced AI Toxic, Scam & Hate Speech Auto-Purge',
     features: [
+      '🛡️ Advanced AI Toxic, Scam & Hate Speech Auto-Purge (Zero Spam)',
       '8,000 AI Replies / Month (96,000/yr)',
-      '1-Time 1-on-1 Live VIP Video Setup Call (Founder Direct 📞)',
-      'Multi-Channel Linking (Up to 6 Channels)',
-      'Advanced Toxic / Hate Speech Auto-Purge',
+      'Multi-Channel Linking (Up to 6 YouTube Channels)',
       'Multi-Project BYOK Unlimited Quota Architecture',
-      'Direct WhatsApp VIP Priority Setup Support',
-      'Custom Promotional Call-To-Action Embedding'
+      'Direct WhatsApp & VIP Screen Share Setup Support',
+      '1-on-1 Dedicated Strategy & Onboarding Call (📞)'
     ]
   },
   {
@@ -132,7 +151,11 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
     name: '💼 Custom Bulk / VIP Calling Plan',
     badge: 'Custom Volume & Direct Call',
     idealFor: 'Large Coaching Institutes, Media Houses & Agencies (20k to 5,00,000+ Replies)',
-    monthlyPrice: 0, // Custom Quote
+    monthlyPriceUSD: 0,
+    yearlyPriceUSD: 0,
+    monthlyPriceINR: 0, // Custom Quote
+    yearlyPriceINR: 0,
+    monthlyPrice: 0,
     yearlyPrice: 0,
     monthlyCredits: 50000,
     yearlyCredits: 600000,
@@ -148,8 +171,8 @@ export const INDIAN_TIER_PLANS: IndianPricingTier[] = [
 ];
 
 export const CREDIT_PACKS = [
-  { id: 'pack_200', name: '200 Extra Credits', credits: 200, price: 99 },
-  { id: 'pack_600', name: '600 Extra Credits', credits: 600, price: 249 },
-  { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, price: 499 },
-  { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, price: 1199 },
+  { id: 'pack_200', name: '200 Extra Credits', credits: 200, priceINR: 99, priceUSD: 3, price: 99 },
+  { id: 'pack_600', name: '600 Extra Credits', credits: 600, priceINR: 249, priceUSD: 8, price: 249 },
+  { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, priceINR: 499, priceUSD: 15, price: 499 },
+  { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, priceINR: 1199, priceUSD: 35, price: 1199 },
 ];

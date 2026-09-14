@@ -1,4 +1,4 @@
-export type PlanType = 'free' | 'starter' | 'pro' | 'enterprise';
+export type PlanType = 'free' | 'free_trial' | 'starter' | 'pro' | 'enterprise' | 'custom_bulk';
 export type BillingCycle = 'monthly' | 'yearly';
 
 export type ChannelCategory = 
@@ -62,7 +62,7 @@ export type CommentIntent = 'appreciation' | 'inquiry' | 'feature_request' | 'br
 
 export interface AIReplySuggestion {
   id: string;
-  tone: 'hinglish_friendly' | 'quick_heart' | 'support_detailed' | 'witty_meme' | 'promotional_cta';
+  tone: 'tone_primary' | 'hinglish_friendly' | 'quick_heart' | 'support_detailed' | 'witty_meme' | 'promotional_cta';
   toneLabel: string;
   text: string;
   autoMentioned: string;
@@ -115,8 +115,17 @@ export interface CreatorPersonaConfig {
     | 'german'
     | 'japanese'
     | 'arabic'
-    | 'auto';
-  toneStyle: 'friendly_bro' | 'pro_mentor' | 'witty_energetic' | 'polite_support';
+  toneStyle:
+    | 'witty_funny'
+    | 'professional_educator'
+    | 'casual_friendly'
+    | 'hype_energetic'
+    | 'supportive_mentor'
+    | 'short_crisp'
+    | 'friendly_bro'
+    | 'pro_mentor'
+    | 'witty_energetic'
+    | 'polite_support';
   personaBio: string;
   appName?: string;              // e.g. "Official App / Course App"
   appDownloadLink?: string;      // e.g. "https://play.google.com/store/apps/..."
