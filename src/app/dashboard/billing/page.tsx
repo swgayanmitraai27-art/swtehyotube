@@ -74,7 +74,7 @@ export default function BillingPage() {
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            3-Tier Creator Plans
+            4-Tier Creator & Custom Bulk Plans
           </h3>
           <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size.</p>
         </div>
