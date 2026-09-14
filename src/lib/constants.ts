@@ -56,20 +56,14 @@ export const DEFAULT_CREATOR_PERSONA: CreatorPersonaConfig = {
   maxCommentAgeHours: 48,
 };
 
-export type CurrencyType = 'USD' | 'INR';
-
 export interface PricingTier {
   id: string;
   name: string;
   badge?: string;
   popular?: boolean;
   idealFor: string;
-  monthlyPriceUSD: number;
-  yearlyPriceUSD: number; // 2 Months Free ($190 vs $228, $390 vs $468, $990 vs $1188)
-  monthlyPriceINR: number;
-  yearlyPriceINR: number; // 2 Months Free
-  monthlyPrice: number; // alias for backwards compatibility
-  yearlyPrice: number;
+  monthlyPrice: number; // in USD ($19, $39, $99)
+  yearlyPrice: number; // in USD ($190, $390, $990 - 2 Months Free)
   monthlyCredits: number;
   yearlyCredits: number;
   highlightFeature?: string;
@@ -82,12 +76,8 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     name: '🚀 Starter Plan',
     badge: 'Starter',
     idealFor: 'Creators & Growing Channels (10k-50k Subs)',
-    monthlyPriceUSD: 19,
-    yearlyPriceUSD: 190, // $15.8/mo (2 Months Free)
-    monthlyPriceINR: 499,
-    yearlyPriceINR: 4990,
-    monthlyPrice: 499,
-    yearlyPrice: 4990,
+    monthlyPrice: 19,
+    yearlyPrice: 190, // $15.8/mo (2 Months Free)
     monthlyCredits: 2000, // 2,000 replies / mo
     yearlyCredits: 24000,
     features: [
@@ -105,20 +95,16 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     badge: '🔥 Best Value • Most Popular',
     popular: true,
     idealFor: 'High-Growth Channels & Global Creators (50k-300k Subs)',
-    monthlyPriceUSD: 39,
-    yearlyPriceUSD: 390, // $32.5/mo (2 Months Free)
-    monthlyPriceINR: 999,
-    yearlyPriceINR: 9990,
-    monthlyPrice: 999,
-    yearlyPrice: 9990,
+    monthlyPrice: 39,
+    yearlyPrice: 390, // $32.5/mo (2 Months Free)
     monthlyCredits: 4000, // 4,000 replies / mo
     yearlyCredits: 48000,
     highlightFeature: '🛡️ Auto-Delete Toxic, Abusive & Spam Comments 24/7',
     features: [
       '🛡️ Auto-Delete Toxic, Abusive & Spam Comments 24/7 (High Priority)',
       '4,000 AI Replies / Month (48,000/yr)',
-      '24/7 Hands-Free Auto-Pilot Mode (No tab needs to be open)',
-      'Smart @username Auto-Mention & App Promotion Links',
+      '24/7 Hands-Free Auto-Pilot Mode (Zero Tab Keeping Needed)',
+      'Smart @username Auto-Mention & Product/App Links',
       'Dedicated BYOK Multi-Project Quota Integration',
       '1-Time 1-on-1 Live Video Setup Call with Founder (📞)'
     ]
@@ -127,13 +113,9 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     id: 'enterprise',
     name: '👑 Enterprise Plan',
     badge: 'Large Teams & Global MCNs',
-    idealFor: 'Large Creators, Media Networks & Coaching Institutes (300k+ Subs)',
-    monthlyPriceUSD: 99,
-    yearlyPriceUSD: 990, // $82.5/mo (2 Months Free)
-    monthlyPriceINR: 2499,
-    yearlyPriceINR: 24990,
-    monthlyPrice: 2499,
-    yearlyPrice: 24990,
+    idealFor: 'Large Creators, Media Networks & Agencies (300k+ Subs)',
+    monthlyPrice: 99,
+    yearlyPrice: 990, // $82.5/mo (2 Months Free)
     monthlyCredits: 8000, // 8,000 replies / mo
     yearlyCredits: 96000,
     highlightFeature: '🛡️ Advanced AI Toxic, Scam & Hate Speech Auto-Purge',
@@ -150,12 +132,8 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     id: 'custom_bulk',
     name: '💼 Custom Bulk / VIP Calling Plan',
     badge: 'Custom Volume & Direct Call',
-    idealFor: 'Large Coaching Institutes, Media Houses & Agencies (20k to 5,00,000+ Replies)',
-    monthlyPriceUSD: 0,
-    yearlyPriceUSD: 0,
-    monthlyPriceINR: 0, // Custom Quote
-    yearlyPriceINR: 0,
-    monthlyPrice: 0,
+    idealFor: 'Large Media Networks, Production Houses & Agencies (20k to 5,00,000+ Replies)',
+    monthlyPrice: 0, // Custom Quote
     yearlyPrice: 0,
     monthlyCredits: 50000,
     yearlyCredits: 600000,
@@ -171,8 +149,8 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
 ];
 
 export const CREDIT_PACKS = [
-  { id: 'pack_200', name: '200 Extra Credits', credits: 200, priceINR: 99, priceUSD: 3, price: 99 },
-  { id: 'pack_600', name: '600 Extra Credits', credits: 600, priceINR: 249, priceUSD: 8, price: 249 },
-  { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, priceINR: 499, priceUSD: 15, price: 499 },
-  { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, priceINR: 1199, priceUSD: 35, price: 1199 },
+  { id: 'pack_200', name: '200 Extra Credits', credits: 200, price: 3 },
+  { id: 'pack_600', name: '600 Extra Credits', credits: 600, price: 8 },
+  { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, price: 15 },
+  { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, price: 35 },
 ];

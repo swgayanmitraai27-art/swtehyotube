@@ -25,7 +25,7 @@ import {
   PhoneCall,
   MessageSquare
 } from 'lucide-react';
-import { INDIAN_TIER_PLANS, CurrencyType } from '@/lib/constants';
+import { INDIAN_TIER_PLANS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
 export default function LandingView() {
@@ -34,28 +34,6 @@ export default function LandingView() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('pro');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
-  const [currency, setCurrency] = useState<CurrencyType>('USD');
-
-  // Smart Geo-Location & Timezone Auto-Detector (India -> INR, USA/Global -> USD)
-  useEffect(() => {
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      const lang = navigator.language || '';
-      if (
-        tz.includes('Calcutta') || 
-        tz.includes('Kolkata') || 
-        tz.includes('India') || 
-        lang.toLowerCase().includes('hi') || 
-        lang.toLowerCase() === 'en-in'
-      ) {
-        setCurrency('INR');
-      } else {
-        setCurrency('USD');
-      }
-    } catch (e) {
-      setCurrency('USD');
-    }
-  }, []);
 
   const handleGetStarted = () => {
     if (user) {
@@ -325,41 +303,15 @@ export default function LandingView() {
         <div className="max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold mb-4">
             <Globe2 className="w-3.5 h-3.5" />
-            Global Creator & Agency Pricing ({currency === 'USD' ? 'USD $' : 'INR ₹'})
+            Global Creator & Agency Growth Plans ($ USD)
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Choose Your Growth Plan</h2>
           <p className="text-sm text-zinc-400 mt-2">
             Save hours every week. All plans include a <strong>7-Day Full Free Trial</strong> with 100 free AI replies and zero upfront commitment.
           </p>
 
-          {/* Currency Switcher + Billing Cycle Controls */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            {/* Currency Selector (USD $ by default for global visitors, INR for India) */}
-            <div className="inline-flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1.5 rounded-2xl shadow-inner">
-              <button
-                onClick={() => setCurrency('USD')}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-                  currency === 'USD'
-                    ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/30'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                <span>🇺🇸 USD ($)</span>
-                <span className="text-[10px] bg-rose-500/30 px-1.5 py-0.5 rounded font-semibold text-rose-200">Global</span>
-              </button>
-              <button
-                onClick={() => setCurrency('INR')}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
-                  currency === 'INR'
-                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                <span>🇮🇳 INR (₹)</span>
-                <span className="text-[10px] bg-emerald-500/30 px-1.5 py-0.5 rounded font-semibold text-emerald-200">India</span>
-              </button>
-            </div>
-
+          {/* Billing Cycle Controls */}
+          <div className="flex items-center justify-center gap-4 mt-8">
             {/* Monthly / Yearly Switch with 2 Months Free */}
             <div className="inline-flex items-center gap-1.5 bg-zinc-900/90 border border-zinc-800 p-1.5 rounded-2xl">
               <button
@@ -389,11 +341,7 @@ export default function LandingView() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {INDIAN_TIER_PLANS.map((plan) => {
             const isYearly = billingCycle === 'yearly';
-            const isUSD = currency === 'USD';
-            const price = isUSD
-              ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
-              : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
-            const currencySymbol = isUSD ? '$' : '₹';
+            const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
             const isCustom = plan.id === 'custom_bulk';
 
@@ -430,7 +378,7 @@ export default function LandingView() {
                       <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
                     ) : (
                       <>
-                        <span className="text-3xl font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
+                        <span className="text-3xl font-black text-white">${price.toLocaleString()}</span>
                         <span className="text-xs text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
                       </>
                     )}

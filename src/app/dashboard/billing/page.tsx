@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import RazorpayModal from '@/components/dashboard/RazorpayModal';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS, CurrencyType } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 import { 
   CreditCard, 
@@ -12,7 +12,7 @@ import {
   Zap, 
   ShieldCheck, 
   Plus, 
-  Gift,
+  Gift, 
   ArrowRight,
   TrendingUp,
   Crown,
@@ -29,28 +29,6 @@ export default function BillingPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState('pro');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
-  const [currency, setCurrency] = useState<CurrencyType>('USD');
-
-  // Smart Geo-Location & Timezone Auto-Detector (India -> INR, USA/Global -> USD)
-  useEffect(() => {
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      const lang = navigator.language || '';
-      if (
-        tz.includes('Calcutta') || 
-        tz.includes('Kolkata') || 
-        tz.includes('India') || 
-        lang.toLowerCase().includes('hi') || 
-        lang.toLowerCase() === 'en-in'
-      ) {
-        setCurrency('INR');
-      } else {
-        setCurrency('USD');
-      }
-    } catch (e) {
-      setCurrency('USD');
-    }
-  }, []);
 
   const openCheckout = (planId: string) => {
     setSelectedPlanId(planId);
@@ -63,10 +41,10 @@ export default function BillingPage() {
       <div>
         <h1 className="text-xl font-bold text-white flex items-center gap-2">
           <CreditCard className="w-5 h-5 text-rose-500" />
-          Billing & AI Reply Credits (Indian Creator Plans)
+          Billing & AI Reply Credits (Global USD Plans)
         </h1>
         <p className="text-xs text-zinc-400 mt-0.5">
-          Upgrade your plan with instant Razorpay checkout (UPI / Cards / NetBanking) or top up credits.
+          Upgrade your plan with instant checkout (Cards, UPI, Global Payment Methods) or top up reply credits.
         </p>
       </div>
 
@@ -92,37 +70,17 @@ export default function BillingPage() {
         </button>
       </div>
 
-      {/* Monthly / Yearly Switch & Currency Switcher */}
+      {/* Monthly / Yearly Switch */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            4-Tier Global & Regional Growth Plans
+            Global Creator & Agency Growth Plans ($ USD)
           </h3>
-          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size ({currency === 'USD' ? 'USD $' : 'INR ₹'}).</p>
+          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size ($ USD).</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Currency Switcher */}
-          <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-bold">
-            <button
-              onClick={() => setCurrency('USD')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
-                currency === 'USD' ? 'bg-rose-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              <span>🇺🇸 USD ($)</span>
-            </button>
-            <button
-              onClick={() => setCurrency('INR')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
-                currency === 'INR' ? 'bg-emerald-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              <span>🇮🇳 INR (₹)</span>
-            </button>
-          </div>
-
+        <div className="flex items-center gap-3">
           {/* Billing Cycle Switch */}
           <div className="inline-flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800 text-xs font-bold">
             <button
@@ -153,11 +111,7 @@ export default function BillingPage() {
         {INDIAN_TIER_PLANS.map((plan) => {
           const isCurrent = profile?.plan === plan.id;
           const isYearly = billingCycle === 'yearly';
-          const isUSD = currency === 'USD';
-          const price = isUSD
-            ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
-            : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
-          const currencySymbol = isUSD ? '$' : '₹';
+          const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
           const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
           const isCustom = plan.id === 'custom_bulk';
 
@@ -193,7 +147,7 @@ export default function BillingPage() {
                     <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
                   ) : (
                     <>
-                      <span className="text-3xl font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
+                      <span className="text-3xl font-black text-white">${price.toLocaleString()}</span>
                       <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
                     </>
                   )}
@@ -374,7 +328,7 @@ export default function BillingPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {CREDIT_PACKS.map((pack) => {
-            const packPrice = currency === 'USD' ? `$${pack.priceUSD}` : `₹${pack.priceINR}`;
+            const packPrice = `$${pack.price}`;
             return (
               <div
                 key={pack.id}

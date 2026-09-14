@@ -1,9 +1,7 @@
-'use client';
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video, MessageSquare } from 'lucide-react';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS, CurrencyType } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
 interface RazorpayModalProps {
@@ -22,33 +20,11 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
   const { user, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<'plan' | 'credits'>('plan');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
-  const [currency, setCurrency] = useState<CurrencyType>('USD');
   const [selectedPlan, setSelectedPlan] = useState(selectedPlanId);
   const [selectedPack, setSelectedPack] = useState(CREDIT_PACKS[0]?.id || 'pack_200');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  // Auto-detect country timezone for currency
-  React.useEffect(() => {
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      const lang = navigator.language || '';
-      if (
-        tz.includes('Calcutta') || 
-        tz.includes('Kolkata') || 
-        tz.includes('India') || 
-        lang.toLowerCase().includes('hi') || 
-        lang.toLowerCase() === 'en-in'
-      ) {
-        setCurrency('INR');
-      } else {
-        setCurrency('USD');
-      }
-    } catch (e) {
-      setCurrency('USD');
-    }
-  }, []);
 
   if (!isOpen) return null;
 
@@ -307,11 +283,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                 {INDIAN_TIER_PLANS.map((plan) => {
                   const isSelected = selectedPlan === plan.id;
                   const isYearly = billingCycle === 'yearly';
-                  const isUSD = currency === 'USD';
-                  const price = isUSD
-                    ? (isYearly ? plan.yearlyPriceUSD : plan.monthlyPriceUSD)
-                    : (isYearly ? plan.yearlyPriceINR : plan.monthlyPriceINR);
-                  const currencySymbol = isUSD ? '$' : '₹';
+                  const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
                   const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
                   const isCustom = plan.id === 'custom_bulk';
 
@@ -341,7 +313,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
                             <span className="text-base font-black text-emerald-400">Custom Quote</span>
                           ) : (
                             <>
-                              <span className="text-lg font-black text-white">{currencySymbol}{price.toLocaleString()}</span>
+                              <span className="text-lg font-black text-white">${price.toLocaleString()}</span>
                               <span className="text-[10px] text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
                             </>
                           )}
@@ -380,7 +352,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' 
               <div className="space-y-2.5 mb-5">
                 {CREDIT_PACKS.map((pack) => {
                   const isSelected = selectedPack === pack.id;
-                  const packPrice = currency === 'USD' ? `$${pack.priceUSD}` : `₹${pack.priceINR}`;
+                  const packPrice = `$${pack.price}`;
                   return (
                     <div
                       key={pack.id}

@@ -11,8 +11,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User UID is required' }, { status: 400 });
     }
 
-    let amount = 49900; // Default ₹499 in paise
-    let description = '🚀 Starter Plan (₹499/Month)';
+    let amount = 1900; // Default $19 in cents
+    let description = '🚀 Starter Plan ($19/Month)';
     let creditsToAdd = 2000;
     let purchaseType = 'subscription';
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       if (plan) {
         const isYearly = billingCycle === 'yearly';
         const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
-        amount = price * 100; // Amount in paise
+        amount = price * 100; // Amount in cents ($19 = 1900)
         creditsToAdd = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
         description = `${plan.name} (${isYearly ? 'Yearly - 2 Months Free' : 'Monthly'}) - SW Tech Solution`;
         purchaseType = 'plan';
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     const options = {
       amount,
-      currency: 'INR',
+      currency: 'USD',
       receipt: `rcpt_${uid.substring(0, 8)}_${Date.now()}`,
       notes: {
         userId: uid,
