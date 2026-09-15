@@ -39,6 +39,10 @@ export default function Navbar() {
               <Sparkles className="w-3.5 h-3.5" />
               AI Playground (Live Demo)
             </Link>
+            <Link href="/tools" className="text-zinc-300 hover:text-white font-medium flex items-center gap-1 transition-colors">
+              <span className="text-xs bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded font-bold">FREE</span>
+              Creator Tools
+            </Link>
             <Link href="/#pricing" className="hover:text-white transition-colors">Pricing ($39/mo)</Link>
             <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
           </div>

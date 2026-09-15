@@ -79,6 +79,36 @@ export default function Sidebar() {
             );
           })}
         </div>
+
+        {/* Free Tools Section */}
+        <div className="px-3 pt-2">
+          <div className="px-3 py-1 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+            Free Creator Tools
+          </div>
+          <div className="space-y-0.5 mt-1">
+            <Link
+              href="/tools/giveaway-picker"
+              className="flex items-center justify-between px-3.5 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60 transition-all"
+            >
+              <span>🎁 Giveaway Picker</span>
+              <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded">FREE</span>
+            </Link>
+            <Link
+              href="/tools/export-comments"
+              className="flex items-center justify-between px-3.5 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60 transition-all"
+            >
+              <span>📊 Export to CSV</span>
+              <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">FREE</span>
+            </Link>
+            <Link
+              href="/tools/comment-audit"
+              className="flex items-center justify-between px-3.5 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60 transition-all"
+            >
+              <span>🛡️ Comment Audit</span>
+              <span className="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">FREE</span>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Pro Plan Status Card */}

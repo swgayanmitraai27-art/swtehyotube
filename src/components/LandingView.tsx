@@ -16,6 +16,8 @@ import {
   CheckCircle2, 
   ArrowRight, 
   Gift,
+  FileSpreadsheet,
+  ShieldAlert,
   Globe2,
   BrainCircuit,
   Languages,
@@ -589,6 +591,93 @@ export default function LandingView() {
               <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
               <span>Direct Call: 8303994616</span>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Free YouTube Creator Tools Suite Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full border-t border-zinc-900">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold mb-3">
+            <Gift className="w-3.5 h-3.5" />
+            100% Free Creator Growth Tools
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            Free Tools to Supercharge Your YouTube Channel
+          </h2>
+          <p className="text-xs sm:text-sm text-zinc-400 mt-2">
+            No credit card or login required. Run giveaways, export comments to Excel, and scan for spam bot attacks.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Giveaway Picker */}
+          <div className="rounded-3xl bg-zinc-900/60 border border-zinc-800 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all hover:-translate-y-1 shadow-xl group">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-rose-600/20 text-rose-400 flex items-center justify-center mb-4">
+                <Gift className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">VIRAL TOOL</span>
+              <h3 className="text-lg font-bold text-white mt-2 group-hover:text-rose-400 transition-colors">
+                Random Giveaway Comment Picker
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                Pick fair, unbiased giveaway winners from any YouTube video with live spinner, confetti celebration, and duplicate user filters.
+              </p>
+            </div>
+            <Link
+              href="/tools/giveaway-picker"
+              className="mt-6 w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-rose-600 text-white text-xs font-bold text-center transition-all flex items-center justify-center gap-1.5"
+            >
+              <span>Launch Giveaway Picker</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Export to CSV */}
+          <div className="rounded-3xl bg-zinc-900/60 border border-zinc-800 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all hover:-translate-y-1 shadow-xl group">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center mb-4">
+                <FileSpreadsheet className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">1-CLICK EXPORT</span>
+              <h3 className="text-lg font-bold text-white mt-2 group-hover:text-emerald-400 transition-colors">
+                Export YouTube Comments to CSV
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                Download every single comment, username, date, and like metric directly into an Excel & Google Sheets-ready CSV file.
+              </p>
+            </div>
+            <Link
+              href="/tools/export-comments"
+              className="mt-6 w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-emerald-600 text-white text-xs font-bold text-center transition-all flex items-center justify-center gap-1.5"
+            >
+              <span>Export Comments to CSV</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Comment Health Audit */}
+          <div className="rounded-3xl bg-zinc-900/60 border border-zinc-800 p-6 flex flex-col justify-between hover:border-zinc-700 transition-all hover:-translate-y-1 shadow-xl group">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mb-4">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">AI AUDIT</span>
+              <h3 className="text-lg font-bold text-white mt-2 group-hover:text-blue-400 transition-colors">
+                Comment Health & Spam Audit
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                Analyze sentiment ratios, catch toxic crypto scam bots, and get AI recommendations to improve viewer retention.
+              </p>
+            </div>
+            <Link
+              href="/tools/comment-audit"
+              className="mt-6 w-full py-2.5 rounded-xl bg-zinc-800 hover:bg-blue-600 text-white text-xs font-bold text-center transition-all flex items-center justify-center gap-1.5"
+            >
+              <span>Run Free AI Audit</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>

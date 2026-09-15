@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { Youtube, Sparkles, RefreshCw, CheckCircle2, AlertCircle, Plus } from 'lucide-react';
 import Link from 'next/link';
+import NotificationCenter from './NotificationCenter';
 
 export default function Topbar() {
   const { profile, connectYouTubeChannel, isYouTubeConnected, user } = useAuth();
@@ -65,6 +66,9 @@ export default function Topbar() {
             <Plus className="w-3 h-3" />
           </div>
         </Link>
+
+        {/* Live In-App Alerts Notification Center */}
+        <NotificationCenter />
 
         {/* Channel Reconnect / Sync Icon */}
         <button
