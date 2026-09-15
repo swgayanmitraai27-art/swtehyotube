@@ -471,14 +471,15 @@ export default function LandingView() {
         <div className="mt-12 rounded-3xl p-6 sm:p-8 bg-zinc-900/80 border border-zinc-800 text-left shadow-2xl">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-3 py-1 rounded-full">
-                💰 Value Comparison Matrix
-              </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white mt-2.5">
-                Why Top Creators Choose SW Tech Over Overpriced Tools
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+                SW Tech vs. CommentShark & Competitors
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white">
+                Side-by-Side Comparison: Why Creators Switch to SW Tech
               </h3>
               <p className="text-xs text-zinc-400 mt-1">
-                More AI replies, smarter Google Gemma 4 intelligence, and dedicated quota pooling at a fraction of the cost.
+                See how SW Tech delivers up to <strong>4x more replies for the exact same price</strong> and crushes legacy competitors.
               </p>
             </div>
           </div>
@@ -486,45 +487,53 @@ export default function LandingView() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-zinc-800 text-zinc-400 font-bold">
-                  <th className="py-3 px-4">Plan Tier</th>
-                  <th className="py-3 px-4 text-rose-400">SW Tech AutoReply ($ USD)</th>
-                  <th className="py-3 px-4 text-zinc-400">Industry Competitor</th>
-                  <th className="py-3 px-4 text-emerald-400">Your Direct Advantage</th>
+                <tr className="border-b border-zinc-800 text-zinc-400 font-bold bg-zinc-950/60">
+                  <th className="py-3.5 px-4 rounded-l-xl">Plan Tier</th>
+                  <th className="py-3.5 px-4 text-rose-400 font-extrabold">🚀 SW Tech AutoReply</th>
+                  <th className="py-3.5 px-4 text-zinc-400">🦈 CommentShark</th>
+                  <th className="py-3.5 px-4 text-emerald-400 font-extrabold rounded-r-xl">Your SW Tech Super-Advantage</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60">
                 <tr className="bg-zinc-950/40">
-                  <td className="py-3.5 px-4 font-bold text-white">⚡ Starter Scale</td>
-                  <td className="py-3.5 px-4 font-bold text-rose-400">$39/mo • 3,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$49/mo • Only 1,500 replies</td>
+                  <td className="py-3.5 px-4 font-bold text-white">Free Trial</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">100 Free AI Replies (Gemma 4 31B)</td>
+                  <td className="py-3.5 px-4 text-zinc-400">Only 20 actions / month</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    ✅ $10 Cheaper + 2x Double Replies (3k)!
+                    🎁 5x More Free Replies + Full AI Thinking Model
                   </td>
                 </tr>
-                <tr className="bg-rose-950/20 border-rose-500/30">
+                <tr className="bg-zinc-950/20">
+                  <td className="py-3.5 px-4 font-bold text-white">⚡ Starter Scale</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">$39/mo • 3,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$19/mo (500 replies) or $49/mo (1,500 replies)</td>
+                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
+                    ✅ 6x More Replies than their $19 & Double their $49 tier!
+                  </td>
+                </tr>
+                <tr className="bg-rose-950/25 border border-rose-500/30">
                   <td className="py-3.5 px-4 font-extrabold text-white flex items-center gap-1.5">
                     <span>🔥 Creator Scale (Twin-Project)</span>
-                    <span className="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-bold">POPULAR</span>
+                    <span className="text-[9px] bg-rose-500 text-white px-1.5 py-0.5 rounded font-bold">BEST VALUE</span>
                   </td>
-                  <td className="py-3.5 px-4 font-bold text-rose-400">$49/mo • 6,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$139/mo • Only 5,000 replies</td>
-                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    🏆 $90 Cheaper & MORE replies than their top plan!
+                  <td className="py-3.5 px-4 font-black text-rose-400">$49/mo • 6,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$49/mo (Only 1,500) • $139/mo (Only 5,000)</td>
+                  <td className="py-3.5 px-4 font-extrabold text-emerald-400">
+                    🏆 4x MORE replies at $49 & beats their $139 Pro tier ($90 SAVED)!
                   </td>
                 </tr>
                 <tr className="bg-zinc-950/40">
                   <td className="py-3.5 px-4 font-bold text-white">👑 Pro / Agency</td>
                   <td className="py-3.5 px-4 font-bold text-rose-400">$99/mo • 15,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$299+/mo restrictive tiers</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$139/mo for only 5,000 replies</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    ⚡ 3-Project automated credential framework (30k daily units) + 6 Channel Linking
+                    ⚡ $40 CHEAPER + 3x TRIPLE (15,000) Replies + 3-Project Framework
                   </td>
                 </tr>
                 <tr className="bg-emerald-950/20 border-emerald-500/30">
                   <td className="py-3.5 px-4 font-bold text-white">💼 Custom / DFY Enterprise</td>
                   <td className="py-3.5 px-4 font-bold text-emerald-400">Let's Talk • Unlimited / Custom</td>
-                  <td className="py-3.5 px-4 text-zinc-400">Limited enterprise tiers</td>
+                  <td className="py-3.5 px-4 text-zinc-400">Standard restrictive enterprise limits</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
                     🏢 Full Done-For-You (DFY) layout with dedicated server nodes
                   </td>
