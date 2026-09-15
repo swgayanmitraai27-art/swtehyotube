@@ -153,16 +153,23 @@ export default function BillingPage() {
                   )}
                 </div>
 
-                <div className="mt-2 flex items-center gap-2 mb-4">
-                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
-                    isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                  }`}>
-                    {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
-                  </span>
-                  {!isCustom && isYearly && (
-                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                      2 Mo Free
+                <div className="mt-2 flex flex-col gap-1.5 mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
+                      isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                    }`}>
+                      {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
                     </span>
+                    {!isCustom && isYearly && (
+                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                        2 Mo Free
+                      </span>
+                    )}
+                  </div>
+                  {plan.competitorAdvantage && (
+                    <div className="text-[10px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-lg">
+                      {plan.competitorAdvantage}
+                    </div>
                   )}
                 </div>
 

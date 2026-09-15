@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
     }
 
     let amount = 3900; // Default $39 in cents
-    let description = '⚡ Standard Tier ($39/Month)';
-    let creditsToAdd = 6000;
+    let description = '⚡ Starter Scale ($39/Month)';
+    let creditsToAdd = 3000;
     let purchaseType = 'subscription';
 
     if (planId) {

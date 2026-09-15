@@ -298,16 +298,23 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 mt-1 mb-2">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                          isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                        }`}>
-                          {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies`}
-                        </span>
-                        {!isCustom && isYearly && (
-                          <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                            🎁 2 Months Free Applied
+                      <div className="flex flex-col gap-1 mt-1 mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
+                            isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                          }`}>
+                            {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies`}
                           </span>
+                          {!isCustom && isYearly && (
+                            <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                              🎁 2 Months Free Applied
+                            </span>
+                          )}
+                        </div>
+                        {plan.competitorAdvantage && (
+                          <div className="text-[10px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md">
+                            {plan.competitorAdvantage}
+                          </div>
                         )}
                       </div>
 

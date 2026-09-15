@@ -67,22 +67,25 @@ export interface PricingTier {
   monthlyCredits: number;
   yearlyCredits: number;
   highlightFeature?: string;
+  competitorAdvantage?: string;
   features: string[];
 }
 
 export const INDIAN_TIER_PLANS: PricingTier[] = [
   {
     id: 'standard',
-    name: '⚡ Standard Tier',
-    badge: 'Standard',
+    name: '⚡ Starter Scale',
+    badge: 'Starter Scale',
     idealFor: 'Growing YouTube Channels & Creators (10k-50k Subs)',
     monthlyPrice: 39,
     yearlyPrice: 390, // $32.5/mo (2 Months Free)
-    monthlyCredits: 6000, // 6,000 replies / mo
-    yearlyCredits: 72000,
+    monthlyCredits: 3000, // 3,000 replies / mo
+    yearlyCredits: 36000,
     highlightFeature: '⚡ 1 Google Cloud Project (10,000 Daily Quota Units)',
+    competitorAdvantage: '💡 $10 Cheaper + Double Replies (3k) vs Competitor $49 Plan!',
     features: [
-      '6,000 AI Replies / Month (72,000/yr)',
+      '3,000 AI Replies / Month (36,000/yr)',
+      '💥 2x More Replies than Competitors ($10 cheaper than their $49 tier)',
       '1 Google Cloud Project Architecture (10,000 Daily Quota Units)',
       '1-Click YouTube Connect (Instant Sync)',
       '24/7 Hands-Free Auto-Pilot Mode',
@@ -94,17 +97,19 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
   },
   {
     id: 'premium',
-    name: '🔥 Premium Scale Tier',
+    name: '🔥 Creator Scale (Twin-Project)',
     badge: '🔥 Best Value • Most Popular',
     popular: true,
     idealFor: 'High-Growth Creators & Heavy Comment Channels (50k-300k Subs)',
     monthlyPrice: 49,
     yearlyPrice: 490, // $40.8/mo (2 Months Free)
-    monthlyCredits: 15000, // 15,000 replies / mo
-    yearlyCredits: 180000,
+    monthlyCredits: 6000, // 6,000 replies / mo (Using Twin-Project)
+    yearlyCredits: 72000,
     highlightFeature: '🚀 Twin-Project Architecture (20,000 Daily Quota Units with Auto-Switch)',
+    competitorAdvantage: '🏆 $90 Cheaper & MORE Replies (6k) than Competitor $139 Plan!',
     features: [
-      '15,000 AI Replies / Month (180,000/yr)',
+      '6,000 AI Replies / Month (72,000/yr)',
+      '💥 $90 Cheaper than Competitor $139 plan + MORE replies!',
       '🚀 Twin-Project Architecture (2 Google Cloud Projects -> 20,000 Daily Quota)',
       '⚡ Intelligent Auto-Switch Quota Balancing (Zero Quota Exhaustion)',
       '24/7 Multi-Project Hands-Free Auto-Pilot Mode',
@@ -115,18 +120,20 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
   },
   {
     id: 'enterprise',
-    name: '👑 Enterprise / Agency Plan',
-    badge: 'Large Teams & Global MCNs',
+    name: '👑 Pro / Agency',
+    badge: 'Heavy Rush Channels & MCNs',
     idealFor: 'Large Creators, Media Networks & Creator Agencies (300k+ Subs)',
     monthlyPrice: 99,
     yearlyPrice: 990, // $82.5/mo (2 Months Free)
-    monthlyCredits: 30000, // 30,000 replies / mo
-    yearlyCredits: 360000,
-    highlightFeature: '🛡️ Tri-Project Quota Pooling + Multi-Channel Linking',
+    monthlyCredits: 15000, // 15,000 replies / mo
+    yearlyCredits: 180000,
+    highlightFeature: '⚡ 3-Project automated credential framework built for heavy rush channels',
+    competitorAdvantage: '🚀 3-Project automated credential framework (30k daily units) + 6 Channel Linking',
     features: [
-      '30,000 AI Replies / Month (360,000/yr)',
+      '15,000 AI Replies / Month (180,000/yr)',
+      '⚡ 3-Project automated credential framework built for heavy rush channels',
       'Multi-Channel Linking (Up to 6 YouTube Channels)',
-      'Tri-Project Quota Pooling Architecture (30,000+ Daily Quota Units)',
+      '30,000+ Daily Quota Units with Smart Auto-Switch Balancing',
       '🛡️ Maximum AI Toxic, Scam & Hate Speech Auto-Purge (Zero Spam)',
       'Dedicated WhatsApp VIP Setup & Strategy Support',
       '1-on-1 Dedicated Scaling & Onboarding Call with Founder (📞)'
@@ -134,15 +141,18 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
   },
   {
     id: 'custom_bulk',
-    name: '💼 Custom Bulk / VIP Calling Plan',
-    badge: 'Custom Volume & Direct Call',
-    idealFor: 'Large Media Networks, Production Houses & Agencies (50k to 5,00,000+ Replies)',
-    monthlyPrice: 0, // Custom Quote
+    name: '💼 Custom / DFY Enterprise',
+    badge: "Let's Talk",
+    idealFor: 'Full Done-For-You (DFY) layout with dedicated server nodes (Large Networks & Agencies)',
+    monthlyPrice: 0, // Custom Quote (Let's Talk)
     yearlyPrice: 0,
     monthlyCredits: 100000,
     yearlyCredits: 1200000,
+    highlightFeature: 'Full Done-For-You (DFY) layout with dedicated server nodes',
+    competitorAdvantage: '🏢 Custom enterprise infrastructure with dedicated server instance & white-glove DFY setup',
     features: [
-      'Custom AI Reply Volume (50,000 to 5,00,000+ / Month)',
+      'Unlimited / Custom Monthly AI Reply Volume',
+      'Full Done-For-You (DFY) layout with dedicated server nodes',
       'Direct Phone & WhatsApp Setup (Founder: +91 8303994616 📞)',
       '1-on-1 VIP Screen Share Setup & Google Cloud Architecture',
       'Unlimited Multi-Channel Support & MCN Linking',

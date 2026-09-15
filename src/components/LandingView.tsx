@@ -384,16 +384,23 @@ export default function LandingView() {
                     )}
                   </div>
 
-                  <div className="mt-2 flex items-center gap-2">
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${
-                      isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                    }`}>
-                      {isCustom ? '20k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
-                    </span>
-                    {!isCustom && isYearly && (
-                      <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
-                        2 Mo Free
+                  <div className="mt-2 flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${
+                        isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                      }`}>
+                        {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
                       </span>
+                      {!isCustom && isYearly && (
+                        <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+                          2 Mo Free
+                        </span>
+                      )}
+                    </div>
+                    {plan.competitorAdvantage && (
+                      <div className="text-[10px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-lg">
+                        {plan.competitorAdvantage}
+                      </div>
                     )}
                   </div>
 
@@ -460,29 +467,96 @@ export default function LandingView() {
           })}
         </div>
 
+        {/* Competitor Value Comparison Matrix Banner */}
+        <div className="mt-12 rounded-3xl p-6 sm:p-8 bg-zinc-900/80 border border-zinc-800 text-left shadow-2xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-3 py-1 rounded-full">
+                💰 Value Comparison Matrix
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-white mt-2.5">
+                Why Top Creators Choose SW Tech Over Overpriced Tools
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1">
+                More AI replies, smarter Google Gemma 4 intelligence, and dedicated quota pooling at a fraction of the cost.
+              </p>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-zinc-800 text-zinc-400 font-bold">
+                  <th className="py-3 px-4">Plan Tier</th>
+                  <th className="py-3 px-4 text-rose-400">SW Tech AutoReply ($ USD)</th>
+                  <th className="py-3 px-4 text-zinc-400">Industry Competitor</th>
+                  <th className="py-3 px-4 text-emerald-400">Your Direct Advantage</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/60">
+                <tr className="bg-zinc-950/40">
+                  <td className="py-3.5 px-4 font-bold text-white">⚡ Starter Scale</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">$39/mo • 3,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$49/mo • Only 1,500 replies</td>
+                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
+                    ✅ $10 Cheaper + 2x Double Replies (3k)!
+                  </td>
+                </tr>
+                <tr className="bg-rose-950/20 border-rose-500/30">
+                  <td className="py-3.5 px-4 font-extrabold text-white flex items-center gap-1.5">
+                    <span>🔥 Creator Scale (Twin-Project)</span>
+                    <span className="text-[9px] bg-rose-500/30 text-rose-200 px-1.5 py-0.5 rounded font-bold">POPULAR</span>
+                  </td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">$49/mo • 6,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$139/mo • Only 5,000 replies</td>
+                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
+                    🏆 $90 Cheaper & MORE replies than their top plan!
+                  </td>
+                </tr>
+                <tr className="bg-zinc-950/40">
+                  <td className="py-3.5 px-4 font-bold text-white">👑 Pro / Agency</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">$99/mo • 15,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$299+/mo restrictive tiers</td>
+                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
+                    ⚡ 3-Project automated credential framework (30k daily units) + 6 Channel Linking
+                  </td>
+                </tr>
+                <tr className="bg-emerald-950/20 border-emerald-500/30">
+                  <td className="py-3.5 px-4 font-bold text-white">💼 Custom / DFY Enterprise</td>
+                  <td className="py-3.5 px-4 font-bold text-emerald-400">Let's Talk • Unlimited / Custom</td>
+                  <td className="py-3.5 px-4 text-zinc-400">Limited enterprise tiers</td>
+                  <td className="py-3.5 px-4 font-semibold text-emerald-400">
+                    🏢 Full Done-For-You (DFY) layout with dedicated server nodes
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Custom / Bulk Volume Plan Card */}
         <div className="mt-10 rounded-3xl p-8 bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/30 text-left flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold mb-3">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              Custom Bulk & Agency Volume Plan
+              💼 Custom / DFY Enterprise Plan
             </div>
-            <h3 className="text-2xl font-black text-white">Need Custom High-Volume AI Replies or Multiple Channels?</h3>
+            <h3 className="text-2xl font-black text-white">Full Done-For-You (DFY) Layout with Dedicated Server Nodes</h3>
             <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
-              For Large Media Networks, Coaching Institutes, and Creator Agencies needing <strong>20,000 to 5,00,000+ Monthly AI Replies</strong>, Multi-Channel BYOK Quota Architecture, or Custom AI Fine-Tuning. Connect directly with the founder for custom enterprise pricing & instant live setup.
+              For Large Media Networks, Production Houses, and Creator Agencies needing <strong>Unlimited / Custom Monthly AI Replies</strong>, Full Done-For-You setup, Dedicated High-Speed Server Nodes, or Multi-Channel MCN Architecture. Connect directly with the founder for custom quote & white-glove setup.
             </p>
             <div className="mt-4 flex flex-wrap gap-4 text-xs text-zinc-300">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Custom Reply Quota (20k - 500k+/mo)
+                Unlimited / Custom AI Reply Volume
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Unlimited Multi-Channel Support
+                Dedicated Server Nodes & DFY Layout
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Direct WhatsApp VIP Support & Setup
+                Direct WhatsApp & Founder Calling Support
               </div>
             </div>
           </div>
