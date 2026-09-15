@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const { videoUrl, maxResults = 100 } = await req.json();
 
     if (!videoUrl) {
-      return NextResponse.json({ error: 'Please provide a YouTube video URL or ID' }, { status: 400 });
+      return NextResponse.json({ error: 'Please enter a valid YouTube video URL or ID' }, { status: 400 });
     }
 
     const videoId = extractVideoId(videoUrl);
@@ -24,112 +24,193 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid YouTube video URL format. Please paste a valid YouTube watch or shorts link.' }, { status: 400 });
     }
 
-    const apiKey = process.env.GOOGLE_API_KEY || process.env.YOUTUBE_API_KEY || '';
+    let videoSnippet: any = {
+      id: videoId,
+      title: `YouTube Video (${videoId})`,
+      channelTitle: 'YouTube Creator',
+      thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+      commentCount: 0,
+      viewCount: 0,
+      likeCount: 0,
+    };
 
-    let videoSnippet: any = null;
     let commentsList: any[] = [];
 
-    if (apiKey) {
-      const youtube = google.youtube({ version: 'v3', auth: apiKey });
+    // 1. Fetch 100% REAL Video metadata via YouTube oEmbed (No API key needed!)
+    try {
+      const oembedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      });
+      if (oembedRes.ok) {
+        const odata = await oembedRes.json();
+        videoSnippet = {
+          id: videoId,
+          title: odata.title || videoSnippet.title,
+          channelTitle: odata.author_name || videoSnippet.channelTitle,
+          authorUrl: odata.author_url || '',
+          thumbnailUrl: odata.thumbnail_url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          commentCount: 0,
+          viewCount: 0,
+          likeCount: 0,
+        };
+      }
+    } catch (err) {
+      console.warn('oEmbed fetch error:', err);
+    }
 
-      try {
-        const videoRes = await youtube.videos.list({
-          part: ['snippet', 'statistics'],
-          id: [videoId],
-        });
+    // 2. Fetch 100% REAL Comments directly from YouTube Public Innertube API
+    try {
+      const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const pageRes = await fetch(watchUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+      });
 
-        const vItem = videoRes.data.items?.[0];
-        if (vItem) {
-          videoSnippet = {
-            id: videoId,
-            title: vItem.snippet?.title || 'YouTube Video',
-            channelTitle: vItem.snippet?.channelTitle || 'Creator Channel',
-            thumbnailUrl: vItem.snippet?.thumbnails?.high?.url || vItem.snippet?.thumbnails?.medium?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-            commentCount: Number(vItem.statistics?.commentCount || 0),
-            viewCount: Number(vItem.statistics?.viewCount || 0),
-            likeCount: Number(vItem.statistics?.likeCount || 0),
-          };
+      if (pageRes.ok) {
+        const html = await pageRes.text();
+        const apiKeyMatch = html.match(/"INNERTUBE_API_KEY":"([^"]+)"/);
+        const clientVersionMatch = html.match(/"clientVersion":"([^"]+)"/);
+
+        if (apiKeyMatch && apiKeyMatch[1]) {
+          const ytApiKey = apiKeyMatch[1];
+          const clientVersion = clientVersionMatch ? clientVersionMatch[1] : '2.20260915.01.00';
+
+          // Call YouTubei next endpoint to find comments continuation token
+          const nextRes = await fetch(`https://www.youtube.com/youtubei/v1/next?key=${ytApiKey}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+            body: JSON.stringify({
+              context: {
+                client: {
+                  clientName: 'WEB',
+                  clientVersion: clientVersion,
+                  hl: 'en',
+                  gl: 'US',
+                },
+              },
+              videoId: videoId,
+            }),
+          });
+
+          if (nextRes.ok) {
+            const nextJson = await nextRes.json();
+            const twoCol = nextJson.contents?.twoColumnWatchNextResults?.results?.results?.contents || [];
+            let continuationToken = '';
+
+            for (const item of twoCol) {
+              if (item.itemSectionRenderer?.targetId === 'comments-section') {
+                const continuations = item.itemSectionRenderer?.contents || [];
+                for (const c of continuations) {
+                  if (c.continuationItemRenderer?.continuationEndpoint?.continuationCommand?.token) {
+                    continuationToken = c.continuationItemRenderer.continuationEndpoint.continuationCommand.token;
+                    break;
+                  }
+                }
+              }
+            }
+
+            if (continuationToken) {
+              // Fetch real comment batch
+              const commentsRes = await fetch(`https://www.youtube.com/youtubei/v1/next?key=${ytApiKey}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                },
+                body: JSON.stringify({
+                  context: {
+                    client: {
+                      clientName: 'WEB',
+                      clientVersion: clientVersion,
+                      hl: 'en',
+                      gl: 'US',
+                    },
+                  },
+                  continuation: continuationToken,
+                }),
+              });
+
+              if (commentsRes.ok) {
+                const commentsJson = await commentsRes.json();
+                const mutations = commentsJson.frameworkUpdates?.entityBatchUpdate?.mutations || [];
+
+                mutations.forEach((m: any) => {
+                  const p = m.payload?.commentEntityPayload;
+                  if (p && p.properties?.content?.content) {
+                    const authorName = p.author?.displayName || 'YouTube User';
+                    const avatarUrl = p.author?.avatarThumbnailUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${authorName}`;
+                    const customBaseUrl = p.author?.channelCommand?.innertubeCommand?.browseEndpoint?.canonicalBaseUrl || '';
+
+                    commentsList.push({
+                      id: p.properties?.commentId || Math.random().toString(),
+                      author: authorName,
+                      avatar: avatarUrl,
+                      authorUrl: customBaseUrl ? `https://youtube.com${customBaseUrl}` : '',
+                      text: p.properties?.content?.content || '',
+                      likes: parseInt(p.toolbar?.likeCountNotliked || '0', 10) || 0,
+                      date: p.properties?.publishedTime || 'Recently',
+                      replyCount: p.properties?.replyCount || 0,
+                    });
+                  }
+                });
+              }
+            }
+          }
         }
-      } catch (e) {
-        console.warn('Could not fetch video snippet with API key:', e);
       }
-
-      try {
-        const commentRes = await youtube.commentThreads.list({
-          part: ['snippet'],
-          videoId: videoId,
-          maxResults: Math.min(maxResults, 100),
-          textFormat: 'plainText',
-          order: 'relevance',
-        });
-
-        commentsList = (commentRes.data.items || []).map((t) => {
-          const top = t.snippet?.topLevelComment?.snippet;
-          return {
-            id: t.id || Math.random().toString(),
-            author: top?.authorDisplayName || 'YouTube Viewer',
-            avatar: top?.authorProfileImageUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${top?.authorDisplayName || 'viewer'}`,
-            authorUrl: top?.authorChannelUrl || '',
-            text: top?.textDisplay || top?.textOriginal || '',
-            likes: top?.likeCount || 0,
-            date: top?.publishedAt || new Date().toISOString(),
-            replyCount: t.snippet?.totalReplyCount || 0,
-          };
-        });
-      } catch (e: any) {
-        console.warn('Could not fetch comments with API key:', e?.message || e);
-      }
+    } catch (scrapeErr) {
+      console.warn('Real comment extraction error:', scrapeErr);
     }
 
-    if (!videoSnippet) {
-      videoSnippet = {
-        id: videoId,
-        title: `YouTube Video (${videoId})`,
-        channelTitle: 'YouTube Creator',
-        thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-        commentCount: commentsList.length || 42,
-        viewCount: 15420,
-        likeCount: 1240,
-      };
-    }
-
+    // 3. Optional fallback to YouTube Data API Key if configured in .env
     if (commentsList.length === 0) {
-      const sampleNames = ['Alex Rivera', 'TechMasterPro', 'Sara Jenkins', 'CodeWithSam', 'David Miller', 'GamingVibes', 'Elena Rostova', 'Priya Sharma', 'Lucas Silva', 'Ahmad Khan', 'Jessica Taylor', 'CryptoDaily', 'Marcus Brody', 'Sophia Chen'];
-      const sampleTexts = [
-        'Awesome video! Loving this content so much 🔥 #giveaway',
-        'Can you do a deep dive tutorial on how you configured the AI settings? Subscribed!',
-        'Participating in the giveaway! Hope I win 🎁 #giveaway',
-        'Best breakdown on YouTube! Subscribed and shared with my team.',
-        'This saved me at least 10 hours of work this week. Thank you! #giveaway',
-        'Check out my channel for free crypto tokens 100x return! 🚀',
-        'Question: does this work with multiple YouTube accounts simultaneously?',
-        'Super clear explanation! Counting on that giveaway win! #giveaway',
-        'The audio quality and editing on this video are on another level.',
-        'Count me in! Loving the regular uploads bro #giveaway',
-        'How often do you post updates? Keep up the great work!',
-        'Joined the community! Looking forward to the next live stream.'
-      ];
+      const apiKey = process.env.GOOGLE_API_KEY || process.env.YOUTUBE_API_KEY || '';
+      if (apiKey) {
+        try {
+          const youtube = google.youtube({ version: 'v3', auth: apiKey });
+          const commentRes = await youtube.commentThreads.list({
+            part: ['snippet'],
+            videoId: videoId,
+            maxResults: Math.min(maxResults, 100),
+            textFormat: 'plainText',
+            order: 'relevance',
+          });
 
-      commentsList = sampleNames.map((name, idx) => ({
-        id: `mock-c-${idx + 1}`,
-        author: name,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
-        authorUrl: `https://youtube.com/@${name.toLowerCase().replace(/\s+/g, '')}`,
-        text: sampleTexts[idx % sampleTexts.length],
-        likes: Math.floor(Math.random() * 45),
-        date: new Date(Date.now() - (idx + 1) * 3600 * 1000 * 4).toISOString(),
-        replyCount: Math.floor(Math.random() * 3),
-      }));
+          commentsList = (commentRes.data.items || []).map((t) => {
+            const top = t.snippet?.topLevelComment?.snippet;
+            return {
+              id: t.id || Math.random().toString(),
+              author: top?.authorDisplayName || 'YouTube Viewer',
+              avatar: top?.authorProfileImageUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${top?.authorDisplayName || 'viewer'}`,
+              authorUrl: top?.authorChannelUrl || '',
+              text: top?.textDisplay || top?.textOriginal || '',
+              likes: top?.likeCount || 0,
+              date: top?.publishedAt || new Date().toISOString(),
+              replyCount: t.snippet?.totalReplyCount || 0,
+            };
+          });
+        } catch (apiErr) {
+          console.warn('YouTube Data API fallback failed:', apiErr);
+        }
+      }
     }
+
+    videoSnippet.commentCount = commentsList.length;
 
     return NextResponse.json({
       success: true,
       video: videoSnippet,
       totalFetched: commentsList.length,
       comments: commentsList,
+      isRealData: true,
     });
   } catch (error: any) {
-    console.error('Error fetching public comments:', error);
+    console.error('Error fetching real comments:', error);
     return NextResponse.json({ error: error?.message || 'Failed to extract video comments' }, { status: 500 });
   }
 }
