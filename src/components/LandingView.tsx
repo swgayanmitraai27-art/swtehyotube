@@ -32,7 +32,7 @@ export default function LandingView() {
   const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('pro');
+  const [selectedPlan, setSelectedPlan] = useState('premium');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
 
   const handleGetStarted = () => {

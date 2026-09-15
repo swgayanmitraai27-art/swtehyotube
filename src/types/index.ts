@@ -1,4 +1,4 @@
-export type PlanType = 'free' | 'free_trial' | 'starter' | 'pro' | 'enterprise' | 'custom_bulk';
+export type PlanType = 'free' | 'free_trial' | 'standard' | 'premium' | 'enterprise' | 'custom_bulk' | 'starter' | 'pro';
 export type BillingCycle = 'monthly' | 'yearly';
 
 export type ChannelCategory = 

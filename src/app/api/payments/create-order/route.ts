@@ -11,9 +11,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User UID is required' }, { status: 400 });
     }
 
-    let amount = 1900; // Default $19 in cents
-    let description = '🚀 Starter Plan ($19/Month)';
-    let creditsToAdd = 2000;
+    let amount = 3900; // Default $39 in cents
+    let description = '⚡ Standard Tier ($39/Month)';
+    let creditsToAdd = 6000;
     let purchaseType = 'subscription';
 
     if (planId) {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       if (plan) {
         const isYearly = billingCycle === 'yearly';
         const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
-        amount = price * 100; // Amount in cents ($19 = 1900)
+        amount = price * 100; // Amount in cents ($39 = 3900, $49 = 4900)
         creditsToAdd = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
         description = `${plan.name} (${isYearly ? 'Yearly - 2 Months Free' : 'Monthly'}) - SW Tech Solution`;
         purchaseType = 'plan';

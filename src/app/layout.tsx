@@ -103,7 +103,7 @@ export default function RootLayout({
         },
         offers: {
           '@type': 'Offer',
-          price: '19',
+          price: '39',
           priceCurrency: 'USD',
           priceValidUntil: '2027-12-31',
           availability: 'https://schema.org/InStock',

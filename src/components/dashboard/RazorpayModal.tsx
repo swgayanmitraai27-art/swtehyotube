@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'pro' }: RazorpayModalProps) {
+export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premium' }: RazorpayModalProps) {
   const { user, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<'plan' | 'credits'>('plan');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');

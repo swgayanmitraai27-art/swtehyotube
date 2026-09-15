@@ -27,7 +27,7 @@ import {
 export default function BillingPage() {
   const { profile } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState('pro');
+  const [selectedPlanId, setSelectedPlanId] = useState('premium');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
 
   const openCheckout = (planId: string) => {
