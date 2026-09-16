@@ -47,7 +47,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
       step: 1,
       title: 'Create Google Cloud Project',
       subtitle: 'Google Cloud Console me free project banayein',
-      tag: 'Step 1 • 1 Min',
+      tag: 'Step 1 â€¢ 1 Min',
       content: (
         <div className="space-y-3 text-xs text-zinc-300 leading-relaxed">
           <p>
@@ -81,7 +81,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
       step: 2,
       title: 'Enable YouTube Data API v3',
       subtitle: 'YouTube official API ko enable karein',
-      tag: 'Step 2 • 30 Sec',
+      tag: 'Step 2 â€¢ 30 Sec',
       content: (
         <div className="space-y-3 text-xs text-zinc-300 leading-relaxed">
           <p>
@@ -115,7 +115,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
       step: 3,
       title: 'Configure OAuth Consent & Add Test Users',
       subtitle: 'Apne Channel ki Gmail ID ko Test User me add karein (Important!)',
-      tag: 'Step 3 • Critical',
+      tag: 'Step 3 â€¢ Critical',
       content: (
         <div className="space-y-3 text-xs text-zinc-300 leading-relaxed">
           <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-amber-300 flex items-start gap-2.5">
@@ -158,7 +158,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
       step: 4,
       title: 'Create OAuth Client ID (Web Application)',
       subtitle: 'Authorized Redirect URI copy karke paste karein',
-      tag: 'Step 4 • Credentials',
+      tag: 'Step 4 â€¢ Credentials',
       content: (
         <div className="space-y-3 text-xs text-zinc-300 leading-relaxed">
           <p>
@@ -179,7 +179,6 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
             </li>
           </ol>
 
-          {/* Copy Box */}
           <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between gap-2">
             <div className="font-mono text-rose-400 text-[11px] truncate">
               {redirectUri}
@@ -226,7 +225,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
       step: 5,
       title: 'Paste Credentials & Connect YouTube Channel',
       subtitle: 'App me save karein aur channel 1-click me connect karein',
-      tag: 'Step 5 • Done ??',
+      tag: 'Step 5 â€¢ Done ðŸŽ‰',
       content: (
         <div className="space-y-3 text-xs text-zinc-300 leading-relaxed">
           <p>
@@ -234,7 +233,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
           </p>
           <ol className="list-decimal pl-4 space-y-2 text-zinc-300">
             <li>
-              Apna <strong>Client ID</strong> (jo <code className="bg-zinc-800 px-1 py-0.5 rounded text-rose-400">.apps.googleusercontent.com</code> par end hota hai) aur <strong>Client Secret</strong> (jo <code className="bg-zinc-800 px-1 py-0.5 rounded text-rose-400">GOCSPX-...</code> se start hota hai) Settings page ke <strong>&quot;Dedicated Google Cloud Project Quota Keys&quot;</strong> section me paste karein.
+              Apna <strong>Client ID</strong> aur <strong>Client Secret</strong> Settings page ke <strong>&quot;Dedicated Google Cloud Project Quota Keys&quot;</strong> section me paste karein.
             </li>
             <li>
               Neeche <strong>&quot;Save &amp; Connect YouTube&quot;</strong> button dabayein.
@@ -270,10 +269,8 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-rose-600/15 blur-3xl rounded-full pointer-events-none" />
 
-        {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-800 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg shadow-rose-600/30">
@@ -296,7 +293,6 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
           </button>
         </div>
 
-        {/* Step Indicator Badges */}
         <div className="flex items-center gap-1.5 py-4 border-b border-zinc-800/80 shrink-0 overflow-x-auto">
           {steps.map((s) => (
             <button
@@ -318,7 +314,6 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
           ))}
         </div>
 
-        {/* Body Content */}
         <div className="py-6 overflow-y-auto space-y-6 flex-1 pr-1">
           {steps.map((s) => {
             const isCurrent = activeStep === s.step;
@@ -357,7 +352,6 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
           })}
         </div>
 
-        {/* Footer */}
         <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <a
             href="https://wa.me/918303994616?text=Hi%20SW%20Tech!%20I%20need%20help%20connecting%20my%20YouTube%20Channel%20in%20Google%20Cloud."
@@ -366,7 +360,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
             className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5"
           >
             <PhoneCall className="w-3.5 h-3.5" />
-            Still Confused? WhatsApp Live Support: +91 8303994616
+            WhatsApp Live Support: +91 8303994616
           </a>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
@@ -403,9 +397,6 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
   );
 }
 
-/**
- * Embedded Accordion Version for Settings Page & Dashboard
- */
 export function SetupGuideCard() {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -426,7 +417,7 @@ export function SetupGuideCard() {
           </div>
           <div>
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              ?? Step-by-Step Google Cloud &amp; Channel Connection Guide
+              ðŸ“– Step-by-Step Google Cloud &amp; Channel Connection Guide
             </h4>
             <p className="text-xs text-zinc-400 mt-0.5">
               Follow 5 quick steps to configure YouTube Data API v3, add Test Users, and get Client ID/Secret.
@@ -453,7 +444,6 @@ export function SetupGuideCard() {
 
       {isOpen && (
         <div className="mt-5 pt-5 border-t border-zinc-800 space-y-4 animate-in fade-in duration-300">
-          {/* Step 1 */}
           <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <span className="font-bold text-white flex items-center gap-2">
@@ -466,7 +456,7 @@ export function SetupGuideCard() {
                 rel="noopener noreferrer"
                 className="text-rose-400 hover:underline flex items-center gap-1 text-[11px]"
               >
-                Open Console <ExternalLink className="w-3 h-3" />
+                Open Console <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
             <p className="text-zinc-400 text-[11px] pl-7">
@@ -474,7 +464,6 @@ export function SetupGuideCard() {
             </p>
           </div>
 
-          {/* Step 2 */}
           <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <span className="font-bold text-white flex items-center gap-2">
@@ -487,7 +476,7 @@ export function SetupGuideCard() {
                 rel="noopener noreferrer"
                 className="text-rose-400 hover:underline flex items-center gap-1 text-[11px]"
               >
-                Enable API <ExternalLink className="w-3 h-3" />
+                Enable API <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
             <p className="text-zinc-400 text-[11px] pl-7">
@@ -495,7 +484,6 @@ export function SetupGuideCard() {
             </p>
           </div>
 
-          {/* Step 3 */}
           <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <span className="font-bold text-white flex items-center gap-2">
@@ -508,7 +496,7 @@ export function SetupGuideCard() {
                 rel="noopener noreferrer"
                 className="text-rose-400 hover:underline flex items-center gap-1 text-[11px]"
               >
-                OAuth Consent <ExternalLink className="w-3 h-3" />
+                OAuth Consent <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
             <p className="text-zinc-400 text-[11px] pl-7">
@@ -516,7 +504,6 @@ export function SetupGuideCard() {
             </p>
           </div>
 
-          {/* Step 4 */}
           <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <span className="font-bold text-white flex items-center gap-2">
@@ -529,7 +516,7 @@ export function SetupGuideCard() {
                 rel="noopener noreferrer"
                 className="text-rose-400 hover:underline flex items-center gap-1 text-[11px]"
               >
-                Credentials <ExternalLink className="w-3 h-3" />
+                Credentials <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
             <p className="text-zinc-400 text-[11px] pl-7 mb-2">
@@ -550,7 +537,6 @@ export function SetupGuideCard() {
             </div>
           </div>
 
-          {/* Step 5 */}
           <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <span className="font-bold text-white flex items-center gap-2">
