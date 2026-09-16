@@ -326,6 +326,10 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'growt
             {/* Credit Packs */}
             {activeTab === 'credits' && (
               <div className="space-y-2.5 mb-5">
+                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 shrink-0 text-emerald-400" />
+                  <span><strong>No plan upgrade needed:</strong> Instant 1-time credit refill added immediately to your channel balance!</span>
+                </div>
                 {CREDIT_PACKS.map((pack) => {
                   const isSelected = selectedPack === pack.id;
                   const packPrice = `₹${pack.price}`;

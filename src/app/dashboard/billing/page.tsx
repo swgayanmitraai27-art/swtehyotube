@@ -295,10 +295,20 @@ export default function BillingPage() {
 
       {/* Pay-as-you-go Credit Packs */}
       <div>
-        <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-          <Plus className="w-4 h-4 text-emerald-400" />
-          Pay-As-You-Go Extra Credit Packs
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Plus className="w-4 h-4 text-emerald-400" />
+              Pay-As-You-Go Extra Credit Packs
+            </h3>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              ⚡ <strong>No need to change or upgrade your active monthly plan.</strong> Buy extra credits anytime with 1-click instant UPI top-up!
+            </p>
+          </div>
+          <span className="self-start sm:self-auto text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full whitespace-nowrap">
+            ✓ Instant Refill • No Plan Upgrade Needed
+          </span>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {CREDIT_PACKS.map((pack) => {
