@@ -493,7 +493,7 @@ export default function PersonaSettings() {
       <SetupGuideCard />
 
       {/* Multi-Project BYOK Quota Pool Card (Dedicated High Volume Setup) */}
-      <div className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+      <div id="gcp-keys" className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden scroll-mt-20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-2">

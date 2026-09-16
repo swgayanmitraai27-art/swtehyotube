@@ -46,16 +46,6 @@ export function InteractiveTour() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isGcpGuideOpen, setIsGcpGuideOpen] = useState(false);
 
-  useEffect(() => {
-    const hasSeenTour = localStorage.getItem('swtech_tour_completed_v1');
-    if (!hasSeenTour) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1200);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
   const completeTour = () => {
     localStorage.setItem('swtech_tour_completed_v1', 'true');
     setIsOpen(false);
@@ -328,18 +318,24 @@ export function QuickLaunchChecklist() {
       desc: isYouTubeConnected ? `Connected to ${profile?.channelTitle || 'Channel'}` : 'Link your YouTube channel to fetch comments',
       done: Boolean(isYouTubeConnected),
       action: !isYouTubeConnected ? (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
-            onClick={connectYouTubeChannel}
-            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold transition-all"
+            onClick={() => router.push('/dashboard/settings#gcp-keys')}
+            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-[11px] font-bold shadow-sm transition-all"
           >
-            1-Click Connect
+            ⚙️ Enter Keys (Settings)
           </button>
           <button
             onClick={() => setIsGcpGuideOpen(true)}
-            className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-bold border border-zinc-700 transition-all"
+            className="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-bold border border-zinc-700 transition-all"
           >
-            GCP Guide
+            Guide
+          </button>
+          <button
+            onClick={connectYouTubeChannel}
+            className="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-[10px] font-bold border border-zinc-700/60 transition-all"
+          >
+            Shared 1-Click
           </button>
         </div>
       ) : null,

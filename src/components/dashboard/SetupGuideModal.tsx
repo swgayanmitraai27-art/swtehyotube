@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   BookOpen, 
   CheckCircle2, 
@@ -29,6 +30,7 @@ interface SetupGuideModalProps {
 }
 
 export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideModalProps) {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState<number>(1);
   const [copied, setCopied] = useState<boolean>(false);
 
@@ -253,12 +255,11 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
               type="button"
               onClick={() => {
                 onClose();
-                if (onOpenConnect) onOpenConnect();
+                router.push('/dashboard/settings#gcp-keys');
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white font-bold text-xs shadow-lg shadow-rose-600/20 transition-all"
             >
-              <Youtube className="w-4 h-4 fill-white" />
-              Go to Settings &amp; Connect Now
+              <span>⚙️ Go to Settings &amp; Enter Keys Now</span>
             </button>
           </div>
         </div>
@@ -266,39 +267,49 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
     },
   ];
 
+  const current = steps[activeStep - 1];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+    >
+      <div className="relative w-full max-w-xl bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-2xl overflow-hidden flex flex-col">
+        {/* Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-rose-600/15 blur-3xl rounded-full pointer-events-none" />
 
+        {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-800 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg shadow-rose-600/30">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                YouTube Channel Connection Setup Guide
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                YouTube Connection Setup Guide
               </h2>
-              <p className="text-xs text-zinc-400">
-                Step-by-step tutorial to connect your YouTube Channel with private GCP quota
+              <p className="text-[11px] text-zinc-400">
+                5 quick steps to connect your channel with private GCP quota
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex items-center gap-1.5 py-4 border-b border-zinc-800/80 shrink-0 overflow-x-auto">
+        {/* Step Indicator Badges */}
+        <div className="flex items-center justify-between gap-1.5 py-3 border-b border-zinc-800/80 shrink-0">
           {steps.map((s) => (
             <button
               key={s.step}
               onClick={() => setActiveStep(s.step)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                 activeStep === s.step
                   ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
                   : 'bg-zinc-950 text-zinc-400 hover:text-zinc-200 border border-zinc-800/80'
@@ -309,58 +320,41 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
               }`}>
                 {s.step}
               </span>
-              <span>Step {s.step}</span>
+              <span className="hidden sm:inline">Step {s.step}</span>
             </button>
           ))}
         </div>
 
-        <div className="py-6 overflow-y-auto space-y-6 flex-1 pr-1">
-          {steps.map((s) => {
-            const isCurrent = activeStep === s.step;
-            return (
-              <div
-                key={s.step}
-                className={`p-5 rounded-2xl border transition-all ${
-                  isCurrent
-                    ? 'bg-zinc-950/80 border-rose-500/50 ring-1 ring-rose-500/30 shadow-lg'
-                    : 'bg-zinc-950/40 border-zinc-800/80 opacity-70 hover:opacity-100 cursor-pointer'
-                }`}
-                onClick={() => !isCurrent && setActiveStep(s.step)}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className={`w-6 h-6 rounded-full text-xs font-black flex items-center justify-center ${
-                      isCurrent ? 'bg-rose-600 text-white' : 'bg-zinc-800 text-zinc-400'
-                    }`}>
-                      {s.step}
-                    </span>
-                    <h3 className="text-sm font-bold text-white">{s.title}</h3>
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300">
-                    {s.tag}
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-400 mb-3 pl-8.5">{s.subtitle}</p>
+        {/* Single Active Step Content */}
+        <div className="py-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-rose-600 text-white text-[10px] flex items-center justify-center font-bold">
+                {current.step}
+              </span>
+              {current.title}
+            </h3>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300">
+              {current.tag}
+            </span>
+          </div>
+          <p className="text-xs text-zinc-400">{current.subtitle}</p>
 
-                {isCurrent && (
-                  <div className="mt-4 pt-4 border-t border-zinc-800/80">
-                    {s.content}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 mt-2">
+            {current.content}
+          </div>
         </div>
 
-        <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+        {/* Footer */}
+        <div className="pt-3 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <a
             href="https://wa.me/918303994616?text=Hi%20SW%20Tech!%20I%20need%20help%20connecting%20my%20YouTube%20Channel%20in%20Google%20Cloud."
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5"
+            className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5"
           >
             <PhoneCall className="w-3.5 h-3.5" />
-            WhatsApp Live Support: +91 8303994616
+            WhatsApp Support: +91 8303994616
           </a>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
@@ -368,7 +362,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
               <button
                 type="button"
                 onClick={() => setActiveStep((prev) => Math.max(1, prev - 1))}
-                className="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all"
+                className="px-3.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all"
               >
                 Previous
               </button>
@@ -377,7 +371,7 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
               <button
                 type="button"
                 onClick={() => setActiveStep((prev) => Math.min(5, prev + 1))}
-                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/20"
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/20"
               >
                 Next Step <ChevronRight className="w-4 h-4" />
               </button>
@@ -385,9 +379,9 @@ export function SetupGuideModal({ isOpen, onClose, onOpenConnect }: SetupGuideMo
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-emerald-600/20"
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-emerald-600/20"
               >
-                Got It, Close Guide <Check className="w-4 h-4" />
+                Done <Check className="w-4 h-4" />
               </button>
             )}
           </div>

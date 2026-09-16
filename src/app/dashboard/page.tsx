@@ -64,21 +64,27 @@ export default function DashboardOverviewPage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setIsGuideOpen(true)}
-              className="px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all border border-zinc-700/60 flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all border border-zinc-700/60 flex items-center gap-1.5"
             >
               <BookOpen className="w-4 h-4 text-rose-400" />
               Setup Guide (5 Steps)
             </button>
+            <Link
+              href="/dashboard/settings#gcp-keys"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/20 transition-all flex items-center gap-1.5"
+            >
+              <span>⚙️ Enter Client ID / Secret</span>
+            </Link>
             <button
               onClick={connectYouTubeChannel}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold border border-zinc-700 transition-all flex items-center gap-1.5"
             >
-              <Sparkles className="w-4 h-4" />
-              Connect Channel (1-Click)
+              <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+              Shared 1-Click Connect
             </button>
           </div>
         </div>
