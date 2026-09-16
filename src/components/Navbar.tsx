@@ -43,7 +43,7 @@ export default function Navbar() {
               <span className="text-xs bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded font-bold">FREE</span>
               Creator Tools
             </Link>
-            <Link href="/#pricing" className="hover:text-white transition-colors">Pricing ($39/mo)</Link>
+            <Link href="/#pricing" className="hover:text-white transition-colors">Pricing (₹499/mo)</Link>
             <Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link>
           </div>
 

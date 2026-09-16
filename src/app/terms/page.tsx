@@ -59,7 +59,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-lg font-bold text-white mb-2">4. Subscriptions, Payments & Refunds (Razorpay)</h2>
               <ul className="list-disc pl-5 space-y-1 text-zinc-400">
-                <li>Paid plans (Standard $39/mo, Premium Scale $49/mo, Enterprise $99/mo) and credit packs are processed securely.</li>
+                <li>Paid plans (Starter ₹499/mo, Growth ₹999/mo, Pro ₹1,999/mo) and credit packs are processed securely via Razorpay (UPI, NetBanking, Cards).</li>
                 <li>Monthly and annual plans renew according to the chosen billing cycle until cancelled by the user.</li>
                 <li>Refund requests are evaluated on a case-by-case basis within 7 days of purchase if service credits remain unused.</li>
               </ul>

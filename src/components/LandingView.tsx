@@ -339,13 +339,12 @@ export default function LandingView() {
           </div>
         </div>
 
-        {/* 4 Tier Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 3 Tier Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {INDIAN_TIER_PLANS.map((plan) => {
             const isYearly = billingCycle === 'yearly';
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
-            const isCustom = plan.id === 'custom_bulk';
 
             return (
               <div
@@ -353,19 +352,12 @@ export default function LandingView() {
                 className={`rounded-3xl p-6 border text-left flex flex-col justify-between relative transition-all ${
                   plan.popular
                     ? 'bg-gradient-to-b from-zinc-900 to-zinc-950 border-rose-500 shadow-2xl shadow-rose-950/40 ring-1 ring-rose-500 scale-[1.02]'
-                    : isCustom
-                    ? 'bg-gradient-to-b from-emerald-950/40 to-zinc-950 border-emerald-500/50 shadow-xl shadow-emerald-950/30'
                     : 'bg-zinc-950 border-zinc-800 hover:border-zinc-700'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg whitespace-nowrap">
-                    🔥 Best Value • Most Popular
-                  </div>
-                )}
-                {isCustom && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-[9px] font-extrabold uppercase tracking-wider shadow-lg whitespace-nowrap">
-                    📞 Direct Call / VIP
+                    🔥 Most Popular • Main Target
                   </div>
                 )}
 
@@ -376,24 +368,16 @@ export default function LandingView() {
                   </span>
 
                   <div className="mt-4 flex items-baseline gap-1">
-                    {isCustom ? (
-                      <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
-                    ) : (
-                      <>
-                        <span className="text-3xl font-black text-white">${price.toLocaleString()}</span>
-                        <span className="text-xs text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
-                      </>
-                    )}
+                    <span className="text-3xl font-black text-white">₹{price.toLocaleString('en-IN')}</span>
+                    <span className="text-xs text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
                   </div>
 
                   <div className="mt-2 flex flex-col gap-1.5">
                     <div className="flex items-center gap-2">
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${
-                        isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                      }`}>
-                        {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-lg text-rose-400 bg-rose-500/10">
+                        Up to {credits.toLocaleString('en-IN')} AI Replies {isYearly ? '/ yr' : '/ mo'}
                       </span>
-                      {!isCustom && isYearly && (
+                      {isYearly && (
                         <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
                           2 Mo Free
                         </span>
@@ -430,40 +414,17 @@ export default function LandingView() {
                   </ul>
                 </div>
 
-                {isCustom ? (
-                  <div className="mt-6 flex flex-col gap-2">
-                    <a
-                      href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                        'Hello SW Tech Team! I am interested in the Custom Bulk / VIP Calling Plan for my YouTube channel(s). Please share pricing & call setup details.'
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-1.5 transition-all"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      <span>WhatsApp (+91 8303994616)</span>
-                    </a>
-                    <a
-                      href="tel:+918303994616"
-                      className="w-full py-2.5 rounded-xl bg-zinc-850 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
-                    >
-                      <PhoneCall className="w-3 h-3 text-emerald-400" />
-                      <span>Direct Call: 8303994616</span>
-                    </a>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => handlePlanSelect(plan.id)}
-                    className={`mt-6 w-full py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
-                      plan.popular
-                        ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/25'
-                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                    }`}
-                  >
-                    Start 7-Day Free Trial
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                )}
+                <button
+                  onClick={() => handlePlanSelect(plan.id)}
+                  className={`mt-6 w-full py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
+                    plan.popular
+                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/25'
+                      : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                  }`}
+                >
+                  Start 7-Day Free Trial (Pay ₹{price?.toLocaleString?.('en-IN')})
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             );
           })}
@@ -475,13 +436,13 @@ export default function LandingView() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold mb-2">
                 <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-                SW Tech vs. CommentShark & Competitors
+                SW Tech vs. Competitors (Value Matrix)
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-white">
-                Side-by-Side Comparison: Why Creators Switch to SW Tech
+                Side-by-Side Comparison: Why Indian Creators Switch to SW Tech
               </h3>
               <p className="text-xs text-zinc-400 mt-1">
-                See how SW Tech delivers up to <strong>4x more replies for the exact same price</strong> and crushes legacy competitors.
+                Relatable Hinglish/Hindi AI, 100% quota safety, and instant UPI checkout at the best pricing in India.
               </p>
             </div>
           </div>
@@ -492,8 +453,8 @@ export default function LandingView() {
                 <tr className="border-b border-zinc-800 text-zinc-400 font-bold bg-zinc-950/60">
                   <th className="py-3.5 px-4 rounded-l-xl">Plan Tier</th>
                   <th className="py-3.5 px-4 text-rose-400 font-extrabold">🚀 SW Tech AutoReply</th>
-                  <th className="py-3.5 px-4 text-zinc-400">🦈 CommentShark</th>
-                  <th className="py-3.5 px-4 text-emerald-400 font-extrabold rounded-r-xl">Your SW Tech Super-Advantage</th>
+                  <th className="py-3.5 px-4 text-zinc-400">Other Tools / Competitors</th>
+                  <th className="py-3.5 px-4 text-emerald-400 font-extrabold rounded-r-xl">Your Super-Advantage</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60">
@@ -502,40 +463,40 @@ export default function LandingView() {
                   <td className="py-3.5 px-4 font-bold text-rose-400">100 Free AI Replies (Gemma 4 31B)</td>
                   <td className="py-3.5 px-4 text-zinc-400">Only 20 actions / month</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    🎁 5x More Free Replies + Full AI Thinking Model
+                    🎁 5x More Free Replies + Natural Hinglish Thinking Model
                   </td>
                 </tr>
                 <tr className="bg-zinc-950/20">
-                  <td className="py-3.5 px-4 font-bold text-white">⚡ Starter Scale</td>
-                  <td className="py-3.5 px-4 font-bold text-rose-400">$39/mo • 3,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$19/mo (500 replies) or $49/mo (1,500 replies)</td>
+                  <td className="py-3.5 px-4 font-bold text-white">🟢 Starter Plan</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">₹499/mo • Up to 1,500 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">Expensive USD pricing ($19 = ₹1,600+) with no UPI</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    ✅ 6x More Replies than their $19 & Double their $49 tier!
+                    ✅ 3x Cheaper for Indian Creators + Instant UPI (GPay/PhonePe)
                   </td>
                 </tr>
                 <tr className="bg-rose-950/25 border border-rose-500/30">
                   <td className="py-3.5 px-4 font-extrabold text-white flex items-center gap-1.5">
-                    <span>🔥 Creator Scale (Twin-Project)</span>
+                    <span>👑 Growth Plan (Main Target)</span>
                     <span className="text-[9px] bg-rose-500 text-white px-1.5 py-0.5 rounded font-bold">BEST VALUE</span>
                   </td>
-                  <td className="py-3.5 px-4 font-black text-rose-400">$49/mo • 6,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$49/mo (Only 1,500) • $139/mo (Only 5,000)</td>
+                  <td className="py-3.5 px-4 font-black text-rose-400">₹999/mo • Up to 4,500 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$49/mo (₹4,200+) for only 1,500 replies</td>
                   <td className="py-3.5 px-4 font-extrabold text-emerald-400">
-                    🏆 4x MORE replies at $49 & beats their $139 Pro tier ($90 SAVED)!
+                    🏆 3x MORE replies at 1/4th the price with Twin-Project Multiplier!
                   </td>
                 </tr>
                 <tr className="bg-zinc-950/40">
-                  <td className="py-3.5 px-4 font-bold text-white">👑 Pro / Agency</td>
-                  <td className="py-3.5 px-4 font-bold text-rose-400">$99/mo • 15,000 AI Replies</td>
-                  <td className="py-3.5 px-4 text-zinc-400">$139/mo for only 5,000 replies</td>
+                  <td className="py-3.5 px-4 font-bold text-white">🚀 Pro Plan (Bade Channels)</td>
+                  <td className="py-3.5 px-4 font-bold text-rose-400">₹1,999/mo • Up to 6,000 AI Replies</td>
+                  <td className="py-3.5 px-4 text-zinc-400">$139/mo (₹11,800+) for only 5,000 replies</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
-                    ⚡ $40 CHEAPER + 3x TRIPLE (15,000) Replies + 3-Project Framework
+                    ⚡ Peak Quota Handling + Advanced Spam & Harassment Purge
                   </td>
                 </tr>
                 <tr className="bg-emerald-950/20 border-emerald-500/30">
                   <td className="py-3.5 px-4 font-bold text-white">💼 Custom / DFY Enterprise</td>
                   <td className="py-3.5 px-4 font-bold text-emerald-400">Let's Talk • Unlimited / Custom</td>
-                  <td className="py-3.5 px-4 text-zinc-400">Standard restrictive enterprise limits</td>
+                  <td className="py-3.5 px-4 text-zinc-400">Restrictive enterprise tiers with no DFY support</td>
                   <td className="py-3.5 px-4 font-semibold text-emerald-400">
                     🏢 Full Done-For-You (DFY) layout with dedicated server nodes
                   </td>
@@ -545,29 +506,29 @@ export default function LandingView() {
           </div>
         </div>
 
-        {/* Custom / Bulk Volume Plan Card */}
+        {/* Dedicated Separate Section: Custom / DFY Enterprise ("Let's Talk") */}
         <div className="mt-10 rounded-3xl p-8 bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/30 text-left flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold mb-3">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              💼 Custom / DFY Enterprise Plan
+              💼 Custom / DFY Enterprise Plan ("Let's Talk")
             </div>
             <h3 className="text-2xl font-black text-white">Full Done-For-You (DFY) Layout with Dedicated Server Nodes</h3>
             <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
-              For Large Media Networks, Production Houses, and Creator Agencies needing <strong>Unlimited / Custom Monthly AI Replies</strong>, Full Done-For-You setup, Dedicated High-Speed Server Nodes, or Multi-Channel MCN Architecture. Connect directly with the founder for custom quote & white-glove setup.
+              Bade YouTube Media Networks, Production Houses, Online Coaching Institutes aur Creator Agencies ke liye jinko <strong>Unlimited / Custom Monthly AI Replies</strong>, Full Done-For-You setup, Dedicated High-Speed Server Nodes, ya Multi-Channel MCN Architecture chahiye. Founder se direct baat karein custom quote aur white-glove setup ke liye.
             </p>
             <div className="mt-4 flex flex-wrap gap-4 text-xs text-zinc-300">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Unlimited / Custom AI Reply Volume
+                Unlimited / Custom Monthly AI Reply Volume (10k - 5,00,000+)
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Dedicated Server Nodes & DFY Layout
+                Dedicated Server Nodes & Full DFY Layout
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Direct WhatsApp & Founder Calling Support
+                Direct Phone & WhatsApp Founder Calling Support (+91 8303994616)
               </div>
             </div>
           </div>
@@ -575,7 +536,7 @@ export default function LandingView() {
           <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto">
             <a
               href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                'Hello SW Tech Team! I am interested in the Custom / Bulk Plan for my YouTube channel(s). Please share custom bulk pricing & setup details.'
+                'Namaste SW Tech Team! Mujhe Custom DFY Enterprise Plan ("Let\'s Talk") ke bare me baat karni hai. Please share custom quote and setup details.'
               )}`}
               target="_blank"
               rel="noopener noreferrer"

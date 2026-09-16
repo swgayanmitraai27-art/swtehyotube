@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video, MessageSquare } from 'lucide-react';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
+import { Sparkles, CheckCircle2, ShieldCheck, Zap, X, Gift, Crown, Flame, Rocket, PhoneCall, Video, MessageSquare, QrCode } from 'lucide-react';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS, CUSTOM_ENTERPRISE_PLAN } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 
 interface RazorpayModalProps {
@@ -16,11 +16,11 @@ declare global {
   }
 }
 
-export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premium' }: RazorpayModalProps) {
+export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'growth' }: RazorpayModalProps) {
   const { user, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState<'plan' | 'credits'>('plan');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
-  const [selectedPlan, setSelectedPlan] = useState(selectedPlanId);
+  const [selectedPlan, setSelectedPlan] = useState(selectedPlanId === 'premium' ? 'growth' : selectedPlanId === 'standard' ? 'starter' : selectedPlanId === 'enterprise' ? 'pro' : selectedPlanId);
   const [selectedPack, setSelectedPack] = useState(CREDIT_PACKS[0]?.id || 'pack_200');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +57,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
         throw new Error('Razorpay SDK failed to load. Please check your internet connection.');
       }
 
-      // 1. Create order on backend
+      // 1. Create order on backend in INR
       const res = await fetch('/api/payments/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,11 +74,11 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
         throw new Error(orderData.error || 'Failed to initialize payment order');
       }
 
-      // 2. Open Razorpay Modal
+      // 2. Open Razorpay Modal with UPI, QR, PhonePe, GPay & Cards
       const options = {
         key: orderData.keyId,
         amount: orderData.amount,
-        currency: orderData.currency,
+        currency: orderData.currency || 'INR',
         name: 'SW Tech Solution',
         description: orderData.description,
         order_id: orderData.orderId,
@@ -154,7 +154,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
             </div>
             <h3 className="text-xl font-bold text-white mb-1">Payment Successful! 🎉</h3>
             <p className="text-xs text-zinc-400 max-w-sm mx-auto mb-6">
-              Your AI reply credits have been credited to your channel. Your auto-pilot is ready to engage with your students & audience!
+              Aapka plan aur AI reply credits turant channel par activate ho gaye hain. Aapka auto-pilot mode ready hai!
             </p>
 
             {/* 1-on-1 WhatsApp Live Video Setup Call Banner */}
@@ -166,12 +166,12 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                 <h4 className="text-sm font-bold text-white">Book Your 1-on-1 Live 5-Min Video Setup Call</h4>
               </div>
               <p className="text-xs text-zinc-300 mb-4">
-                Want our founder & engineering team to personally walk you through custom persona prompts, BYOK quota keys, or edtech app conversion tricks?
+                Founder ke sath WhatsApp par direct 5-minute video call schedule karein jahan hum aapka Google Cloud Quota aur AI persona prompt setup karwayenge!
               </p>
 
               <a
                 href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                  `🎉 Hey SW Tech Team! I just purchased a plan for my YouTube Channel (${user.displayName || 'Creator'}). I want to book my 5-minute Live Video Setup Call with the Founder directly on WhatsApp!`
+                  `🎉 Namaste SW Tech Team! Maine plan purchase kiya hai (${user.displayName || 'Creator'}). Mujhe apna 1-on-1 WhatsApp Video Setup Call schedule karna hai!`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -199,11 +199,11 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                 <span className="p-1.5 rounded-lg bg-rose-600/10 text-rose-500 border border-rose-500/20">
                   <Zap className="w-4 h-4" />
                 </span>
-                <h3 className="text-lg font-extrabold text-white">Select Your Growth Plan ($ USD)</h3>
+                <h3 className="text-lg font-extrabold text-white">Select Your Plan (Instant UPI & Cards)</h3>
               </div>
             </div>
             <p className="text-xs text-zinc-400 mb-4">
-              Instant activation with 7-Day Free Trial & dedicated Google Gemma 4 AI quota.
+              Google Pay, PhonePe, Paytm, QR, NetBanking aur All Debit/Credit Cards se instant activation.
             </p>
 
             {/* Tab: Plan vs Credit Packs */}
@@ -214,7 +214,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                   activeTab === 'plan' ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
-                Subscription Plans (Monthly / Yearly)
+                Monthly / Yearly Plans
               </button>
               <button
                 onClick={() => setActiveTab('credits')}
@@ -238,7 +238,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  Monthly Billing
+                  Monthly
                 </button>
                 <button
                   type="button"
@@ -250,7 +250,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                   }`}
                 >
                   <Gift className="w-3.5 h-3.5" />
-                  <span>Yearly (Pay for 10 Mo, Get 2 Free!)</span>
+                  <span>Yearly (2 Months Free Applied 🎁)</span>
                 </button>
               </div>
             )}
@@ -263,7 +263,6 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                   const isYearly = billingCycle === 'yearly';
                   const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
                   const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
-                  const isCustom = plan.id === 'custom_bulk';
 
                   return (
                     <div
@@ -287,25 +286,17 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                           <span className="text-[11px] text-zinc-400 block">{plan.idealFor}</span>
                         </div>
                         <div className="text-right">
-                          {isCustom ? (
-                            <span className="text-base font-black text-emerald-400">Custom Quote</span>
-                          ) : (
-                            <>
-                              <span className="text-lg font-black text-white">${price.toLocaleString()}</span>
-                              <span className="text-[10px] text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
-                            </>
-                          )}
+                          <span className="text-lg font-black text-white">₹{price.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px] text-zinc-400">/{isYearly ? 'yr' : 'mo'}</span>
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1 mt-1 mb-2">
                         <div className="flex items-center gap-2">
-                          <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${
-                            isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                          }`}>
-                            {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies`}
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md text-rose-400 bg-rose-500/10">
+                            {credits.toLocaleString('en-IN')} AI Replies {isYearly ? '/ yr' : '/ mo'}
                           </span>
-                          {!isCustom && isYearly && (
+                          {isYearly && (
                             <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md">
                               🎁 2 Months Free Applied
                             </span>
@@ -337,7 +328,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
               <div className="space-y-2.5 mb-5">
                 {CREDIT_PACKS.map((pack) => {
                   const isSelected = selectedPack === pack.id;
-                  const packPrice = `$${pack.price}`;
+                  const packPrice = `₹${pack.price}`;
                   return (
                     <div
                       key={pack.id}
@@ -350,7 +341,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
                     >
                       <div>
                         <div className="font-bold text-sm text-white">{pack.name}</div>
-                        <span className="text-xs text-zinc-400">{pack.credits.toLocaleString()} AI comment replies</span>
+                        <span className="text-xs text-zinc-400">{pack.credits.toLocaleString('en-IN')} AI comment replies</span>
                       </div>
                       <span className="text-base font-extrabold text-rose-400">{packPrice}</span>
                     </div>
@@ -371,22 +362,25 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
               disabled={loading}
               className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 disabled:opacity-50 transition-all hover:scale-[1.02]"
             >
-              <Sparkles className="w-4 h-4" />
-              {loading ? 'Processing Secure Checkout...' : 'Proceed to Secure Checkout (Credit / Debit Cards)'}
+              <QrCode className="w-4 h-4" />
+              {loading ? 'Opening UPI & Payment Gateway...' : 'Pay with UPI (GPay / PhonePe / Paytm / QR) & Cards'}
             </button>
 
-            {/* Custom Bulk Plan Direct Contact */}
-            <div className="mt-4 p-3 rounded-xl bg-zinc-900/70 border border-zinc-800 text-center">
-              <span className="text-[11px] text-zinc-400 block mb-1.5">
-                Need a <strong>Custom Bulk Plan (20,000 to 5,00,000+ replies)</strong> or Multi-Channel Agency setup?
+            {/* Custom Bulk / Let's Talk Section */}
+            <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-zinc-900 to-zinc-950 border border-emerald-500/30 text-center">
+              <span className="text-xs font-bold text-emerald-400 block mb-1">
+                💼 Large Media Network, Coaching Institute ya Agency? ("Let's Talk")
               </span>
+              <p className="text-[11px] text-zinc-400 mb-2">
+                Unlimited AI Replies, Dedicated High-Speed Server Node aur Full DFY Layout ke liye founder se direct baat karein.
+              </p>
               <a
                 href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                  'Hello SW Tech Team! I want to inquire about a Custom Bulk Plan for my YouTube channels.'
+                  'Namaste SW Tech Team! Mujhe Custom Enterprise / DFY Plan (Let\'s Talk) ke bare me baat karni hai.'
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>Chat with Founder on WhatsApp (+91 8303994616)</span>
@@ -395,7 +389,7 @@ export default function RazorpayModal({ isOpen, onClose, selectedPlanId = 'premi
 
             <div className="flex items-center justify-center gap-2 mt-3 text-[11px] text-zinc-500">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              100% Encrypted & Secure Razorpay Indian Checkout
+              100% Encrypted & Secure Razorpay UPI (Google Pay, PhonePe, Paytm, QR) & NetBanking
             </div>
           </div>
         )}

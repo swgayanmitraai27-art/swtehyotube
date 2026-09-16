@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import RazorpayModal from '@/components/dashboard/RazorpayModal';
-import { INDIAN_TIER_PLANS, CREDIT_PACKS } from '@/lib/constants';
+import { INDIAN_TIER_PLANS, CREDIT_PACKS, CUSTOM_ENTERPRISE_PLAN } from '@/lib/constants';
 import { BillingCycle } from '@/types';
 import { 
   CreditCard, 
@@ -21,13 +21,13 @@ import {
   PhoneCall,
   Video,
   MessageSquare,
-  Globe2
+  QrCode
 } from 'lucide-react';
 
 export default function BillingPage() {
   const { profile } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState('premium');
+  const [selectedPlanId, setSelectedPlanId] = useState('growth');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
 
   const openCheckout = (planId: string) => {
@@ -41,10 +41,10 @@ export default function BillingPage() {
       <div>
         <h1 className="text-xl font-bold text-white flex items-center gap-2">
           <CreditCard className="w-5 h-5 text-rose-500" />
-          Billing & AI Reply Credits (Global USD Plans)
+          Billing & AI Reply Credits (Indian Creator Plans)
         </h1>
         <p className="text-xs text-zinc-400 mt-0.5">
-          Upgrade your plan with instant secure checkout (Credit / Debit Cards & Global Methods) or top up reply credits.
+          Instant UPI (Google Pay, PhonePe, Paytm, QR), NetBanking & All Indian Cards se upgrade karein.
         </p>
       </div>
 
@@ -62,11 +62,11 @@ export default function BillingPage() {
         </div>
 
         <button
-          onClick={() => openCheckout('pro')}
+          onClick={() => openCheckout('growth')}
           className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/25 flex items-center gap-2 transition-all hover:scale-105"
         >
-          <Sparkles className="w-4 h-4" />
-          Upgrade / Top Up Now
+          <QrCode className="w-4 h-4" />
+          Upgrade Plan / Pay with UPI
         </button>
       </div>
 
@@ -75,9 +75,9 @@ export default function BillingPage() {
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            Global Creator & Agency Growth Plans ($ USD)
+            Indian Creator Growth Plans (₹ INR)
           </h3>
-          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size ($ USD).</p>
+          <p className="text-xs text-zinc-400">Choose the ideal capacity for your channel size (Instant UPI & Cards).</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -106,14 +106,13 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* 4 Tier Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* 3 Tier Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {INDIAN_TIER_PLANS.map((plan) => {
           const isCurrent = profile?.plan === plan.id;
           const isYearly = billingCycle === 'yearly';
           const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
           const credits = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
-          const isCustom = plan.id === 'custom_bulk';
 
           return (
             <div
@@ -121,8 +120,6 @@ export default function BillingPage() {
               className={`p-6 rounded-3xl border flex flex-col justify-between transition-all ${
                 plan.popular
                   ? 'bg-gradient-to-b from-zinc-900 to-zinc-950 border-rose-500 shadow-xl ring-1 ring-rose-500'
-                  : isCustom
-                  ? 'bg-gradient-to-b from-emerald-950/40 to-zinc-950 border-emerald-500/50 shadow-xl shadow-emerald-950/30'
                   : 'bg-zinc-900/50 border-zinc-800'
               }`}
             >
@@ -134,33 +131,25 @@ export default function BillingPage() {
                       Active
                     </span>
                   )}
-                  {isCustom && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      VIP Calling
+                  {plan.popular && (
+                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                      🔥 MAIN TARGET
                     </span>
                   )}
                 </div>
                 <span className="text-[11px] text-zinc-400 block mb-3 line-clamp-2">{plan.idealFor}</span>
 
                 <div className="flex items-baseline gap-1 mt-2">
-                  {isCustom ? (
-                    <span className="text-2xl font-black text-emerald-400">Custom Quote</span>
-                  ) : (
-                    <>
-                      <span className="text-3xl font-black text-white">${price.toLocaleString()}</span>
-                      <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
-                    </>
-                  )}
+                  <span className="text-3xl font-black text-white">₹{price.toLocaleString('en-IN')}</span>
+                  <span className="text-xs text-zinc-400">/{isYearly ? 'year' : 'month'}</span>
                 </div>
 
                 <div className="mt-2 flex flex-col gap-1.5 mb-4">
                   <div className="flex items-center gap-2">
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
-                      isCustom ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                    }`}>
-                      {isCustom ? '30k - 500k+ AI Replies' : `${credits.toLocaleString()} AI Replies ${isYearly ? '/ yr' : '/ mo'}`}
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-md text-rose-400 bg-rose-500/10">
+                      Up to {credits.toLocaleString('en-IN')} AI Replies {isYearly ? '/ yr' : '/ mo'}
                     </span>
-                    {!isCustom && isYearly && (
+                    {isYearly && (
                       <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
                         2 Mo Free
                       </span>
@@ -197,71 +186,49 @@ export default function BillingPage() {
                 </ul>
               </div>
 
-              {isCustom ? (
-                <div className="mt-6 flex flex-col gap-2">
-                  <a
-                    href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                      `Hello SW Tech Team! I want to inquire about the Custom Bulk / VIP Calling Plan for my YouTube channel(s). Channel: ${profile?.channelTitle || 'My Channel'}`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/50 flex items-center justify-center gap-1.5"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>WhatsApp (+91 8303994616)</span>
-                  </a>
-                  <a
-                    href="tel:+918303994616"
-                    className="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
-                  >
-                    <PhoneCall className="w-3 h-3 text-emerald-400" />
-                    <span>Direct Call: 8303994616</span>
-                  </a>
-                </div>
-              ) : (
-                <button
-                  onClick={() => openCheckout(plan.id)}
-                  className={`mt-6 w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
-                    plan.popular
-                      ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20'
-                      : isCurrent
-                      ? 'bg-zinc-800 text-zinc-400'
-                      : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                  }`}
-                >
-                  {isCurrent ? 'Current Tier' : `Select ${plan.name} ($${price?.toLocaleString?.() ?? price})`}
-                </button>
-              )}
+              <button
+                onClick={() => openCheckout(plan.id)}
+                className={`mt-6 w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
+                  plan.popular
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20'
+                    : isCurrent
+                    ? 'bg-zinc-800 text-zinc-400'
+                    : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                }`}
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                {isCurrent ? 'Current Tier' : `Pay ₹${price?.toLocaleString?.('en-IN') ?? price} with UPI`}
+              </button>
             </div>
           );
         })}
       </div>
 
-      {/* Custom Bulk Volume & Multi-Channel Agency Plan */}
+      {/* Dedicated Separate Section: Custom / DFY Enterprise ("Let's Talk") */}
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-zinc-900 to-zinc-950 border border-emerald-500/40 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold mb-2">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            💼 Custom Bulk Volume & Multi-Channel Plan
+            💼 Custom / DFY Enterprise Plan ("Let's Talk")
           </div>
           <h3 className="text-xl font-bold text-white mb-1.5">
-            Need 20,000 to 5,00,000+ Monthly Replies or Multiple Channels?
+            Full Done-For-You (DFY) Layout with Dedicated Server Nodes
           </h3>
           <p className="text-xs text-zinc-300 leading-relaxed mb-4">
-            Custom high-volume packages tailored for large coaching institutes, YouTube media networks, and creators with multiple active channels. Includes dedicated multi-project BYOK quota setup and VIP live support directly with the founder.
+            Bade YouTube Media Networks, Coaching Institutes aur Creator Agencies ke liye jinko <strong>Unlimited / Custom Monthly AI Replies</strong>, Full Done-For-You setup aur Dedicated High-Speed Server Nodes chahiye. Founder se direct baat karke custom quote aur 1-on-1 setup lein.
           </p>
           <div className="flex flex-wrap gap-4 text-xs text-zinc-300">
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Custom High Reply Quota (20k - 500k+/mo)
+              Unlimited / Custom Monthly AI Reply Volume
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Multi-Channel Network (MCN) Linking
+              Dedicated Server Nodes & Full DFY Layout
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              Direct Founder WhatsApp Live Setup
+              Direct Founder Phone & WhatsApp Setup (+91 8303994616)
             </div>
           </div>
         </div>
@@ -269,7 +236,7 @@ export default function BillingPage() {
         <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto">
           <a
             href={`https://wa.me/918303994616?text=${encodeURIComponent(
-              `Hello SW Tech Team! I want to inquire about the Custom / Bulk Plan for my YouTube channel(s). Channel: ${profile?.channelTitle || 'My Channel'}`
+              `Namaste SW Tech Team! Mujhe Custom DFY Enterprise Plan ("Let's Talk") ke bare me discuss karna hai. Channel: ${profile?.channelTitle || 'My Channel'}`
             )}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -306,7 +273,7 @@ export default function BillingPage() {
         {profile?.plan && profile?.plan !== 'free' ? (
           <a
             href={`https://wa.me/918303994616?text=${encodeURIComponent(
-              `Hello SW Tech Team! I am an active paid member (${profile?.plan} plan). I want to schedule my 1-Time 5-Minute Live Video Setup Call with the Founder on WhatsApp. Channel: ${profile?.channelTitle || 'My Channel'}`
+              `Namaste SW Tech Team! Main paid member hoon (${profile?.plan} plan). Mujhe apna 5-Minute Live Video Setup Call schedule karna hai. Channel: ${profile?.channelTitle || 'My Channel'}`
             )}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -330,12 +297,12 @@ export default function BillingPage() {
       <div>
         <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
           <Plus className="w-4 h-4 text-emerald-400" />
-          Pay-As-You-Go Credit Packs
+          Pay-As-You-Go Extra Credit Packs
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {CREDIT_PACKS.map((pack) => {
-            const packPrice = `$${pack.price}`;
+            const packPrice = `₹${pack.price}`;
             return (
               <div
                 key={pack.id}
@@ -343,7 +310,7 @@ export default function BillingPage() {
               >
                 <div>
                   <span className="font-bold text-sm text-white block">{pack.name}</span>
-                  <span className="text-xs text-zinc-400">{pack.credits.toLocaleString()} Replies</span>
+                  <span className="text-xs text-zinc-400">{pack.credits.toLocaleString('en-IN')} Replies</span>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-base font-bold text-rose-400">{packPrice}</span>
@@ -363,7 +330,7 @@ export default function BillingPage() {
       {/* Security & Trust Badge */}
       <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-center gap-3 text-xs text-zinc-400">
         <ShieldCheck className="w-4 h-4 text-emerald-400" />
-        All transactions processed with 256-bit SSL encryption supporting Visa, Mastercard, AMEX & Global Cards.
+        100% Encrypted & Secure Razorpay UPI (Google Pay, PhonePe, Paytm, BHIM, QR), NetBanking & All Debit/Credit Cards.
       </div>
 
       {/* Checkout Modal */}

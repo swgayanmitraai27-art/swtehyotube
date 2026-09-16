@@ -11,26 +11,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User UID is required' }, { status: 400 });
     }
 
-    let amount = 3900; // Default $39 in cents
-    let description = '⚡ Starter Scale ($39/Month)';
-    let creditsToAdd = 3000;
+    let amount = 49900; // Default ₹499 in paise (49900 paise)
+    let description = '🟢 Starter Plan (₹499/Month) - SW Tech Solution';
+    let creditsToAdd = 1500;
     let purchaseType = 'subscription';
 
     if (planId) {
-      const plan = INDIAN_TIER_PLANS.find((p) => p.id === planId);
+      // Find plan by id or legacy alias
+      let plan = INDIAN_TIER_PLANS.find((p) => p.id === planId);
+      if (!plan) {
+        if (planId === 'standard') plan = INDIAN_TIER_PLANS.find((p) => p.id === 'starter');
+        if (planId === 'premium') plan = INDIAN_TIER_PLANS.find((p) => p.id === 'growth');
+        if (planId === 'enterprise') plan = INDIAN_TIER_PLANS.find((p) => p.id === 'pro');
+      }
+
       if (plan) {
         const isYearly = billingCycle === 'yearly';
         const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
-        amount = price * 100; // Amount in cents ($39 = 3900, $49 = 4900)
+        amount = price * 100; // Amount in paise (₹499 = 49900, ₹999 = 99900, ₹1999 = 199900)
         creditsToAdd = isYearly ? plan.yearlyCredits : plan.monthlyCredits;
-        description = `${plan.name} (${isYearly ? 'Yearly - 2 Months Free' : 'Monthly'}) - SW Tech Solution`;
+        description = `${plan.name} (${isYearly ? 'Yearly - ₹' + price : '₹' + price + '/mo'}) - Instant UPI & Cards`;
         purchaseType = 'plan';
       }
     } else if (packId) {
       const pack = CREDIT_PACKS.find((p) => p.id === packId);
       if (pack) {
-        amount = pack.price * 100;
-        description = `${pack.name} - SW Tech Solution`;
+        amount = pack.price * 100; // Amount in paise
+        description = `${pack.name} (₹${pack.price}) - SW Tech Solution`;
         creditsToAdd = pack.credits;
         purchaseType = 'credits';
       }
@@ -38,11 +45,11 @@ export async function POST(req: NextRequest) {
 
     const options = {
       amount,
-      currency: 'USD',
+      currency: 'INR',
       receipt: `rcpt_${uid.substring(0, 8)}_${Date.now()}`,
       notes: {
         userId: uid,
-        planId: planId || '',
+        planId: planId || 'growth',
         billingCycle: billingCycle || 'monthly',
         packId: packId || '',
         credits: String(creditsToAdd),

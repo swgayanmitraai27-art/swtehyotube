@@ -141,7 +141,7 @@ export default function ToolsHubPage() {
                 href="/#pricing"
                 className="w-full sm:w-auto px-6 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-200 hover:text-white hover:bg-zinc-800 font-bold text-xs transition-all"
               >
-                View Plans ($39/mo)
+                View Plans (₹499/mo)
               </Link>
             </div>
           </div>
