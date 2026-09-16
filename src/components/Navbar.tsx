@@ -22,8 +22,8 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-red-500 flex items-center justify-center shadow-lg shadow-rose-600/20 group-hover:scale-105 transition-transform">
-              <Youtube className="w-5 h-5 text-white fill-white" />
+            <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-lg shadow-rose-600/10 group-hover:scale-105 transition-transform overflow-hidden shrink-0">
+              <img src="/logo.png" alt="SW Reply Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5">

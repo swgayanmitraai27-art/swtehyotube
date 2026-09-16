@@ -34,11 +34,11 @@ export default function Sidebar() {
       <div>
         {/* Logo Section */}
         <div className="h-16 px-6 border-b border-zinc-800 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
-            <Youtube className="w-4 h-4 text-white fill-white" />
+          <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+            <img src="/logo.png" alt="SW Reply Logo" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 className="font-bold text-sm text-white leading-tight">SW Tech Solution</h1>
+            <h1 className="font-bold text-sm text-white leading-tight">SW Reply</h1>
             <p className="text-[10px] text-zinc-400">YouTube AutoReply Studio</p>
           </div>
         </div>

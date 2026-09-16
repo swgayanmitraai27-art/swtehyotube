@@ -78,6 +78,16 @@ export const metadata: Metadata = {
       'Automate YouTube comment replies, app promotions, and toxic comment cleaning with Google Gemma 4 31B AI.',
     images: ['https://swgayanbhumi.in/og-image.png'],
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
   verification: {
     google: 'google-site-verification-placeholder',
   },
