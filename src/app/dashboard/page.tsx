@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { YouTubeVideoSummary } from '@/types';
-import { QuickLaunchChecklist } from '@/components/dashboard/InteractiveTour';
 
 export default function DashboardOverviewPage() {
   const { user, profile, isYouTubeConnected, connectYouTubeChannel } = useAuth();
@@ -117,9 +116,6 @@ export default function DashboardOverviewPage() {
           </div>
         </div>
       )}
-
-      {/* New Creator Step-by-Step Launch Checklist */}
-      <QuickLaunchChecklist />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

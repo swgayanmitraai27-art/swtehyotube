@@ -6,7 +6,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Youtube, Sparkles, RefreshCw, CheckCircle2, AlertCircle, Plus } from 'lucide-react';
 import Link from 'next/link';
 import NotificationCenter from './NotificationCenter';
-import { InteractiveTour } from './InteractiveTour';
 
 export default function Topbar() {
   const { profile, connectYouTubeChannel, isYouTubeConnected, user } = useAuth();
@@ -53,8 +52,6 @@ export default function Topbar() {
 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
-        {/* Interactive Tour Guide Button */}
-        <InteractiveTour />
 
         {/* Credits Badge */}
         <Link
