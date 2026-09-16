@@ -192,19 +192,19 @@ export default function LandingView() {
             </div>
           </div>
 
-          {/* Pillar 4: BYOK Multi-Project Quota */}
+          {/* Pillar 4: 1-Click Instant Automation */}
           <div className="p-6 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between">
             <div>
               <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
-                <Layers className="w-6 h-6" />
+                <Sparkles className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2">⚡ BYOK Quota Pooling</h3>
+              <h3 className="text-base font-bold text-white mb-2">⚡ 1-Click Instant Setup</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Connect your own Google Cloud projects to pool 10k, 20k, or 30k daily quota units (~18,000 replies/month) with zero server bottlenecks.
+                Connect your YouTube channel in 10 seconds with 1-click Google OAuth. Zero manual API keys, zero Google Cloud setup, and instant 24/7 automation.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-zinc-800/80 text-[11px] text-purple-400 font-semibold flex items-center gap-1">
-              <Check className="w-3.5 h-3.5" /> Unlimited Scale & Reliability
+              <Check className="w-3.5 h-3.5" /> 100% Automated & Hassle-Free
             </div>
           </div>
         </div>
@@ -671,8 +671,8 @@ export default function LandingView() {
               a: 'Yes! Our built-in Toxic Comment Filter scans for vulgar abuses, scams, sub4sub links, and derogatory keywords, and automatically deletes them from YouTube to protect your channel brand reputation 24/7.',
             },
             {
-              q: 'How does the BYOK Multi-Project Quota Pooling work?',
-              a: 'For high-growth channels and agencies (4,000 to 18,000+ monthly replies), you can pool your own Google Cloud projects (10k, 20k, 30k daily units) in Settings. This gives you dedicated unlimited quota directly from Google without server rate-limits.',
+              q: 'How does the 1-Click YouTube Channel Connection work?',
+              a: 'Simply click "Connect YouTube Channel" and sign in with your Google account. Our automated backend handles all API tokens, quota management, and auto-reply scheduling behind the scenes with enterprise-grade encryption.',
             },
             {
               q: 'How do I get the 1-on-1 Live 5-Minute Setup Video Call with the Founder?',

@@ -18,14 +18,12 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { YouTubeVideoSummary } from '@/types';
-import { SetupGuideModal } from '@/components/dashboard/SetupGuideModal';
 import { QuickLaunchChecklist } from '@/components/dashboard/InteractiveTour';
 
 export default function DashboardOverviewPage() {
   const { user, profile, isYouTubeConnected, connectYouTubeChannel } = useAuth();
   const [videos, setVideos] = useState<YouTubeVideoSummary[]>([]);
   const [loadingVideos, setLoadingVideos] = useState(false);
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   useEffect(() => {
     if (!user || !isYouTubeConnected) return;
@@ -64,27 +62,13 @@ export default function DashboardOverviewPage() {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setIsGuideOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all border border-zinc-700/60 flex items-center gap-1.5"
-            >
-              <BookOpen className="w-4 h-4 text-rose-400" />
-              Setup Guide (5 Steps)
-            </button>
-            <Link
-              href="/dashboard/settings#gcp-keys"
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/20 transition-all flex items-center gap-1.5"
-            >
-              <span>⚙️ Enter Client ID / Secret</span>
-            </Link>
+          <div className="shrink-0">
             <button
               onClick={connectYouTubeChannel}
-              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold border border-zinc-700 transition-all flex items-center gap-1.5"
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2"
             >
-              <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-              Shared 1-Click Connect
+              <Youtube className="w-4 h-4 text-white" />
+              <span>Connect YouTube (1-Click)</span>
             </button>
           </div>
         </div>
@@ -258,13 +242,6 @@ export default function DashboardOverviewPage() {
           </div>
         ) : null}
       </div>
-
-      {/* Setup Guide Modal */}
-      <SetupGuideModal
-        isOpen={isGuideOpen}
-        onClose={() => setIsGuideOpen(false)}
-        onOpenConnect={connectYouTubeChannel}
-      />
     </div>
   );
 }

@@ -17,15 +17,10 @@ import {
   TrendingUp, 
   Gamepad2, 
   Smartphone,
-  BookOpen,
   BrainCircuit,
-  Key,
   PhoneCall,
   Video,
   ExternalLink,
-  Layers,
-  Crown,
-  Lock,
   Youtube,
   Activity,
   AlertCircle,
@@ -34,7 +29,6 @@ import {
   Play
 } from 'lucide-react';
 import Link from 'next/link';
-import { SetupGuideCard, SetupGuideModal } from '@/components/dashboard/SetupGuideModal';
 
 export default function PersonaSettings() {
   const { user, profile, connectYouTubeChannel } = useAuth();
@@ -43,7 +37,6 @@ export default function PersonaSettings() {
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
   const [newKeyword, setNewKeyword] = useState('');
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [testingDiagnostics, setTestingDiagnostics] = useState(false);
   const [diagnosticsResult, setDiagnosticsResult] = useState<any>(null);
 
@@ -530,310 +523,98 @@ export default function PersonaSettings() {
         </div>
       </div>
 
-      {/* Interactive Step-by-Step Setup Guide Card */}
-      <SetupGuideCard />
-
-      {/* Multi-Project BYOK Quota Pool Card (Dedicated High Volume Setup) */}
-      <div id="gcp-keys" className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden scroll-mt-20">
+      {/* 1-Click YouTube Channel Connect & AI Health Diagnostics Card */}
+      <div className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold">
-                <Layers className="w-3.5 h-3.5" />
-                Multi-Project BYOK Quota Pooling (Optional & Free)
-              </span>
-              <button
-                type="button"
-                onClick={() => setIsGuideOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-[11px] font-bold transition-colors"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-rose-400" />
-                Full Setup Guide Popup 📖
-              </button>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold mb-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              100% Automated • 1-Click YouTube Channel Connect
             </div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Key className="w-4 h-4 text-amber-400" />
-              Dedicated Google Cloud Project Quota Keys
+              <Youtube className="w-4 h-4 text-rose-500" />
+              YouTube Channel Connection & 24/7 Auto-Pilot
             </h3>
             <p className="text-xs text-zinc-400 mt-1 max-w-xl">
-              By default, your account runs on our shared high-speed server quota. For high-volume channels (Pro/Enterprise 4k–8k+ replies), you can pool your own Google Cloud projects to get up to <strong>30,000 daily quota units (~18,000 replies/month)</strong>.
+              Connect your YouTube channel with 1-click Google OAuth. Zero manual API keys, zero Google Cloud setup, and lightning-fast AI auto-replies.
             </p>
           </div>
 
-          {/* 1-on-1 WhatsApp Live Call CTA (Paid Subscribers Only) */}
-          {profile?.plan && profile?.plan !== 'free' ? (
-            <a
-              href={`https://wa.me/918303994616?text=${encodeURIComponent(
-                `Hello SW Tech Team! I am an active paid member (${profile?.plan} plan). I want to schedule my 1-on-1 5-Minute Live Video Setup Call with the Founder on WhatsApp. Channel: ${settings.channelName || 'Creator'}`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 text-xs font-bold transition-all shadow-lg shadow-emerald-950/50"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              <span>Book 5-Min Live Setup Call 📞</span>
-            </a>
-          ) : (
-            <Link
-              href="/dashboard/billing"
-              className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-800 hover:bg-rose-600 border border-zinc-700 text-zinc-300 hover:text-white text-xs font-bold transition-all shadow-lg"
-            >
-              <Crown className="w-3.5 h-3.5 text-amber-400" />
-              <span>Upgrade to Unlock Live Setup Call 🔒</span>
-            </Link>
-          )}
+          <button
+            type="button"
+            onClick={handleSaveAndConnect}
+            disabled={saving}
+            className="shrink-0 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2 disabled:opacity-50"
+          >
+            <Youtube className="w-4 h-4 text-white" />
+            <span>{saving ? 'Connecting...' : 'Connect YouTube Channel (1-Click)'}</span>
+          </button>
         </div>
 
-        {/* Quota Math Badge Matrix */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
-          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-0.5">1 Project Key</span>
-            <div className="text-sm font-black text-white">10,000 Units/day</div>
-            <div className="text-[11px] text-zinc-400">~6,000 AI Replies/mo</div>
-          </div>
-          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
-            <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider block mb-0.5">2 Project Keys (Pro)</span>
-            <div className="text-sm font-black text-white">20,000 Units/day</div>
-            <div className="text-[11px] text-zinc-400">~12,000 AI Replies/mo</div>
-          </div>
-          <div className="p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
-            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-0.5">3 Project Keys (Enterprise)</span>
-            <div className="text-sm font-black text-white">30,000 Units/day</div>
-            <div className="text-[11px] text-zinc-400">~18,000 AI Replies/mo</div>
-          </div>
-        </div>
-
-        {/* 3 Dedicated Project Blocks (OAuth Client ID & Client Secret) */}
-        <div className="space-y-4 pt-2">
-          {/* Project 1 */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
+        {/* 1-Click System Diagnostics & Live Test */}
+        <div className="mt-4 p-4 rounded-2xl bg-zinc-950/80 border border-emerald-500/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
               <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
-                <span className="text-xs font-bold text-white">Google Cloud Project 1 (Primary Dedicated Quota)</span>
+                <Activity className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-white">⚡ Instant AI Engine Health Test</span>
               </div>
-              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">10,000 Units/day (~6k replies/mo)</span>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
+                Simulate a live AI auto-reply to test tone rules and response latency before publishing.
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 1 OAuth Client ID
-                </label>
-                <input
-                  type="text"
-                  value={settings.customClientId || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientId: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="xxxx.apps.googleusercontent.com"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 1 Client Secret
-                </label>
-                <input
-                  type="password"
-                  value={settings.customClientSecret || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientSecret: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="GOCSPX-xxxx..."
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Project 2 */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 text-xs font-bold flex items-center justify-center">2</span>
-                <span className="text-xs font-bold text-white">Google Cloud Project 2 (Pro Expansion Pool)</span>
-              </div>
-              <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (Total 20k Quota)</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 2 OAuth Client ID
-                </label>
-                <input
-                  type="text"
-                  value={settings.customClientId2 || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientId2: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="xxxx.apps.googleusercontent.com"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 2 Client Secret
-                </label>
-                <input
-                  type="password"
-                  value={settings.customClientSecret2 || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientSecret2: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="GOCSPX-xxxx..."
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Project 3 */}
-          <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800/60">
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
-                <span className="text-xs font-bold text-white">Google Cloud Project 3 (Enterprise High-Volume Pool)</span>
-              </div>
-              <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md">+10,000 Units/day (Total 30k Quota)</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 3 OAuth Client ID
-                </label>
-                <input
-                  type="text"
-                  value={settings.customClientId3 || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientId3: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="xxxx.apps.googleusercontent.com"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">
-                  Project 3 Client Secret
-                </label>
-                <input
-                  type="password"
-                  value={settings.customClientSecret3 || ''}
-                  onChange={(e) => setSettings({ ...settings, customClientSecret3: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-100 font-mono focus:outline-none focus:border-rose-500"
-                  placeholder="GOCSPX-xxxx..."
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* 1-Click System Diagnostics & Live Test for Agencies / Creators */}
-          <div className="mt-4 p-4 rounded-2xl bg-zinc-900/90 border border-emerald-500/30">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-bold text-white">⚡ 1-Click System Diagnostics & Live AI Test</span>
-                </div>
-                <p className="text-[11px] text-zinc-400 mt-0.5">
-                  Test your Google Cloud credentials, Gemini 31B AI response speed, and tone rules before connecting.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={runDiagnostics}
-                disabled={testingDiagnostics}
-                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center gap-1.5 shrink-0 self-start sm:self-auto disabled:opacity-50"
-              >
-                {testingDiagnostics ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Testing Engine...</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-3.5 h-3.5" />
-                    <span>Run 1-Click Health Test</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Test Results Display */}
-            {diagnosticsResult && (
-              <div className="mt-3 pt-3 border-t border-zinc-800 space-y-2.5 animate-in fade-in duration-300">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                  <div className="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <div>
-                      <div className="font-bold text-white text-[11px]">Google Cloud Keys</div>
-                      <div className="text-[10px] text-zinc-400">{diagnosticsResult.gcpMessage}</div>
-                    </div>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <div>
-                      <div className="font-bold text-white text-[11px]">Gemma 31B AI Engine</div>
-                      <div className="text-[10px] text-zinc-400">{diagnosticsResult.aiMessage}</div>
-                    </div>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-                    <div>
-                      <div className="font-bold text-white text-[11px]">Engine Response Latency</div>
-                      <div className="text-[10px] text-emerald-400 font-mono font-bold">{diagnosticsResult.latencyMs}ms (Superfast)</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-800/80">
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">
-                    Live AI Auto-Reply Preview (Simulated Comment: "Sir, course notes aur app ka link kahan milega?")
-                  </span>
-                  <p className="text-xs text-emerald-300 font-medium italic bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800">
-                    "{diagnosticsResult.sampleReply}"
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Action: Save & Connect YouTube */}
-          <div className="mt-4 pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-zinc-400">
-              💡 <span className="text-zinc-200 font-semibold">Ready to connect?</span> Enter your Client ID & Secret, then click below to connect with your own Google Cloud app name and zero quota limits!
-            </p>
             <button
               type="button"
-              onClick={handleSaveAndConnect}
-              disabled={saving}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-2 shrink-0 disabled:opacity-50"
+              onClick={runDiagnostics}
+              disabled={testingDiagnostics}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 font-bold text-xs transition-all flex items-center gap-1.5 shrink-0 self-start sm:self-auto disabled:opacity-50"
             >
-              <Youtube className="w-4 h-4 text-white" />
-              {saving ? 'Saving...' : 'Save & Connect YouTube'}
+              {testingDiagnostics ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Testing AI Engine...</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Run Live AI Test</span>
+                </>
+              )}
             </button>
           </div>
+
+          {/* Test Results Display */}
+          {diagnosticsResult && (
+            <div className="mt-3 pt-3 border-t border-zinc-800 space-y-2.5 animate-in fade-in duration-300">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div>
+                    <div className="font-bold text-white text-[11px]">Gemma 31B AI Engine</div>
+                    <div className="text-[10px] text-zinc-400">{diagnosticsResult.aiMessage}</div>
+                  </div>
+                </div>
+                <div className="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+                  <div>
+                    <div className="font-bold text-white text-[11px]">Response Speed</div>
+                    <div className="text-[10px] text-emerald-400 font-mono font-bold">{diagnosticsResult.latencyMs}ms (Lightning Fast)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">
+                  Live AI Auto-Reply Preview (Simulated Question: "Sir, course notes aur app ka link kahan milega?")
+                </span>
+                <p className="text-xs text-emerald-300 font-medium italic bg-zinc-950 p-2.5 rounded-lg border border-zinc-800/80">
+                  "{diagnosticsResult.sampleReply}"
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Save Button */}
-      <div className="flex items-center justify-between pt-2">
-        {savedMessage ? (
-          <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold bg-emerald-950/20 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
-            <CheckCircle2 className="w-4 h-4" /> Persona Settings Saved Successfully!
-          </div>
-        ) : (
-          <div />
-        )}
-
-        <button
-          type="submit"
-          disabled={saving}
-          className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-xs shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2 disabled:opacity-50"
-        >
-          <Save className="w-4 h-4" />
-          {saving ? 'Saving...' : 'Save Persona Settings'}
-        </button>
-      </div>
-
-      {/* Setup Guide Modal */}
-      <SetupGuideModal
-        isOpen={isGuideOpen}
-        onClose={() => setIsGuideOpen(false)}
-        onOpenConnect={handleSaveAndConnect}
-      />
     </form>
   );
 }

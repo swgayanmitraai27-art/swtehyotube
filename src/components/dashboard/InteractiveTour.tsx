@@ -21,7 +21,6 @@ import {
   Compass,
   Rocket
 } from 'lucide-react';
-import { SetupGuideModal } from './SetupGuideModal';
 
 export interface TourStep {
   id: number;
@@ -77,17 +76,17 @@ export function InteractiveTour() {
       iconBg: 'bg-red-500/20 border-red-500/30',
       description: isYouTubeConnected 
         ? `Aapka channel "${profile?.channelTitle || 'YouTube'}" already successfully linked hai! 🎉 Ab next step par chaliye.`
-        : 'Apna channel connect karne ke liye 1-Click Google OAuth use karein ya apna private Google Cloud Project link karein.',
-      actionText: isYouTubeConnected ? 'Channel Connected ✅' : 'Connect Channel Now 🚀',
+        : 'Apna channel connect karne ke liye 1-Click Google OAuth button dabayein. Zero manual keys, zero technical setup.',
+      actionText: isYouTubeConnected ? 'Channel Connected ✅' : 'Connect Channel (1-Click) 🚀',
       onAction: () => {
         if (!isYouTubeConnected) {
           connectYouTubeChannel();
         }
       },
       tips: [
-        'Shared Server Quota: Instant 1-Click Connect (Zero Setup Required)',
-        'Private GCP Pool: Dedicated 10k daily quota units (~6k replies/month)',
-        'GCP Setup Guide dekhne ke liye popup me "View GCP Guide" button dabayein'
+        '100% Automated: Instant 1-Click Connect with zero Google Cloud setup',
+        'Lightning Fast: 24/7 background AI comment monitoring & auto-replies',
+        'Encrypted & Safe: Official Google YouTube Data API v3 OAuth 2.0'
       ]
     },
     {
@@ -289,12 +288,6 @@ export function InteractiveTour() {
           </div>
         </div>
       )}
-
-      <SetupGuideModal
-        isOpen={isGcpGuideOpen}
-        onClose={() => setIsGcpGuideOpen(false)}
-        onOpenConnect={connectYouTubeChannel}
-      />
     </>
   );
 }
@@ -315,29 +308,16 @@ export function QuickLaunchChecklist() {
     {
       id: 2,
       title: 'Connect YouTube Channel',
-      desc: isYouTubeConnected ? `Connected to ${profile?.channelTitle || 'Channel'}` : 'Link your YouTube channel to fetch comments',
+      desc: isYouTubeConnected ? `Connected to ${profile?.channelTitle || 'Channel'}` : 'Link your YouTube channel to start AI auto-replies',
       done: Boolean(isYouTubeConnected),
       action: !isYouTubeConnected ? (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button
-            onClick={() => router.push('/dashboard/settings#gcp-keys')}
-            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-[11px] font-bold shadow-sm transition-all"
-          >
-            ⚙️ Enter Keys (Settings)
-          </button>
-          <button
-            onClick={() => setIsGcpGuideOpen(true)}
-            className="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-bold border border-zinc-700 transition-all"
-          >
-            Guide
-          </button>
-          <button
-            onClick={connectYouTubeChannel}
-            className="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-[10px] font-bold border border-zinc-700/60 transition-all"
-          >
-            Shared 1-Click
-          </button>
-        </div>
+        <button
+          onClick={connectYouTubeChannel}
+          className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition-all flex items-center gap-1.5"
+        >
+          <Youtube className="w-3.5 h-3.5" />
+          <span>1-Click Connect</span>
+        </button>
       ) : null,
     },
     {
@@ -373,75 +353,67 @@ export function QuickLaunchChecklist() {
   const completedCount = checklist.filter((item) => item.done).length;
 
   return (
-    <>
-      <div className="p-6 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-900/80 to-zinc-950 border border-zinc-800 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center shadow-lg shadow-rose-600/20">
-              <Rocket className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                New Creator Launch Checklist
-              </h3>
-              <p className="text-xs text-zinc-400">
-                Complete these 4 steps to start 24/7 automatic AI replies on your channel
-              </p>
-            </div>
+    <div className="p-6 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-900/80 to-zinc-950 border border-zinc-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center shadow-lg shadow-rose-600/20">
+            <Rocket className="w-5 h-5 text-white" />
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-              {completedCount} of 4 Completed
-            </span>
+          <div>
+            <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              New Creator Launch Checklist
+            </h3>
+            <p className="text-xs text-zinc-400">
+              Complete these 4 steps to start 24/7 automatic AI replies on your channel
+            </p>
           </div>
         </div>
-
-        <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden mb-5">
-          <div
-            className="bg-gradient-to-r from-rose-500 to-emerald-400 h-full rounded-full transition-all duration-500"
-            style={{ width: `${(completedCount / 4) * 100}%` }}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {checklist.map((item) => (
-            <div
-              key={item.id}
-              className={`p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 ${
-                item.done
-                  ? 'bg-zinc-950/60 border-emerald-500/30'
-                  : 'bg-zinc-950/40 border-zinc-800'
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 shrink-0">
-                  {item.done ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  ) : (
-                    <div className="w-4 h-4 rounded-full border border-zinc-600 flex items-center justify-center text-[10px] text-zinc-400 font-bold">
-                      {item.id}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className={`text-xs font-bold ${item.done ? 'text-zinc-200 line-through opacity-80' : 'text-white'}`}>
-                    {item.title}
-                  </div>
-                  <div className="text-[11px] text-zinc-400 mt-0.5">{item.desc}</div>
-                </div>
-              </div>
-
-              {item.action && <div className="shrink-0">{item.action}</div>}
-            </div>
-          ))}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+            {completedCount} of 4 Completed
+          </span>
         </div>
       </div>
 
-      <SetupGuideModal
-        isOpen={isGcpGuideOpen}
-        onClose={() => setIsGcpGuideOpen(false)}
-        onOpenConnect={connectYouTubeChannel}
-      />
-    </>
+      <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden mb-5">
+        <div
+          className="bg-gradient-to-r from-rose-500 to-emerald-400 h-full rounded-full transition-all duration-500"
+          style={{ width: `${(completedCount / 4) * 100}%` }}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {checklist.map((item) => (
+          <div
+            key={item.id}
+            className={`p-4 rounded-2xl border transition-all flex items-start justify-between gap-3 ${
+              item.done
+                ? 'bg-zinc-950/60 border-emerald-500/30'
+                : 'bg-zinc-950/40 border-zinc-800'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 shrink-0">
+                {item.done ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                ) : (
+                  <div className="w-4 h-4 rounded-full border border-zinc-600 flex items-center justify-center text-[10px] text-zinc-400 font-bold">
+                    {item.id}
+                  </div>
+                )}
+              </div>
+              <div>
+                <div className={`text-xs font-bold ${item.done ? 'text-zinc-200 line-through opacity-80' : 'text-white'}`}>
+                  {item.title}
+                </div>
+                <div className="text-[11px] text-zinc-400 mt-0.5">{item.desc}</div>
+              </div>
+            </div>
+
+            {item.action && <div className="shrink-0">{item.action}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

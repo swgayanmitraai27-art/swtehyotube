@@ -81,13 +81,12 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     yearlyPrice: 4990, // ₹415/mo (2 Months Free)
     monthlyCredits: 1200, // 1,200 replies / mo
     yearlyCredits: 14400,
-    highlightFeature: '⚡ Up to 1,200 AI Replies / month (Single Project Setup)',
+    highlightFeature: '⚡ Up to 1,200 AI Replies / month (1-Click Instant Setup)',
     competitorAdvantage: '💡 ₹499 me 1,200 Real AI Replies + Instant UPI Payment!',
     features: [
       'Up to 1,200 AI Replies / Month (14,400/yr)',
       '⚡ Instant UPI (Google Pay, PhonePe, Paytm, QR) & Cards',
-      '1 Google Cloud Project Setup (10,000 Daily Quota Units)',
-      '1-Click YouTube Channel Connect (OAuth 2.0)',
+      '1-Click Instant YouTube Channel Connect (Zero Setup)',
       '24/7 Hands-Free Auto-Pilot Mode',
       'Google Gemma 4 31B AI Engine (Relatable Hinglish & English)',
       '🛡️ Auto-Delete Toxic & Spam Comments 24/7',
@@ -105,14 +104,14 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     yearlyPrice: 9990, // ₹832/mo (2 Months Free)
     monthlyCredits: 2200, // 2,200 replies / mo
     yearlyCredits: 26400,
-    highlightFeature: '🚀 Up to 2,200 AI Replies / month (Safe & Profitable Zone)',
-    competitorAdvantage: '🏆 Best Value in India: 2,200 AI Replies with Smart Multi-Project Balancing!',
+    highlightFeature: '🚀 Up to 2,200 AI Replies / month (100% Automated)',
+    competitorAdvantage: '🏆 Best Value in India: 2,200 AI Replies + Instant 1-Click Connect!',
     features: [
       'Up to 2,200 AI Replies / Month (26,400/yr)',
       '⚡ Instant UPI (GPay, PhonePe, Paytm, QR) & NetBanking',
-      '🚀 Twin-Project Architecture (20,000 Daily Quota Units)',
-      '⚡ Intelligent Auto-Switch Quota Balancing (Zero Quota Exhaustion)',
-      '24/7 Multi-Project Hands-Free Auto-Pilot Mode',
+      '🚀 Dedicated High-Speed Server Quota Allocation',
+      '⚡ Intelligent Priority AI Queue (Zero Quota Bottlenecks)',
+      '24/7 Hands-Free Auto-Pilot Mode',
       '🛡️ Advanced AI Toxic, Scam & Harassment Auto-Purge',
       'Smart @username Auto-Mention & App Download Conversions',
       'Priority VIP 1-on-1 Live Video Setup Call with Founder (📞)'
@@ -128,12 +127,12 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     monthlyCredits: 4200, // 4,200 replies / mo
     yearlyCredits: 50400,
     highlightFeature: '⚡ Up to 4,200 AI Replies / month + Advanced AI Spam Filter',
-    competitorAdvantage: '🚀 Extreme Peak Quota Limit (4,200 Replies) + Full Spam Protection',
+    competitorAdvantage: '🚀 Extreme Peak Volume (4,200 Replies) + 1-Click Instant Connect',
     features: [
       'Up to 4,200 AI Replies / Month (50,400/yr)',
-      '⚡ Extreme Peak Quota Handling (Up to 4,200 Replies)',
+      '⚡ Extreme Peak Volume Handling (Up to 4,200 Replies)',
       '🛡️ Advanced Real-time Toxic, Scam & Hate Speech Auto-Purge',
-      '3-Project Automated Credential Framework',
+      'Dedicated High-Speed AI Cloud Node',
       'Multi-Channel Linking Support',
       '24/7 Dedicated Hands-Free Auto-Pilot Engine',
       'Dedicated WhatsApp VIP Setup & Strategy Support',
