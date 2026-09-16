@@ -79,12 +79,12 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     idealFor: 'Chhote creators ke liye jinke hafte mein 1-2 videos aate hain',
     monthlyPrice: 499,
     yearlyPrice: 4990, // ₹415/mo (2 Months Free)
-    monthlyCredits: 1500, // 1,500 replies / mo
-    yearlyCredits: 18000,
-    highlightFeature: '⚡ Up to 1,500 AI Replies / month (Single Project Setup)',
-    competitorAdvantage: '💡 ₹499 me 1,500 Real AI Replies + Instant UPI Payment!',
+    monthlyCredits: 1200, // 1,200 replies / mo
+    yearlyCredits: 14400,
+    highlightFeature: '⚡ Up to 1,200 AI Replies / month (Single Project Setup)',
+    competitorAdvantage: '💡 ₹499 me 1,200 Real AI Replies + Instant UPI Payment!',
     features: [
-      'Up to 1,500 AI Replies / Month (18,000/yr)',
+      'Up to 1,200 AI Replies / Month (14,400/yr)',
       '⚡ Instant UPI (Google Pay, PhonePe, Paytm, QR) & Cards',
       '1 Google Cloud Project Setup (10,000 Daily Quota Units)',
       '1-Click YouTube Channel Connect (OAuth 2.0)',
@@ -103,12 +103,12 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     idealFor: 'Mid-tier creators ke liye (Safe, highly profitable & high-growth zone)',
     monthlyPrice: 999,
     yearlyPrice: 9990, // ₹832/mo (2 Months Free)
-    monthlyCredits: 4500, // 4,500 replies / mo
-    yearlyCredits: 54000,
-    highlightFeature: '🚀 Up to 4,500 AI Replies / month (Safe & Profitable Zone)',
-    competitorAdvantage: '🏆 Best Value in India: 4,500 AI Replies with Smart Multi-Project Balancing!',
+    monthlyCredits: 2200, // 2,200 replies / mo
+    yearlyCredits: 26400,
+    highlightFeature: '🚀 Up to 2,200 AI Replies / month (Safe & Profitable Zone)',
+    competitorAdvantage: '🏆 Best Value in India: 2,200 AI Replies with Smart Multi-Project Balancing!',
     features: [
-      'Up to 4,500 AI Replies / Month (54,000/yr)',
+      'Up to 2,200 AI Replies / Month (26,400/yr)',
       '⚡ Instant UPI (GPay, PhonePe, Paytm, QR) & NetBanking',
       '🚀 Twin-Project Architecture (20,000 Daily Quota Units)',
       '⚡ Intelligent Auto-Switch Quota Balancing (Zero Quota Exhaustion)',
@@ -125,13 +125,13 @@ export const INDIAN_TIER_PLANS: PricingTier[] = [
     idealFor: 'Bade YouTube Channels (Extreme peak volume & heavy rush)',
     monthlyPrice: 1999,
     yearlyPrice: 19990, // ₹1,665/mo (2 Months Free)
-    monthlyCredits: 6000, // 6,000 replies / mo
-    yearlyCredits: 72000,
-    highlightFeature: '⚡ Up to 6,000 AI Replies / month + Advanced AI Spam Filter',
-    competitorAdvantage: '🚀 Extreme Peak Quota Limit (6,000 Replies) + Full Spam Protection',
+    monthlyCredits: 4200, // 4,200 replies / mo
+    yearlyCredits: 50400,
+    highlightFeature: '⚡ Up to 4,200 AI Replies / month + Advanced AI Spam Filter',
+    competitorAdvantage: '🚀 Extreme Peak Quota Limit (4,200 Replies) + Full Spam Protection',
     features: [
-      'Up to 6,000 AI Replies / Month (72,000/yr)',
-      '⚡ Extreme Peak Quota Handling (Up to 6,000 Replies)',
+      'Up to 4,200 AI Replies / Month (50,400/yr)',
+      '⚡ Extreme Peak Quota Handling (Up to 4,200 Replies)',
       '🛡️ Advanced Real-time Toxic, Scam & Hate Speech Auto-Purge',
       '3-Project Automated Credential Framework',
       'Multi-Channel Linking Support',

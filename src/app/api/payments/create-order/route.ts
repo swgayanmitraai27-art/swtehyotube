@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     let amount = 49900; // Default ₹499 in paise (49900 paise)
     let description = '🟢 Starter Plan (₹499/Month) - SW Tech Solution';
-    let creditsToAdd = 1500;
+    let creditsToAdd = 1200;
     let purchaseType = 'subscription';
 
     if (planId) {
