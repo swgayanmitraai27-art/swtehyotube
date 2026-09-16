@@ -170,3 +170,6 @@ export const CREDIT_PACKS = [
   { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, price: 599 },
   { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, price: 1299 },
 ];
+
+export const REDIRECT_URI_PROD = 'https://swgayanbhumi.in/api/auth/google-callback';
+

@@ -29,6 +29,7 @@ import {
   Youtube
 } from 'lucide-react';
 import Link from 'next/link';
+import { SetupGuideCard, SetupGuideModal } from '@/components/dashboard/SetupGuideModal';
 
 export default function PersonaSettings() {
   const { user, profile, connectYouTubeChannel } = useAuth();
@@ -37,6 +38,7 @@ export default function PersonaSettings() {
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
   const [newKeyword, setNewKeyword] = useState('');
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const handleSaveAndConnect = async () => {
     if (!user) return;
@@ -487,13 +489,26 @@ export default function PersonaSettings() {
         </div>
       </div>
 
+      {/* Interactive Step-by-Step Setup Guide Card */}
+      <SetupGuideCard />
+
       {/* Multi-Project BYOK Quota Pool Card (Dedicated High Volume Setup) */}
       <div className="bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold mb-2">
-              <Layers className="w-3.5 h-3.5" />
-              Multi-Project BYOK Quota Pooling (Optional & Free)
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold">
+                <Layers className="w-3.5 h-3.5" />
+                Multi-Project BYOK Quota Pooling (Optional & Free)
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsGuideOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-[11px] font-bold transition-colors"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-rose-400" />
+                Full Setup Guide Popup 📖
+              </button>
             </div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
               <Key className="w-4 h-4 text-amber-400" />
@@ -700,6 +715,13 @@ export default function PersonaSettings() {
           {saving ? 'Saving...' : 'Save Persona Settings'}
         </button>
       </div>
+
+      {/* Setup Guide Modal */}
+      <SetupGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        onOpenConnect={handleSaveAndConnect}
+      />
     </form>
   );
 }

@@ -13,15 +13,18 @@ import {
   ArrowRight, 
   Zap, 
   AlertCircle,
-  Clock
+  Clock,
+  BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
 import { YouTubeVideoSummary } from '@/types';
+import { SetupGuideModal } from '@/components/dashboard/SetupGuideModal';
 
 export default function DashboardOverviewPage() {
   const { user, profile, isYouTubeConnected, connectYouTubeChannel } = useAuth();
   const [videos, setVideos] = useState<YouTubeVideoSummary[]>([]);
   const [loadingVideos, setLoadingVideos] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   useEffect(() => {
     if (!user || !isYouTubeConnected) return;
@@ -60,13 +63,23 @@ export default function DashboardOverviewPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={connectYouTubeChannel}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/20 transition-all shrink-0 flex items-center gap-2"
-          >
-            <Sparkles className="w-4 h-4" />
-            Connect Channel (1-Click)
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsGuideOpen(true)}
+              className="px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all border border-zinc-700/60 flex items-center gap-1.5"
+            >
+              <BookOpen className="w-4 h-4 text-rose-400" />
+              Setup Guide (5 Steps)
+            </button>
+            <button
+              onClick={connectYouTubeChannel}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              Connect Channel (1-Click)
+            </button>
+          </div>
         </div>
       ) : (
         <div className="p-6 rounded-3xl bg-zinc-900/70 border border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -235,6 +248,13 @@ export default function DashboardOverviewPage() {
           </div>
         ) : null}
       </div>
+
+      {/* Setup Guide Modal */}
+      <SetupGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        onOpenConnect={connectYouTubeChannel}
+      />
     </div>
   );
 }
