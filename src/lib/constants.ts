@@ -165,10 +165,10 @@ export const CUSTOM_ENTERPRISE_PLAN = {
 };
 
 export const CREDIT_PACKS = [
-  { id: 'pack_200', name: '200 Extra Credits', credits: 200, price: 99 },
-  { id: 'pack_600', name: '600 Extra Credits', credits: 600, price: 249 },
-  { id: 'pack_2000', name: '2,000 Extra Credits', credits: 2000, price: 599 },
-  { id: 'pack_5000', name: '5,000 Extra Credits', credits: 5000, price: 1299 },
+  { id: 'pack_250', name: '250 Extra Credits', credits: 250, price: 149 },
+  { id: 'pack_600', name: '600 Extra Credits', credits: 600, price: 299 },
+  { id: 'pack_1500', name: '1,500 Extra Credits', credits: 1500, price: 699 },
+  { id: 'pack_3500', name: '3,500 Extra Credits', credits: 3500, price: 1499 },
 ];
 
 export const REDIRECT_URI_PROD = 'https://swgayanbhumi.in/api/auth/google-callback';
