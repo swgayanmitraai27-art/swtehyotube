@@ -51,8 +51,8 @@ export default function DashboardOverviewPage() {
       {!isYouTubeConnected ? (
         <div className="p-6 rounded-3xl bg-gradient-to-r from-rose-950/40 via-red-950/20 to-zinc-900 border border-rose-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-600 flex items-center justify-center shrink-0 shadow-lg shadow-rose-600/30">
-              <Youtube className="w-6 h-6 text-white fill-white" />
+            <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 shadow-lg overflow-hidden">
+              <img src="/logo.png" alt="SW Reply" className="w-full h-full object-cover" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Connect Your YouTube Channel</h2>
@@ -66,7 +66,7 @@ export default function DashboardOverviewPage() {
               onClick={connectYouTubeChannel}
               className="px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white text-xs font-bold shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2"
             >
-              <Youtube className="w-4 h-4 text-white" />
+              <Sparkles className="w-4 h-4 text-white" />
               <span>Connect YouTube (1-Click)</span>
             </button>
           </div>

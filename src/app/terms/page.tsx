@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { FileText, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react';
+import { FileText, ArrowLeft, ShieldCheck, Lock, ExternalLink } from 'lucide-react';
 
 export const metadata = {
   title: 'Terms of Service | SW Tech AutoReply (SW Gyanbhumi)',
@@ -28,64 +28,90 @@ export default function TermsOfServicePage() {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-black text-white">Terms of Service</h1>
-              <p className="text-xs text-zinc-400 mt-0.5">Last Updated: September 11, 2026 • SW Tech Solution (swgayanbhumi.in)</p>
+              <p className="text-xs text-zinc-400 mt-0.5">Last Updated: September 22, 2026 • SW Tech Solution (swgayanbhumi.in)</p>
             </div>
           </div>
 
           <div className="prose prose-invert max-w-none text-xs sm:text-sm text-zinc-300 space-y-6 leading-relaxed">
-            <section>
-              <h2 className="text-lg font-bold text-white mb-2">1. Agreement to Terms</h2>
-              <p>
-                By accessing or using <strong>SW Tech AutoReply</strong> (accessible at <Link href="https://swgayanbhumi.in" className="text-rose-400 underline">swgayanbhumi.in</Link>), you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree, please do not use the service.
+            {/* YouTube API Services & Google Terms Notice */}
+            <section className="p-5 rounded-2xl bg-gradient-to-r from-rose-950/40 via-zinc-900 to-zinc-950 border border-rose-500/40">
+              <h2 className="text-sm sm:text-base font-bold text-white mb-2 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-rose-400" />
+                1. YouTube API Services Terms of Service
+              </h2>
+              <p className="text-xs text-zinc-200 leading-relaxed mb-2">
+                <strong>SW Tech AutoReply uses YouTube API Services.</strong> By accessing, subscribing to, or using our application, you explicitly acknowledge and agree to be bound by the{' '}
+                <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline font-bold">
+                  YouTube Terms of Service (https://www.youtube.com/t/terms)
+                </a>{' '}
+                and the{' '}
+                <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline font-bold">
+                  Google Privacy Policy (http://www.google.com/policies/privacy)
+                </a>.
+              </p>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Users can review their connected Google apps and revoke access at any time via the Google security settings page at{' '}
+                <a href="https://myaccount.google.com/connections?filters=3,4&hl=en" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline font-semibold">
+                  https://myaccount.google.com/connections?filters=3,4&amp;hl=en
+                </a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">2. Description of Service</h2>
+              <h2 className="text-lg font-bold text-white mb-2">2. Agreement to Terms</h2>
               <p>
-                SW Tech AutoReply is a SaaS tool designed for YouTube creators to manage, analyze sentiment, and automate comment replies using Google Gemma 4 31B IT Thinking AI (Powered by Google AI) in compliance with YouTube Data API v3 terms.
+                By accessing or using <strong>SW Tech AutoReply</strong> (accessible at <Link href="https://swgayanbhumi.in" className="text-rose-400 underline">swgayanbhumi.in</Link>), you agree to be bound by these Terms of Service, our Privacy Policy, and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this platform.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">3. User Responsibilities & Acceptable Use</h2>
-              <ul className="list-disc pl-5 space-y-1 text-zinc-400">
-                <li>You are solely responsible for maintaining the confidentiality of your Google/YouTube account credentials.</li>
-                <li>You agree not to configure the AI tool to send abusive, defamatory, illegal, or harassing messages on YouTube.</li>
-                <li>You agree to comply with the <Link href="https://www.youtube.com/t/terms" target="_blank" className="text-rose-400 underline">YouTube Community Guidelines and Terms of Service</Link>.</li>
+              <h2 className="text-lg font-bold text-white mb-2">3. Description of Service</h2>
+              <p>
+                SW Tech AutoReply is a SaaS tool designed for YouTube creators to manage, analyze sentiment, and automate comment replies using Google Generative AI in strict compliance with YouTube Data API v3 terms and Developer Policies.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-white mb-2">4. User Responsibilities &amp; Acceptable Use</h2>
+              <ul className="list-disc pl-5 space-y-1.5 text-zinc-300">
+                <li>You are solely responsible for maintaining the confidentiality of your Google and YouTube account authentication sessions.</li>
+                <li>You agree not to configure automated persona prompts to send abusive, defamatory, illegal, deceptive, harassing, or hateful messages on YouTube.</li>
+                <li>You agree to comply fully with the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline">YouTube Community Guidelines</a> and YouTube Developer Policies at all times.</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">4. Subscriptions, Payments & Refunds (Razorpay)</h2>
-              <ul className="list-disc pl-5 space-y-1 text-zinc-400">
-                <li>Paid plans (Starter ₹499/mo, Growth ₹999/mo, Pro ₹1,999/mo) and credit packs are processed securely via Razorpay (UPI, NetBanking, Cards).</li>
-                <li>Monthly and annual plans renew according to the chosen billing cycle until cancelled by the user.</li>
+              <h2 className="text-lg font-bold text-white mb-2">5. Subscriptions, Payments &amp; Refunds (Razorpay)</h2>
+              <ul className="list-disc pl-5 space-y-1.5 text-zinc-300">
+                <li>Paid subscription plans (Starter ₹499/mo, Growth ₹999/mo, Pro ₹1,999/mo) and credit packs are processed securely via Razorpay (UPI, NetBanking, Debit/Credit Cards).</li>
+                <li>Monthly and annual plans renew according to the chosen billing cycle until cancelled by the creator.</li>
                 <li>Refund requests are evaluated on a case-by-case basis within 7 days of purchase if service credits remain unused.</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">5. YouTube API & Service Availability</h2>
-              <p>
-                While we employ smart quota optimization algorithms to safeguard your 10,000 daily YouTube API limit, YouTube API availability and daily quota allocations are governed solely by Google Cloud policies.
-              </p>
+              <h2 className="text-lg font-bold text-white mb-2">6. YouTube API Data Handling &amp; Retention</h2>
+              <ul className="list-disc pl-5 space-y-1.5 text-zinc-300">
+                <li>YouTube API data is fetched in real-time during active sessions and cached for a maximum of 30 days in strict accordance with YouTube Developer Policies (Section III.E.4b).</li>
+                <li>Users can request complete data deletion at any time by emailing <strong className="text-white">swgayanmitraai27@gmail.com</strong>. Data will be completely purged within 48 hours.</li>
+              </ul>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">6. Limitation of Liability</h2>
+              <h2 className="text-lg font-bold text-white mb-2">7. Limitation of Liability</h2>
               <p>
                 SW Tech Solution will not be liable for any indirect, incidental, or consequential damages arising from the use or inability to use the platform.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">7. Contact Information</h2>
+              <h2 className="text-lg font-bold text-white mb-2">8. Contact Information</h2>
               <p>If you have any questions regarding these Terms, contact us at:</p>
-              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-xs">
-                <p><strong>Company:</strong> SW Tech Solution</p>
-                <p><strong>Website:</strong> <Link href="https://swgayanbhumi.in" className="text-rose-400">https://swgayanbhumi.in</Link></p>
-                <p><strong>Email:</strong> swgayanmitraai27@gmail.com</p>
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 text-xs space-y-1">
+                <p><strong className="text-white">Company:</strong> SW Tech Solution</p>
+                <p><strong className="text-white">Website:</strong> <Link href="https://swgayanbhumi.in" className="text-rose-400">https://swgayanbhumi.in</Link></p>
+                <p><strong className="text-white">Email:</strong> swgayanmitraai27@gmail.com</p>
+                <p><strong className="text-white">Phone / WhatsApp:</strong> +91 8303994616</p>
               </div>
             </section>
           </div>
@@ -93,7 +119,7 @@ export default function TermsOfServicePage() {
       </main>
 
       <footer className="border-t border-zinc-900 bg-zinc-950 py-6 text-center text-xs text-zinc-500">
-        © {new Date().getFullYear()} SW Tech Solution. All rights reserved.
+        © {new Date().getFullYear()} SW Tech Solution. All rights reserved. • <Link href="/privacy" className="hover:text-zinc-300">Privacy Policy</Link> • <Link href="/terms" className="hover:text-zinc-300">Terms of Service</Link>
       </footer>
     </div>
   );

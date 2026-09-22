@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { ShieldCheck, Lock, Eye, FileText, ArrowLeft, Youtube, Server, Database, Sparkles, UserX, Trash2, Mail } from 'lucide-react';
+import { ShieldCheck, Lock, Eye, FileText, ArrowLeft, Server, Database, Sparkles, UserX, Trash2, Mail, Cookie, RefreshCw } from 'lucide-react';
 
 export const metadata = {
   title: 'Privacy Policy | SW Tech AutoReply (SW Gyanbhumi)',
@@ -28,30 +28,55 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-black text-white">Privacy Policy</h1>
-              <p className="text-xs text-zinc-400 mt-0.5">Last Updated: September 16, 2026 • SW Tech Solution (swgayanbhumi.in)</p>
+              <p className="text-xs text-zinc-400 mt-0.5">Last Updated: September 22, 2026 • SW Tech Solution (swgayanbhumi.in)</p>
             </div>
           </div>
 
           <div className="prose prose-invert max-w-none text-xs sm:text-sm text-zinc-300 space-y-6 leading-relaxed">
-            {/* 1. Introduction */}
-            <section>
-              <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                1. Introduction &amp; Overview
+            {/* 1. YouTube API Services & Google Privacy Policy Notice (Policy III.A.2c) */}
+            <section className="p-5 rounded-2xl bg-gradient-to-r from-rose-950/40 via-zinc-900 to-zinc-950 border border-rose-500/40">
+              <h2 className="text-sm sm:text-base font-bold text-white mb-2 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-rose-400" />
+                1. YouTube API Services &amp; Google Privacy Policy
               </h2>
+              <p className="text-xs text-zinc-200 leading-relaxed mb-2">
+                <strong>SW Tech AutoReply uses YouTube API Services.</strong> By accessing or using our application, you agree to be bound by the{' '}
+                <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline font-bold">
+                  YouTube Terms of Service
+                </a>{' '}
+                and acknowledge that your information is handled in accordance with the{' '}
+                <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline font-bold">
+                  Google Privacy Policy (http://www.google.com/policies/privacy)
+                </a>.
+              </p>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Please review the Google Privacy Policy at{' '}
+                <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline">
+                  http://www.google.com/policies/privacy
+                </a>{' '}
+                and{' '}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline">
+                  https://policies.google.com/privacy
+                </a>{' '}
+                for full details on Google&apos;s data collection and processing practices.
+              </p>
+            </section>
+
+            {/* 2. Introduction */}
+            <section>
+              <h2 className="text-lg font-bold text-white mb-2">2. Introduction &amp; Overview</h2>
               <p>
                 Welcome to <strong>SW Tech AutoReply</strong> (&quot;we,&quot; &quot;our,&quot; &quot;us,&quot; or &quot;Application&quot;), operated by <strong>SW Tech Solution</strong> at <Link href="https://swgayanbhumi.in" className="text-rose-400 underline">swgayanbhumi.in</Link>. 
                 SW Tech AutoReply is an AI-powered YouTube comment management, sentiment analysis, and creator community engagement platform designed to help YouTube creators respond intelligently to their video comments.
               </p>
               <p>
-                We are committed to protecting your privacy and handling Google and YouTube user data with the highest standards of security, transparency, and compliance. This Privacy Policy details the types of data we collect, how it is used, how it is stored, and <strong>with whom Google user data is shared, transferred, or disclosed</strong>.
+                We are committed to protecting your privacy and handling Google and YouTube user data with the highest standards of security, transparency, and compliance. This Privacy Policy details the types of data we collect, how it is used, how it is stored, how device cookies are used, and <strong>with whom Google user data is shared, transferred, or disclosed</strong>.
               </p>
             </section>
 
-            {/* 2. Google & YouTube User Data We Access */}
+            {/* 3. Google & YouTube User Data We Access */}
             <section>
-              <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                2. Google &amp; YouTube User Data We Access
-              </h2>
+              <h2 className="text-lg font-bold text-white mb-2">3. Google &amp; YouTube User Data We Access</h2>
               <p>
                 When you sign in and authenticate with Google OAuth 2.0, our application requests access to the following minimum necessary Google API scopes:
               </p>
@@ -68,9 +93,9 @@ export default function PrivacyPolicyPage() {
               </ul>
             </section>
 
-            {/* 3. How We Use and Process Google User Data */}
+            {/* 4. How We Use and Process Google User Data */}
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">3. How We Use and Process Google User Data</h2>
+              <h2 className="text-lg font-bold text-white mb-2">4. How We Use and Process Google User Data</h2>
               <p>We access and process Google user data strictly for providing user-facing features requested by the creator, including:</p>
               <ul className="list-disc pl-5 space-y-1.5 text-zinc-300">
                 <li>Displaying incoming unreplied comments in your creator studio feed.</li>
@@ -80,11 +105,55 @@ export default function PrivacyPolicyPage() {
               </ul>
             </section>
 
-            {/* 4. DATA SHARING DISCLOSURE (CRITICAL FOR GOOGLE VERIFICATION) */}
+            {/* 5. Cookies, Device Storage & Third-Party Access (Policy III.A.2g) */}
+            <section className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800 space-y-3">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2 text-amber-400">
+                <Cookie className="w-5 h-5 text-amber-400 shrink-0" />
+                5. Device Data, Cookies &amp; Local Storage Disclosure
+              </h2>
+              <p className="text-zinc-300 text-xs sm:text-sm">
+                In compliance with YouTube Developer Policy Section III.A.2g, we explicitly disclose that the <strong>API Client stores, accesses, and collects (and allows third parties to do so) information directly or indirectly on or from users’ devices, including by placing, accessing, or recognizing cookies or similar technology on users&apos; devices or browsers:</strong>
+              </p>
+              <ul className="list-disc pl-5 space-y-2 text-xs text-zinc-300">
+                <li>
+                  <strong className="text-white">Authentication &amp; Session Cookies:</strong> We and our third-party infrastructure provider (Firebase Authentication / Google LLC) place and read secure session cookies and HTTP tokens to authenticate your browser session, maintain secure logins, and protect against Cross-Site Request Forgery (CSRF).
+                </li>
+                <li>
+                  <strong className="text-white">Browser LocalStorage &amp; SessionStorage:</strong> We use browser localStorage to store non-sensitive creator interface preferences (such as theme modes, active tab selections, and UI tour completion markers).
+                </li>
+                <li>
+                  <strong className="text-white">Third-Party Service Identifiers:</strong> Third-party integrations (Google Cloud Platform, Google Identity Services, and Razorpay) may recognize or place essential cookies or device identifiers on your browser strictly for verifying API requests, fraud detection, and payment verification.
+                </li>
+              </ul>
+            </section>
+
+            {/* 6. Data Refresh, Update & Deletion Lifecycle (Policy III.E.4a-g) */}
+            <section className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800 space-y-3">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2 text-emerald-400">
+                <RefreshCw className="w-5 h-5 text-emerald-400 shrink-0" />
+                6. Data Refresh, Update &amp; Deletion Lifecycle
+              </h2>
+              <p className="text-zinc-300 text-xs sm:text-sm">
+                In compliance with YouTube Developer Policy Section III.E.4, we implement strict rules for refreshing, updating, and deleting API data:
+              </p>
+              <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-300">
+                <li>
+                  <strong className="text-white">Real-Time Refreshing:</strong> YouTube API data (channel metadata, subscriber counts, and unreplied comment threads) is fetched and refreshed in real-time when the creator actively accesses their dashboard or when Auto-Pilot triggers an automated sync.
+                </li>
+                <li>
+                  <strong className="text-white">Maximum 30-Day Storage Limitation:</strong> No YouTube API data or content is cached or stored for more than 30 calendar days (complying strictly with Policy III.E.4b). Data older than 30 days is automatically purged and refreshed from the API.
+                </li>
+                <li>
+                  <strong className="text-white">Immediate Purge on Revocation/Deletion:</strong> When a creator disconnects their channel or deletes their account, all associated OAuth tokens, cached comment snippets, and channel identifiers are permanently purged from our databases within 48 hours.
+                </li>
+              </ul>
+            </section>
+
+            {/* 7. Data Sharing Disclosure (Policy III.A.2) */}
             <section className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800 space-y-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-2 text-rose-400">
                 <Lock className="w-5 h-5 text-rose-400 shrink-0" />
-                4. With Whom We Share, Transfer, or Disclose Google User Data
+                7. With Whom We Share, Transfer, or Disclose Google User Data
               </h2>
               <p className="text-zinc-300">
                 In compliance with Google API Services User Data Policy requirements, we provide full disclosure regarding all entities with whom Google user data is shared, transferred, or disclosed:
@@ -142,65 +211,84 @@ export default function PrivacyPolicyPage() {
               </div>
             </section>
 
-            {/* 5. Google API Limited Use Requirements Compliance */}
+            {/* 8. Google API Limited Use Requirements Compliance */}
             <section className="p-5 rounded-2xl bg-gradient-to-r from-rose-950/30 to-zinc-900 border border-rose-500/40 text-rose-200">
               <h2 className="text-sm sm:text-base font-bold text-white mb-2 flex items-center gap-2">
                 <Lock className="w-4 h-4 text-rose-400" />
-                5. Google API Services User Data Policy Compliance &amp; Limited Use
+                8. Google API Services User Data Policy Compliance &amp; Limited Use
               </h2>
               <p className="text-xs text-zinc-200 leading-relaxed">
                 <strong>SW Tech AutoReply&apos;s use and transfer to any other app of information received from Google APIs will adhere to the <Link href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" className="text-rose-400 underline font-semibold">Google API Services User Data Policy</Link>, including the Limited Use requirements.</strong>
               </p>
             </section>
 
-            {/* 6. Data Storage & Security */}
+            {/* 9. Data Storage & Security */}
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">6. Data Storage, Security &amp; Retention</h2>
+              <h2 className="text-lg font-bold text-white mb-2">9. Data Storage, Security &amp; Retention</h2>
               <p>
                 We implement industry-standard administrative, physical, and technical safeguards to protect your personal information and Google user data:
               </p>
               <ul className="list-disc pl-5 space-y-1 text-zinc-300">
                 <li>All data transmission is encrypted in transit using industry-standard TLS 1.3 / HTTPS encryption.</li>
                 <li>OAuth tokens and user configuration settings are stored with AES-256 encryption at rest inside Google Cloud Firebase Firestore.</li>
-                <li>We retain Google user data only for as long as your creator account remains active. Upon disconnection or account termination, data is permanently purged.</li>
+                <li>We retain Google user data only for as long as your creator account remains active. Upon disconnection or account termination, data is permanently purged within 48 hours.</li>
               </ul>
             </section>
 
-            {/* 7. User Control, Permissions Revocation & Data Deletion */}
-            <section className="space-y-3">
-              <h2 className="text-lg font-bold text-white mb-2">7. User Control, Permissions Revocation &amp; Data Deletion</h2>
-              <p>
-                You have full control over your Google and YouTube data at all times:
+            {/* 10. User Control, Permissions Revocation & Data Deletion Procedure (Policy III.A.2h) */}
+            <section className="space-y-4 p-6 rounded-3xl bg-zinc-950 border border-zinc-800">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2 text-rose-400">
+                <UserX className="w-5 h-5 text-rose-400 shrink-0" />
+                10. User Control, Permissions Revocation &amp; Data Deletion Procedure
+              </h2>
+              <p className="text-zinc-300 text-xs sm:text-sm">
+                In compliance with YouTube Developer Policy Section III.A.2h, users have full control over their data and can revoke permissions or request complete deletion at any time:
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">
-                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800">
+                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 mb-2">
                     <UserX className="w-4 h-4 text-rose-400" />
-                    Revoke Google Access
+                    A. How to Revoke Google Account Access
                   </h3>
-                  <p className="text-xs text-zinc-400">
-                    You can instantly revoke our application&apos;s access at any time via your official <Link href="https://myaccount.google.com/permissions" target="_blank" className="text-rose-400 underline">Google Account Security &amp; Permissions Manager</Link>.
+                  <p className="text-xs text-zinc-300 leading-relaxed mb-2">
+                    You can instantly revoke SW Tech AutoReply&apos;s access to your YouTube and Google account at any time via the official Google Security Settings page:
+                  </p>
+                  <a
+                    href="https://myaccount.google.com/connections?filters=3,4&hl=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-xs font-bold text-rose-400 hover:text-rose-300 underline break-all"
+                  >
+                    https://myaccount.google.com/connections?filters=3,4&amp;hl=en
+                  </a>
+                  <p className="text-[11px] text-zinc-400 mt-2">
+                    Alternatively, visit <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" className="text-rose-400 underline">https://myaccount.google.com/permissions</a>, locate &quot;SW Tech AutoReply&quot; (or &quot;samsher&quot;), and click &quot;Remove Access&quot;.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">
-                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
+                <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800">
+                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 mb-2">
                     <Trash2 className="w-4 h-4 text-amber-400" />
-                    Request Permanent Data Deletion
+                    B. Procedure for Deleting Stored Data
                   </h3>
-                  <p className="text-xs text-zinc-400">
-                    You can request complete and permanent deletion of your account, stored credentials, and logs by emailing us at <strong className="text-zinc-200">swgayanmitraai27@gmail.com</strong>. All records are completely deleted within 48 hours.
+                  <p className="text-xs text-zinc-300 leading-relaxed mb-2">
+                    To request complete and permanent deletion of your stored credentials, profile data, cached comments, and settings:
                   </p>
+                  <ol className="list-decimal pl-4 space-y-1 text-xs text-zinc-300">
+                    <li>Send an email to <strong className="text-white">swgayanmitraai27@gmail.com</strong> with the subject line <em>&quot;Data Deletion Request&quot;</em> and your channel name.</li>
+                    <li>Our security team will immediately verify the request and permanently delete all tokens, database records, and logs from Firebase within <strong>48 hours</strong>.</li>
+                    <li>A confirmation email will be sent upon full deletion completion.</li>
+                  </ol>
                 </div>
               </div>
             </section>
 
-            {/* 8. Contact Information */}
+            {/* 11. Contact Information */}
             <section>
-              <h2 className="text-lg font-bold text-white mb-2">8. Contact Information</h2>
-              <p>If you have any questions, concerns, or inquiries regarding this Privacy Policy or our Google API data practices, please reach out to us:</p>
+              <h2 className="text-lg font-bold text-white mb-2">11. Contact Information</h2>
+              <p>If you have any questions, concerns, or inquiries regarding this Privacy Policy or our YouTube API data practices, please reach out to us:</p>
               <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 text-xs space-y-1 mt-2">
-                <p><strong className="text-white">Application Name:</strong> SW Tech AutoReply (SW Tech Solution)</p>
+                <p><strong className="text-white">Application Name:</strong> SW Tech AutoReply (API Client: samsher / SW Tech Solution)</p>
                 <p><strong className="text-white">Official Website:</strong> <Link href="https://swgayanbhumi.in" className="text-rose-400">https://swgayanbhumi.in</Link></p>
                 <p><strong className="text-white">Privacy &amp; Support Email:</strong> <a href="mailto:swgayanmitraai27@gmail.com" className="text-rose-400">swgayanmitraai27@gmail.com</a></p>
                 <p><strong className="text-white">WhatsApp Support:</strong> +91 8303994616</p>
@@ -217,4 +305,3 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
-

@@ -529,11 +529,11 @@ export default function PersonaSettings() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold mb-2">
               <Sparkles className="w-3.5 h-3.5" />
-              100% Automated • 1-Click YouTube Channel Connect
+              100% Automated • 1-Click Channel Connect
             </div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Youtube className="w-4 h-4 text-rose-500" />
-              YouTube Channel Connection & 24/7 Auto-Pilot
+              <Sparkles className="w-4 h-4 text-rose-500" />
+              YouTube Channel Connection &amp; 24/7 Auto-Pilot
             </h3>
             <p className="text-xs text-zinc-400 mt-1 max-w-xl">
               Connect your YouTube channel with 1-click Google OAuth. Zero manual API keys, zero Google Cloud setup, and lightning-fast AI auto-replies.
@@ -546,7 +546,7 @@ export default function PersonaSettings() {
             disabled={saving}
             className="shrink-0 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold text-xs shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2 disabled:opacity-50"
           >
-            <Youtube className="w-4 h-4 text-white" />
+            <Sparkles className="w-4 h-4 text-white" />
             <span>{saving ? 'Connecting...' : 'Connect YouTube Channel (1-Click)'}</span>
           </button>
         </div>
