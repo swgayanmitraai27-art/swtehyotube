@@ -152,16 +152,16 @@ function PaymentContent() {
 
           <button
             onClick={() => {
-              if (window.history.length > 1) {
-                window.history.back();
+              if (window.opener) {
+                window.close();
               } else {
-                window.location.href = '/';
+                window.location.href = 'https://booyehreward.vercel.app';
               }
             }}
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
-            Return to {isSkillWinner ? 'SkillWinner App' : 'App'}
+            Return to Booyah Rewards App
           </button>
         </div>
       </div>
