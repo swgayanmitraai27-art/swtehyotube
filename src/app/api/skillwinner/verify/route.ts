@@ -58,21 +58,55 @@ export async function POST(req: NextRequest) {
 
         if (userDoc.exists) {
           const data = userDoc.data() || {};
-          const currentReal = Number(data.real_balance || 0);
-          const currentBonus = Number(data.bonus_balance || 0);
+          const currentReal = Number(data.wallet?.depositCash || data.depositCash || data.real_balance || 0);
+          const currentBonus = Number(data.wallet?.adCoins || data.adCoins || data.bonus_balance || 0);
+          const currentWinning = Number(data.wallet?.winningCash || data.winningCash || 0);
+          const currentReward = Number(data.wallet?.rewardCoins || data.rewardCoins || 0);
 
-          await userRef.update({
-            real_balance: currentReal + addedReal,
-            bonus_balance: currentBonus + addedBonus,
-            updated_at: new Date().toISOString(),
-          });
+          await userRef.set(
+            {
+              real_balance: currentReal + addedReal,
+              bonus_balance: currentBonus + addedBonus,
+              depositCash: currentReal + addedReal,
+              adCoins: currentBonus + addedBonus,
+              wallet: {
+                depositCash: currentReal + addedReal,
+                adCoins: currentBonus + addedBonus,
+                winningCash: currentWinning,
+                rewardCoins: currentReward,
+              },
+              updated_at: new Date().toISOString(),
+            },
+            { merge: true }
+          );
         } else {
           await userRef.set({
+            uid: String(userId),
             userId: String(userId),
+            displayName: 'Gamer',
             real_balance: addedReal,
             bonus_balance: addedBonus,
-            total_matches_played: 0,
-            total_winnings: 0,
+            depositCash: addedReal,
+            adCoins: addedBonus,
+            wallet: {
+              depositCash: addedReal,
+              adCoins: addedBonus,
+              winningCash: 0,
+              rewardCoins: 0,
+            },
+            stats: {
+              matchesPlayed: 0,
+              matchesWon: 0,
+              totalKills: 0,
+              totalWinningsCash: 0,
+              totalRewardCoinsWon: 0,
+              totalCoinsEarned: addedBonus,
+            },
+            adTracker: {
+              adsWatchedToday: 0,
+              adsWatchedSinceLastCoin: 0,
+              dailyLimitRemaining: 30,
+            },
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           });
@@ -80,14 +114,22 @@ export async function POST(req: NextRequest) {
 
         // Log transaction
         await adminDb.collection('skillwinner_transactions').add({
+          id: `txn_${Date.now()}`,
           userId: String(userId),
-          type: 'DEPOSIT',
+          userName: 'Gamer',
+          type: 'deposit',
+          walletAffected: 'depositCash',
+          amount: addedReal,
           real_amount: addedReal,
           bonus_amount: addedBonus,
+          currency: 'INR',
+          balanceBefore: 0,
+          balanceAfter: addedReal,
           razorpay_payment_id,
           razorpay_order_id,
           status: 'SUCCESS',
           description: `Added ₹${addedReal} cash (+₹${addedBonus} bonus)`,
+          createdAt: new Date().toISOString(),
           created_at: new Date().toISOString(),
         });
       } catch (dbErr) {
