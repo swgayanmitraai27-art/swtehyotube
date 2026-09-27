@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { db } from '@/lib/firebaseAdmin';
+import { adminDb } from '@/lib/firebase-admin';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -51,9 +51,9 @@ export async function POST(req: NextRequest) {
     const addedBonus = bonusCoins;
 
     // Update or credit user in Firebase Firestore
-    if (db) {
+    if (adminDb) {
       try {
-        const userRef = db.collection('skillwinner_users').doc(String(userId));
+        const userRef = adminDb.collection('skillwinner_users').doc(String(userId));
         const userDoc = await userRef.get();
 
         if (userDoc.exists) {
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Log transaction
-        await db.collection('skillwinner_transactions').add({
+        await adminDb.collection('skillwinner_transactions').add({
           userId: String(userId),
           type: 'DEPOSIT',
           real_amount: addedReal,
