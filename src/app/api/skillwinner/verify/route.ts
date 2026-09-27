@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
       body.razorpay_signature || body.signature;
     const userId =
       body.userId || body.uid || body.user_id || body.id || 'guest_user';
-    const amount = Number(body.amount || body.price || body.coins || 0);
-    const bonusCoins =
-      Number(body.bonusCoins || body.bonus) || Math.round(amount * 0.5);
+    const amount = Number(body.amount || body.price || 0);
+    const extraBonus = Number((amount * 0.10).toFixed(2)); // 10% Extra Deposit Cash
+    const addedDepositCash = amount + extraBonus; // Total credited deposit cash
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
@@ -47,9 +47,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const addedReal = amount;
-    const addedBonus = bonusCoins;
-
     // Update or credit user in Firebase Firestore
     if (adminDb) {
       try {
@@ -59,19 +56,19 @@ export async function POST(req: NextRequest) {
         if (userDoc.exists) {
           const data = userDoc.data() || {};
           const currentReal = Number(data.wallet?.depositCash || data.depositCash || data.real_balance || 0);
-          const currentBonus = Number(data.wallet?.adCoins || data.adCoins || data.bonus_balance || 0);
+          const currentAdCoins = Number(data.wallet?.adCoins || data.adCoins || data.bonus_balance || 0);
           const currentWinning = Number(data.wallet?.winningCash || data.winningCash || 0);
           const currentReward = Number(data.wallet?.rewardCoins || data.rewardCoins || 0);
 
+          const newDepositCash = Number((currentReal + addedDepositCash).toFixed(2));
+
           await userRef.set(
             {
-              real_balance: currentReal + addedReal,
-              bonus_balance: currentBonus + addedBonus,
-              depositCash: currentReal + addedReal,
-              adCoins: currentBonus + addedBonus,
+              real_balance: newDepositCash,
+              depositCash: newDepositCash,
               wallet: {
-                depositCash: currentReal + addedReal,
-                adCoins: currentBonus + addedBonus,
+                depositCash: newDepositCash,
+                adCoins: currentAdCoins, // Ad coins only increase from ads
                 winningCash: currentWinning,
                 rewardCoins: currentReward,
               },
@@ -84,13 +81,13 @@ export async function POST(req: NextRequest) {
             uid: String(userId),
             userId: String(userId),
             displayName: 'Gamer',
-            real_balance: addedReal,
-            bonus_balance: addedBonus,
-            depositCash: addedReal,
-            adCoins: addedBonus,
+            real_balance: addedDepositCash,
+            bonus_balance: 0,
+            depositCash: addedDepositCash,
+            adCoins: 0,
             wallet: {
-              depositCash: addedReal,
-              adCoins: addedBonus,
+              depositCash: addedDepositCash,
+              adCoins: 0,
               winningCash: 0,
               rewardCoins: 0,
             },
@@ -100,7 +97,7 @@ export async function POST(req: NextRequest) {
               totalKills: 0,
               totalWinningsCash: 0,
               totalRewardCoinsWon: 0,
-              totalCoinsEarned: addedBonus,
+              totalCoinsEarned: 0,
             },
             adTracker: {
               adsWatchedToday: 0,
@@ -119,16 +116,15 @@ export async function POST(req: NextRequest) {
           userName: 'Gamer',
           type: 'deposit',
           walletAffected: 'depositCash',
-          amount: addedReal,
-          real_amount: addedReal,
-          bonus_amount: addedBonus,
+          amount: amount,
+          real_amount: amount,
+          bonus_amount: extraBonus,
+          credited_amount: addedDepositCash,
           currency: 'INR',
-          balanceBefore: 0,
-          balanceAfter: addedReal,
           razorpay_payment_id,
           razorpay_order_id,
           status: 'SUCCESS',
-          description: `Added ₹${addedReal} cash (+₹${addedBonus} bonus)`,
+          description: `Added ₹${amount} (+10% Bonus = ₹${addedDepositCash}) to Deposit Cash`,
           createdAt: new Date().toISOString(),
           created_at: new Date().toISOString(),
         });
@@ -140,10 +136,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: 'Payment verified and wallet credited successfully',
-        addedReal,
-        addedBonus,
-        totalAdded: addedReal + addedBonus,
+        message: 'Payment verified and 10% extra deposit cash credited successfully',
+        realAmount: amount,
+        extraBonus: extraBonus,
+        totalCredited: addedDepositCash,
         userId,
       },
       { headers: corsHeaders }

@@ -20,15 +20,15 @@ export async function POST(req: NextRequest) {
     const phone = body.phone || body.contact || '';
     const email = body.email || '';
 
-    if (isNaN(amount) || amount < 1) {
+    if (isNaN(amount) || amount < 10) {
       return NextResponse.json(
-        { error: 'Valid amount is required (Min ₹1)' },
+        { error: 'Valid amount is required (Min ₹10)' },
         { status: 400, headers: corsHeaders }
       );
     }
 
     const amountInPaise = Math.round(amount * 100);
-    const bonusCoins = Math.round(amount * 0.5); // 50% Bonus
+    const bonusCash = Number((amount * 0.10).toFixed(2)); // 10% Extra Deposit Cash
 
     const options = {
       amount: amountInPaise,
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
         phone: String(phone),
         email: String(email),
         realAmount: String(amount),
-        bonusCoins: String(bonusCoins),
+        bonusCash: String(bonusCash),
       },
     };
 
@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
         keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_TakGRfnTFl20dG',
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_TakGRfnTFl20dG',
         name: 'SkillWinner / SW Tech Solution',
-        description: `Add ₹${amount} (+₹${bonusCoins} Bonus)`,
-        bonusCoins,
+        description: `Add ₹${amount} (+10% Bonus = ₹${Number((amount + bonusCash).toFixed(2))} Deposit Cash)`,
+        bonusCash,
         realAmount: amount,
       },
       { headers: corsHeaders }

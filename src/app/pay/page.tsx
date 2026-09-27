@@ -22,20 +22,20 @@ function PaymentContent() {
   const isSkillWinner = app.toLowerCase().includes('skill') || app.toLowerCase().includes('esport');
 
   const presetPacks = [
-    { real: 1, bonus: 1, label: 'Test ₹1', tag: 'Instant Test' },
-    { real: 20, bonus: 10, label: 'Starter Pack', tag: 'Fast Match' },
-    { real: 50, bonus: 25, label: 'Gamer Choice', tag: 'Popular', popular: true },
-    { real: 100, bonus: 50, label: 'Pro Pack', tag: '+50% Extra' },
-    { real: 200, bonus: 100, label: 'Champion Pack', tag: 'Max Value' },
-    { real: 500, bonus: 250, label: 'Esports Legend', tag: 'VIP Bonus' },
+    { real: 10, bonus: 1, label: 'Starter Pack', tag: 'Fast Match' },
+    { real: 20, bonus: 2, label: 'Pro Pack', tag: '+10% Bonus' },
+    { real: 50, bonus: 5, label: 'Gamer Choice', tag: 'Popular', popular: true },
+    { real: 100, bonus: 10, label: 'Champion Pack', tag: '+10% Extra Cash' },
+    { real: 200, bonus: 20, label: 'Esports Legend', tag: 'Max Value' },
+    { real: 500, bonus: 50, label: 'VIP Pack', tag: 'Mega Bonus' },
   ];
 
   const currentAmount = customAmount ? Number(customAmount) : selectedAmount;
-  const currentBonus = Math.round(currentAmount * 0.5);
+  const currentBonus = Number((currentAmount * 0.10).toFixed(2)); // 10% Extra Deposit Cash
 
   const handlePayNow = async () => {
-    if (currentAmount < 1) {
-      setErrorMsg('Minimum deposit amount is ₹1');
+    if (currentAmount < 10) {
+      setErrorMsg('Minimum deposit amount is ₹10');
       return;
     }
     setErrorMsg('');
@@ -130,20 +130,20 @@ function PaymentContent() {
             <CheckCircle2 className="w-10 h-10" />
           </div>
           <h2 className="text-2xl font-black tracking-tight text-white mb-2">Payment Successful!</h2>
-          <p className="text-gray-400 text-sm mb-6">Your wallet has been credited instantly with 50% bonus.</p>
+          <p className="text-gray-400 text-sm mb-6">Your wallet has been credited with 10% Extra Deposit Cash.</p>
 
           <div className="bg-[#1A2234] rounded-2xl p-4 mb-6 border border-gray-800 space-y-3">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">Real Cash Added</span>
+              <span className="text-gray-400">Real Cash Paid</span>
               <span className="font-bold text-emerald-400 text-base">₹{paymentDetails.real}</span>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">50% Bonus Extra</span>
-              <span className="font-bold text-amber-400 text-base">+₹{paymentDetails.bonus} Coins</span>
+              <span className="text-gray-400">10% Extra Deposit Bonus</span>
+              <span className="font-bold text-amber-400 text-base">+₹{paymentDetails.bonus}</span>
             </div>
             <div className="pt-2 border-t border-gray-700/60 flex justify-between items-center text-sm">
-              <span className="text-gray-300 font-semibold">Total Credit Value</span>
-              <span className="font-extrabold text-white text-lg">₹{paymentDetails.real + paymentDetails.bonus}</span>
+              <span className="text-gray-300 font-semibold">Total Deposit Cash Added</span>
+              <span className="font-extrabold text-white text-lg">₹{Number((paymentDetails.real + paymentDetails.bonus).toFixed(2))}</span>
             </div>
             <div className="text-[11px] text-gray-500 pt-1">
               Transaction ID: <span className="font-mono text-gray-400">{paymentDetails.txId}</span>
@@ -205,14 +205,14 @@ function PaymentContent() {
           </div>
         </div>
 
-        {/* 50% Bonus Banner */}
+        {/* 10% Extra Deposit Cash Banner */}
         <div className="bg-gradient-to-r from-red-950/60 via-orange-950/40 to-amber-950/60 border border-orange-500/30 rounded-2xl p-3.5 mb-6 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
           <div className="text-xs">
-            <div className="font-bold text-orange-300">50% Instant Deposit Bonus Active!</div>
-            <div className="text-gray-400 text-[11px]">Add any amount and get 50% extra bonus coins automatically.</div>
+            <div className="font-bold text-orange-300">10% Instant Extra Deposit Cash Active!</div>
+            <div className="text-gray-400 text-[11px]">Recharge any amount (Min ₹10) and get 10% extra deposit cash added directly to your Deposit Balance.</div>
           </div>
         </div>
 
@@ -243,8 +243,8 @@ function PaymentContent() {
                     </span>
                   )}
                   <div className="text-lg font-black text-white">₹{pack.real}</div>
-                  <div className="text-[11px] font-semibold text-amber-400 mt-1 flex items-center gap-1">
-                    <Coins className="w-3 h-3" /> +₹{pack.bonus} Bonus
+                  <div className="text-[11px] font-semibold text-emerald-400 mt-1 flex items-center gap-1">
+                    <Coins className="w-3 h-3" /> +₹{pack.bonus} Extra Cash
                   </div>
                 </button>
               );
@@ -257,7 +257,7 @@ function PaymentContent() {
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
               <input
                 type="number"
-                placeholder="Or enter custom amount (Min ₹1, No Limit)"
+                placeholder="Or enter custom amount (Min ₹10, No Limit)"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
                 className="w-full bg-[#151C2C] border border-gray-800 focus:border-red-500 rounded-xl pl-8 pr-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition"
@@ -269,16 +269,19 @@ function PaymentContent() {
         {/* Calculation Box */}
         <div className="bg-[#151C2C] rounded-2xl p-4 border border-gray-800/80 mb-6 space-y-2.5">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-gray-400">Real Cash (100% Usable & Withdrawable)</span>
+            <span className="text-gray-400">Recharge Amount (Cash Paid)</span>
             <span className="font-bold text-white">₹{currentAmount}</span>
           </div>
           <div className="flex justify-between items-center text-xs">
-            <span className="text-gray-400">50% Bonus Extra (For Match Entry)</span>
-            <span className="font-bold text-amber-400">+₹{currentBonus} Coins</span>
+            <span className="text-gray-400">10% Extra Deposit Cash Bonus</span>
+            <span className="font-bold text-emerald-400">+₹{currentBonus}</span>
           </div>
           <div className="pt-2 border-t border-gray-700/50 flex justify-between items-center">
-            <span className="text-sm font-bold text-gray-200">Total Credits Received</span>
-            <span className="text-lg font-black text-emerald-400">₹{currentAmount + currentBonus}</span>
+            <span className="text-sm font-bold text-gray-200">Total Deposit Cash Credited</span>
+            <span className="text-lg font-black text-emerald-400">₹{Number((currentAmount + currentBonus).toFixed(2))}</span>
+          </div>
+          <div className="text-[10px] text-gray-500 pt-1">
+            * 100% usable to join tournaments. Ad Coins (🟡) are earned exclusively by watching ads.
           </div>
         </div>
 
