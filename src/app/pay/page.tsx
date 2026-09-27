@@ -22,6 +22,7 @@ function PaymentContent() {
   const isSkillWinner = app.toLowerCase().includes('skill') || app.toLowerCase().includes('esport');
 
   const presetPacks = [
+    { real: 1, bonus: 1, label: 'Test ₹1', tag: 'Instant Test' },
     { real: 20, bonus: 10, label: 'Starter Pack', tag: 'Fast Match' },
     { real: 50, bonus: 25, label: 'Gamer Choice', tag: 'Popular', popular: true },
     { real: 100, bonus: 50, label: 'Pro Pack', tag: '+50% Extra' },
@@ -33,8 +34,8 @@ function PaymentContent() {
   const currentBonus = Math.round(currentAmount * 0.5);
 
   const handlePayNow = async () => {
-    if (currentAmount < 10) {
-      setErrorMsg('Minimum deposit amount is ₹10');
+    if (currentAmount < 1) {
+      setErrorMsg('Minimum deposit amount is ₹1');
       return;
     }
     setErrorMsg('');
@@ -256,7 +257,7 @@ function PaymentContent() {
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
               <input
                 type="number"
-                placeholder="Or enter custom amount (Min ₹10)"
+                placeholder="Or enter custom amount (Min ₹1, No Limit)"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
                 className="w-full bg-[#151C2C] border border-gray-800 focus:border-red-500 rounded-xl pl-8 pr-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition"
