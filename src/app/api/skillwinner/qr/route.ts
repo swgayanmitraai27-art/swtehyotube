@@ -69,7 +69,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. If Razorpay QR Code created successfully
-    if (qrData && qrData.image_url) {
+    if (qrData && (qrData.image_url || qrData.id)) {
+      const paymentUrl = qrData.image_url || `https://rzp.io/rzp/${qrData.id}`;
+      const directQrImage = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(paymentUrl)}`;
+
       if (adminDb) {
         try {
           await adminDb.collection('skillwinner_pending_qr').doc(qrData.id).set({
@@ -79,7 +82,8 @@ export async function POST(req: NextRequest) {
             extraBonus: extraBonus,
             totalDepositCash: totalDepositCash,
             status: 'PENDING',
-            imageUrl: qrData.image_url,
+            paymentUrl: paymentUrl,
+            imageUrl: directQrImage,
             createdAt: new Date().toISOString(),
           });
         } catch (_) {}
@@ -89,8 +93,9 @@ export async function POST(req: NextRequest) {
         {
           success: true,
           qrId: qrData.id,
-          imageUrl: qrData.image_url,
-          image_url: qrData.image_url,
+          paymentUrl: paymentUrl,
+          qrImageUrl: directQrImage,
+          imageUrl: directQrImage,
           amount: amount,
           extraBonus: extraBonus,
           totalDepositCash: totalDepositCash,
