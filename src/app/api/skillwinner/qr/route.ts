@@ -32,65 +32,67 @@ export async function POST(req: NextRequest) {
     const extraBonus = Number((amount * 0.10).toFixed(2));
     const totalDepositCash = Number((amount + extraBonus).toFixed(2));
 
-    // 1. Create official Razorpay UPI QR Code via API
-    let rzpQrId: string | null = null;
-    let rzpWebUrl: string | null = null;
-
-    try {
-      const rzpRes = await fetch('https://api.razorpay.com/v1/payments/qr_codes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': authHeader,
+    // 1. Create official Razorpay QR Code via Razorpay QR API
+    const rzpRes = await fetch('https://api.razorpay.com/v1/payments/qr_codes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': authHeader,
+      },
+      body: JSON.stringify({
+        type: 'upi_qr',
+        name: 'Swgayanbhumi',
+        usage: 'single_use',
+        fixed_amount: true,
+        payment_amount: amountInPaise,
+        description: `Add ₹${amount} (+10% Bonus = ₹${totalDepositCash})`,
+        notes: {
+          userId: String(userId),
+          amount: String(amount),
+          extraBonus: String(extraBonus),
+          totalDepositCash: String(totalDepositCash),
+          appName: 'SkillWinner / Booyah Rewards',
         },
-        body: JSON.stringify({
-          type: 'upi_qr',
-          name: 'Swgayanbhumi',
-          usage: 'single_use',
-          fixed_amount: true,
-          payment_amount: amountInPaise,
-          description: `Add ₹${amount} (+10% Bonus = ₹${totalDepositCash})`,
-          notes: {
-            userId: String(userId),
-            amount: String(amount),
-            extraBonus: String(extraBonus),
-            totalDepositCash: String(totalDepositCash),
-            appName: 'SkillWinner / Booyah Rewards',
-          },
-        }),
-      });
+      }),
+    });
 
-      const rzpJson = await rzpRes.json();
-      if (rzpRes.ok && rzpJson.id) {
-        rzpQrId = rzpJson.id;
-        rzpWebUrl = rzpJson.image_url;
-      } else {
-        console.warn('Razorpay QR API response warning:', rzpJson);
-      }
-    } catch (rzpErr) {
-      console.error('Razorpay QR API call error:', rzpErr);
+    const rzpJson = await rzpRes.json();
+
+    if (!rzpRes.ok || !rzpJson.id) {
+      console.error('Razorpay QR API Error:', rzpJson);
+      return NextResponse.json(
+        { error: rzpJson.error?.description || 'Failed to create Razorpay QR Code' },
+        { status: 500, headers: corsHeaders }
+      );
     }
 
-    const activeQrId = rzpQrId || `qr_upi_${Date.now()}`;
-    const rzpVpa = 'swgayanbhumi490795.rzp@rxairtel';
-    const directUpiString = `upi://pay?pa=${rzpVpa}&pn=Swgayanbhumi&tr=${activeQrId}&am=${amount.toFixed(2)}&cu=INR&tn=Swgayanbhumi_Deposit`;
-    const directQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(directUpiString)}`;
-    const finalWebUrl = rzpWebUrl || `https://www.swgayanbhumi.in/pay?app=skillwinner&userId=${encodeURIComponent(userId)}&amount=${amount}&auto=1`;
+    // 2. Fetch the official binary QR image directly from Razorpay
+    let imageBase64 = '';
+    try {
+      const imgRes = await fetch(`https://api.razorpay.com/v1/l/qrcode/${rzpJson.id}`, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        },
+      });
+      if (imgRes.ok) {
+        const arrayBuffer = await imgRes.arrayBuffer();
+        imageBase64 = Buffer.from(arrayBuffer).toString('base64');
+      }
+    } catch (imgErr) {
+      console.error('Error downloading Razorpay QR Image:', imgErr);
+    }
 
     // Save pending QR session in Firestore
     if (adminDb) {
       try {
-        await adminDb.collection('skillwinner_pending_qr').doc(activeQrId).set({
-          qrId: activeQrId,
+        await adminDb.collection('skillwinner_pending_qr').doc(rzpJson.id).set({
+          qrId: rzpJson.id,
           userId: String(userId),
           amount: amount,
           extraBonus: extraBonus,
           totalDepositCash: totalDepositCash,
           status: 'PENDING',
-          upiString: directUpiString,
-          vpa: rzpVpa,
-          paymentUrl: finalWebUrl,
-          imageUrl: directQrImageUrl,
+          paymentUrl: rzpJson.image_url,
           createdAt: new Date().toISOString(),
         });
       } catch (_) {}
@@ -99,13 +101,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        qrId: activeQrId,
-        upi_string: directUpiString,
-        upiString: directUpiString,
-        vpa: rzpVpa,
-        qrImageUrl: directQrImageUrl,
-        imageUrl: directQrImageUrl,
-        paymentUrl: finalWebUrl,
+        qrId: rzpJson.id,
+        imageBase64: imageBase64,
+        paymentUrl: rzpJson.image_url,
         amount: amount,
         extraBonus: extraBonus,
         totalDepositCash: totalDepositCash,
