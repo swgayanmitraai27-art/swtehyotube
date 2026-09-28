@@ -32,8 +32,16 @@ export async function POST(req: NextRequest) {
     const extraBonus = Number((amount * 0.10).toFixed(2));
     const totalDepositCash = Number((amount + extraBonus).toFixed(2));
 
-    // 1. Attempt to create official Razorpay UPI QR Code via API
-    let qrData: any = null;
+    // Standard High-Performance UPI Intent for Direct GPay/PhonePe/Paytm/BHIM Scanning (No website redirects)
+    const merchantVpa = 'samashermaurya9935@okaxis';
+    const userShort = String(userId).replace(/[^a-zA-Z0-9]/g, '').substring(0, 6) || 'gamer';
+    const upiTxnNote = `SW_DEP_${userShort}_${Date.now().toString().slice(-4)}`;
+    const directUpiIntent = `upi://pay?pa=${merchantVpa}&pn=SkillWinner&am=${amount}&cu=INR&tn=${upiTxnNote}`;
+
+    // 1. Attempt to create official Razorpay UPI QR Code / Order
+    let rzpQrId: string | null = null;
+    let rzpWebUrl = `https://www.swgayanbhumi.in/pay?app=skillwinner&userId=${encodeURIComponent(userId)}&amount=${amount}&auto=1`;
+
     try {
       const rzpRes = await fetch('https://api.razorpay.com/v1/payments/qr_codes', {
         method: 'POST',
@@ -59,69 +67,32 @@ export async function POST(req: NextRequest) {
       });
 
       const rzpJson = await rzpRes.json();
-      if (rzpRes.ok && (rzpJson.image_url || rzpJson.id)) {
-        qrData = rzpJson;
-      } else {
-        console.warn('Razorpay QR Code API response:', rzpJson);
+      if (rzpRes.ok && rzpJson.id) {
+        rzpQrId = rzpJson.id;
+        if (rzpJson.image_url) {
+          rzpWebUrl = rzpJson.image_url;
+        }
       }
     } catch (rzpErr) {
-      console.error('Razorpay QR API call error:', rzpErr);
+      console.warn('Razorpay QR API optional call:', rzpErr);
     }
 
-    // 2. If Razorpay QR Code created successfully
-    if (qrData && (qrData.image_url || qrData.id)) {
-      const paymentUrl = qrData.image_url || `https://rzp.io/rzp/${qrData.id}`;
-      const directQrImage = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(paymentUrl)}`;
+    const activeQrId = rzpQrId || `qr_upi_${Date.now()}`;
+    const directQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(directUpiIntent)}`;
 
-      if (adminDb) {
-        try {
-          await adminDb.collection('skillwinner_pending_qr').doc(qrData.id).set({
-            qrId: qrData.id,
-            userId: String(userId),
-            amount: amount,
-            extraBonus: extraBonus,
-            totalDepositCash: totalDepositCash,
-            status: 'PENDING',
-            paymentUrl: paymentUrl,
-            imageUrl: directQrImage,
-            createdAt: new Date().toISOString(),
-          });
-        } catch (_) {}
-      }
-
-      return NextResponse.json(
-        {
-          success: true,
-          qrId: qrData.id,
-          paymentUrl: paymentUrl,
-          qrImageUrl: directQrImage,
-          imageUrl: directQrImage,
-          amount: amount,
-          extraBonus: extraBonus,
-          totalDepositCash: totalDepositCash,
-          upiString: qrData.payload || '',
-        },
-        { headers: corsHeaders }
-      );
-    }
-
-    // 3. Fallback Dynamic UPI QR Code (Directly scannable by Google Pay, PhonePe, Paytm, BHIM)
-    const merchantVpa = 'samashermaurya9935@okaxis';
-    const upiIntent = `upi://pay?pa=${merchantVpa}&pn=SkillWinner&am=${amount}&cu=INR&tn=SkillWinner_Deposit_${String(userId).substring(0, 6)}`;
-    const fallbackQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiIntent)}`;
-
-    const fallbackQrId = `qr_upi_${Date.now()}`;
+    // Save pending QR session in Firestore
     if (adminDb) {
       try {
-        await adminDb.collection('skillwinner_pending_qr').doc(fallbackQrId).set({
-          qrId: fallbackQrId,
+        await adminDb.collection('skillwinner_pending_qr').doc(activeQrId).set({
+          qrId: activeQrId,
           userId: String(userId),
           amount: amount,
           extraBonus: extraBonus,
           totalDepositCash: totalDepositCash,
           status: 'PENDING',
-          imageUrl: fallbackQrUrl,
-          upiIntent: upiIntent,
+          upiIntent: directUpiIntent,
+          paymentUrl: rzpWebUrl,
+          imageUrl: directQrImageUrl,
           createdAt: new Date().toISOString(),
         });
       } catch (_) {}
@@ -130,14 +101,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        qrId: fallbackQrId,
-        imageUrl: fallbackQrUrl,
-        image_url: fallbackQrUrl,
+        qrId: activeQrId,
+        upiString: directUpiIntent,
+        upiIntent: directUpiIntent,
+        upiId: merchantVpa,
+        qrImageUrl: directQrImageUrl,
+        imageUrl: directQrImageUrl,
+        paymentUrl: rzpWebUrl,
         amount: amount,
         extraBonus: extraBonus,
         totalDepositCash: totalDepositCash,
-        upiString: upiIntent,
-        upiId: merchantVpa,
       },
       { headers: corsHeaders }
     );
