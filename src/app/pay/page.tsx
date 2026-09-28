@@ -18,8 +18,17 @@ function PaymentContent() {
   const [paymentDetails, setPaymentDetails] = useState<{ real: number; bonus: number; txId: string } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [razorpayReady, setRazorpayReady] = useState<boolean>(false);
+  const [hasAutoTriggered, setHasAutoTriggered] = useState<boolean>(false);
 
   const isSkillWinner = app.toLowerCase().includes('skill') || app.toLowerCase().includes('esport');
+  const autoStart = searchParams.get('auto') === '1' || searchParams.get('autopay') === '1';
+
+  useEffect(() => {
+    if (razorpayReady && autoStart && !hasAutoTriggered && !paymentSuccess) {
+      setHasAutoTriggered(true);
+      handlePayNow();
+    }
+  }, [razorpayReady, autoStart, hasAutoTriggered, paymentSuccess]);
 
   const presetPacks = [
     { real: 10, bonus: 1, label: 'Starter Pack', tag: 'Fast Match' },
