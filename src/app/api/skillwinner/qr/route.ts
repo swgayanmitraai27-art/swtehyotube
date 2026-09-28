@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const userId = body.userId || body.uid || 'guest_user';
-    const amount = Number(body.amount || 50);
+    const amount = Number(body.amount || 20);
 
     if (isNaN(amount) || amount < 10) {
       return NextResponse.json(
@@ -32,15 +32,9 @@ export async function POST(req: NextRequest) {
     const extraBonus = Number((amount * 0.10).toFixed(2));
     const totalDepositCash = Number((amount + extraBonus).toFixed(2));
 
-    // Standard High-Performance UPI Intent for Direct GPay/PhonePe/Paytm/BHIM Scanning (No website redirects)
-    const merchantVpa = 'samashermaurya9935@okaxis';
-    const userShort = String(userId).replace(/[^a-zA-Z0-9]/g, '').substring(0, 6) || 'gamer';
-    const upiTxnNote = `SW_DEP_${userShort}_${Date.now().toString().slice(-4)}`;
-    const directUpiIntent = `upi://pay?pa=${merchantVpa}&pn=SkillWinner&am=${amount}&cu=INR&tn=${upiTxnNote}`;
-
-    // 1. Attempt to create official Razorpay UPI QR Code / Order
+    // 1. Create official Razorpay UPI QR Code via API
     let rzpQrId: string | null = null;
-    let rzpWebUrl = `https://www.swgayanbhumi.in/pay?app=skillwinner&userId=${encodeURIComponent(userId)}&amount=${amount}&auto=1`;
+    let rzpWebUrl: string | null = null;
 
     try {
       const rzpRes = await fetch('https://api.razorpay.com/v1/payments/qr_codes', {
@@ -51,7 +45,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           type: 'upi_qr',
-          name: 'SkillWinner Esports',
+          name: 'Swgayanbhumi',
           usage: 'single_use',
           fixed_amount: true,
           payment_amount: amountInPaise,
@@ -69,16 +63,19 @@ export async function POST(req: NextRequest) {
       const rzpJson = await rzpRes.json();
       if (rzpRes.ok && rzpJson.id) {
         rzpQrId = rzpJson.id;
-        if (rzpJson.image_url) {
-          rzpWebUrl = rzpJson.image_url;
-        }
+        rzpWebUrl = rzpJson.image_url;
+      } else {
+        console.warn('Razorpay QR API response warning:', rzpJson);
       }
     } catch (rzpErr) {
-      console.warn('Razorpay QR API optional call:', rzpErr);
+      console.error('Razorpay QR API call error:', rzpErr);
     }
 
     const activeQrId = rzpQrId || `qr_upi_${Date.now()}`;
-    const directQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(directUpiIntent)}`;
+    const rzpVpa = 'swgayanbhumi490795.rzp@rxairtel';
+    const directUpiString = `upi://pay?pa=${rzpVpa}&pn=Swgayanbhumi&tr=${activeQrId}&am=${amount.toFixed(2)}&cu=INR&tn=Swgayanbhumi_Deposit`;
+    const directQrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(directUpiString)}`;
+    const finalWebUrl = rzpWebUrl || `https://www.swgayanbhumi.in/pay?app=skillwinner&userId=${encodeURIComponent(userId)}&amount=${amount}&auto=1`;
 
     // Save pending QR session in Firestore
     if (adminDb) {
@@ -90,8 +87,9 @@ export async function POST(req: NextRequest) {
           extraBonus: extraBonus,
           totalDepositCash: totalDepositCash,
           status: 'PENDING',
-          upiIntent: directUpiIntent,
-          paymentUrl: rzpWebUrl,
+          upiString: directUpiString,
+          vpa: rzpVpa,
+          paymentUrl: finalWebUrl,
           imageUrl: directQrImageUrl,
           createdAt: new Date().toISOString(),
         });
@@ -102,12 +100,12 @@ export async function POST(req: NextRequest) {
       {
         success: true,
         qrId: activeQrId,
-        upiString: directUpiIntent,
-        upiIntent: directUpiIntent,
-        upiId: merchantVpa,
+        upi_string: directUpiString,
+        upiString: directUpiString,
+        vpa: rzpVpa,
         qrImageUrl: directQrImageUrl,
         imageUrl: directQrImageUrl,
-        paymentUrl: rzpWebUrl,
+        paymentUrl: finalWebUrl,
         amount: amount,
         extraBonus: extraBonus,
         totalDepositCash: totalDepositCash,
