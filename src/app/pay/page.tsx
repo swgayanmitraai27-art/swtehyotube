@@ -58,7 +58,7 @@ function PaymentContent() {
         throw new Error(data.error || 'Failed to create payment order');
       }
 
-      // 2. Open Razorpay Checkout
+      // 2. Open Razorpay Checkout (Pre-filled to skip phone number & go direct to UPI QR)
       const options = {
         key: data.keyId,
         amount: data.amount,
@@ -67,6 +67,31 @@ function PaymentContent() {
         description: data.description || `Add ₹${currentAmount} to Wallet`,
         order_id: data.orderId,
         image: isSkillWinner ? 'https://swgayanbhumi.in/logo.png' : 'https://swgayanbhumi.in/logo.png',
+        prefill: {
+          name: 'Gamer',
+          email: 'gamer@swgayanbhumi.in',
+          contact: '9876543210',
+          method: 'upi',
+        },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay via UPI / QR Code / GPay / PhonePe',
+                instruments: [
+                  {
+                    method: 'upi',
+                    flows: ['qr', 'intent', 'collect'],
+                  },
+                ],
+              },
+            },
+            sequence: ['block.upi'],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
