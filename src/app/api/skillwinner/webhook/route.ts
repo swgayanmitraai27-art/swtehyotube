@@ -36,6 +36,18 @@ export async function POST(req: NextRequest) {
       );
 
       if (adminDb && amountInRupees > 0) {
+        const paymentId = paymentEntity.id || qrEntity.id || 'WEBHOOK_PAYMENT';
+        const existingTxn = await adminDb
+          .collection('skillwinner_transactions')
+          .where('razorpay_payment_id', '==', paymentId)
+          .limit(1)
+          .get();
+
+        if (!existingTxn.empty) {
+          // Already processed, exit cleanly
+          return NextResponse.json({ status: 'ok', message: 'Already processed' });
+        }
+
         const userRef = adminDb.collection('skillwinner_users').doc(userId);
         const userDoc = await userRef.get();
 

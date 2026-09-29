@@ -45,8 +45,28 @@ export async function GET(req: NextRequest) {
             const totalDepositCash = Number((amountInRupees + extraBonus).toFixed(2));
             const targetUserId = String(userId || successfulPayment.notes?.userId || 'guest_user');
 
-            // Credit in Firestore
+            // Credit in Firestore (with Idempotency Check)
             if (adminDb) {
+              const existingTxn = await adminDb
+                .collection('skillwinner_transactions')
+                .where('razorpay_payment_id', '==', successfulPayment.id)
+                .limit(1)
+                .get();
+
+              if (!existingTxn.empty) {
+                return NextResponse.json(
+                  {
+                    paid: true,
+                    status: 'SUCCESS',
+                    paymentId: successfulPayment.id,
+                    amount: amountInRupees,
+                    extraBonus: extraBonus,
+                    totalDepositCash: totalDepositCash,
+                  },
+                  { headers: corsHeaders }
+                );
+              }
+
               const userRef = adminDb.collection('skillwinner_users').doc(targetUserId);
               const userDoc = await userRef.get();
 
