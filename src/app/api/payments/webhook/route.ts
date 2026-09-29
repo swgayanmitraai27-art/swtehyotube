@@ -40,26 +40,46 @@ export async function POST(req: NextRequest) {
         const rawAmount = payment.amount || qrEntity.payment_amount || 0;
         const amountInRupees = rawAmount > 0 ? rawAmount / 100 : Number(notes.amount || 0);
         const extraBonus = Number((amountInRupees * 0.10).toFixed(2));
-        const totalDepositCash = Number((amountInRupees + extraBonus).toFixed(2));
+        const paymentId = payment.id || qrEntity.id || 'WEBHOOK_CREDIT';
 
         if (adminDb && amountInRupees > 0) {
+          // Idempotency: prevent double credit
+          const existingTxn = await adminDb
+            .collection('skillwinner_transactions')
+            .where('razorpay_payment_id', '==', paymentId)
+            .limit(1)
+            .get();
+
+          if (!existingTxn.empty) {
+            return NextResponse.json({ status: 'ok', message: 'Already processed' });
+          }
+
           const userRef = adminDb.collection('skillwinner_users').doc(userId);
           const userDoc = await userRef.get();
 
           if (userDoc.exists) {
             const data = userDoc.data() || {};
-            const currentReal = Number(data.wallet?.depositCash || data.depositCash || data.real_balance || 0);
-            const currentAdCoins = Number(data.wallet?.adCoins || data.adCoins || 0);
-            const newDeposit = Number((currentReal + totalDepositCash).toFixed(2));
+            const currentDeposit = Number(data.wallet?.depositCash ?? data.depositCash ?? data.real_balance ?? 0);
+            const currentBonus = Number(data.wallet?.bonusCash ?? data.bonusCash ?? 0);
+            const currentWinning = Number(data.wallet?.winningCash ?? data.winningCash ?? data.total_winnings ?? 0);
+            const currentAdCoins = Number(data.wallet?.adCoins ?? data.adCoins ?? 0);
+            const currentRewardCoins = Number(data.wallet?.rewardCoins ?? data.rewardCoins ?? 0);
+
+            const newDeposit = Number((currentDeposit + amountInRupees).toFixed(2));
+            const newBonus = Number((currentBonus + extraBonus).toFixed(2));
 
             await userRef.set(
               {
                 real_balance: newDeposit,
                 depositCash: newDeposit,
+                bonusCash: newBonus,
                 wallet: {
                   ...data.wallet,
                   depositCash: newDeposit,
+                  bonusCash: newBonus,
+                  winningCash: currentWinning,
                   adCoins: currentAdCoins,
+                  rewardCoins: currentRewardCoins,
                 },
                 updated_at: new Date().toISOString(),
               },
@@ -67,7 +87,9 @@ export async function POST(req: NextRequest) {
             );
           }
 
-          // Record SkillWinner Transaction
+          const nowIso = new Date().toISOString();
+
+          // 1. Record Deposit Transaction
           await adminDb.collection('skillwinner_transactions').add({
             id: `txn_${Date.now()}`,
             userId: userId,
@@ -75,21 +97,36 @@ export async function POST(req: NextRequest) {
             type: 'deposit',
             walletAffected: 'depositCash',
             amount: amountInRupees,
-            real_amount: amountInRupees,
-            bonus_amount: extraBonus,
-            credited_amount: totalDepositCash,
             currency: 'INR',
-            razorpay_payment_id: payment.id || qrEntity.id || 'WEBHOOK_CREDIT',
+            razorpay_payment_id: paymentId,
             status: 'SUCCESS',
-            description: `Webhook Verified: Added ₹${amountInRupees} (+10% Bonus = ₹${totalDepositCash}) to Deposit Cash`,
-            createdAt: new Date().toISOString(),
-            created_at: new Date().toISOString(),
+            description: `Deposit: Added ₹${amountInRupees} Real Cash`,
+            createdAt: nowIso,
+            created_at: nowIso,
           });
+
+          // 2. Record 10% Extra Bonus Transaction
+          if (extraBonus > 0) {
+            await adminDb.collection('skillwinner_transactions').add({
+              id: `txn_bonus_${Date.now()}`,
+              userId: userId,
+              userName: 'Gamer',
+              type: 'bonusCashback',
+              walletAffected: 'bonusCash',
+              amount: extraBonus,
+              currency: 'INR',
+              razorpay_payment_id: paymentId,
+              status: 'SUCCESS',
+              description: `🎁 10% Extra Deposit Cashback (+₹${extraBonus} Bonus Cash)`,
+              createdAt: nowIso,
+              created_at: nowIso,
+            });
+          }
 
           // Mark pending QR success if applicable
           if (qrEntity.id) {
             await adminDb.collection('skillwinner_pending_qr').doc(qrEntity.id).set(
-              { status: 'SUCCESS', paymentId: payment.id || qrEntity.id, updated_at: new Date().toISOString() },
+              { status: 'SUCCESS', paymentId: paymentId, updated_at: nowIso },
               { merge: true }
             );
           }
