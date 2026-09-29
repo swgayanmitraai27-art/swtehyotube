@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     const keySecret = process.env.RAZORPAY_KEY_SECRET || 'zQhvUiuH7ZESonqwqXFMk8Ge';
     const authHeader = 'Basic ' + Buffer.from(`${keyId}:${keySecret}`).toString('base64');
 
-    // 1. If it's a Razorpay QR Code, check payments against this QR Code
+    // 1. Check payments against this QR Code
     if (qrId.startsWith('qr_')) {
       try {
         const rzpRes = await fetch(`https://api.razorpay.com/v1/payments/qr_codes/${qrId}/payments`, {
@@ -52,18 +52,27 @@ export async function GET(req: NextRequest) {
 
               if (userDoc.exists) {
                 const data = userDoc.data() || {};
-                const currentReal = Number(data.wallet?.depositCash || data.depositCash || data.real_balance || 0);
-                const currentAdCoins = Number(data.wallet?.adCoins || data.adCoins || 0);
-                const newDeposit = Number((currentReal + totalDepositCash).toFixed(2));
+                const currentDeposit = Number(data.wallet?.depositCash ?? data.depositCash ?? data.real_balance ?? 0);
+                const currentBonus = Number(data.wallet?.bonusCash ?? data.bonusCash ?? 0);
+                const currentWinning = Number(data.wallet?.winningCash ?? data.winningCash ?? data.total_winnings ?? 0);
+                const currentAdCoins = Number(data.wallet?.adCoins ?? data.adCoins ?? 0);
+                const currentRewardCoins = Number(data.wallet?.rewardCoins ?? data.rewardCoins ?? 0);
+
+                const newDeposit = Number((currentDeposit + amountInRupees).toFixed(2));
+                const newBonus = Number((currentBonus + extraBonus).toFixed(2));
 
                 await userRef.set(
                   {
                     real_balance: newDeposit,
                     depositCash: newDeposit,
+                    bonusCash: newBonus,
                     wallet: {
                       ...data.wallet,
                       depositCash: newDeposit,
+                      bonusCash: newBonus,
+                      winningCash: currentWinning,
                       adCoins: currentAdCoins,
+                      rewardCoins: currentRewardCoins,
                     },
                     updated_at: new Date().toISOString(),
                   },
@@ -79,17 +88,32 @@ export async function GET(req: NextRequest) {
                 type: 'deposit',
                 walletAffected: 'depositCash',
                 amount: amountInRupees,
-                real_amount: amountInRupees,
-                bonus_amount: extraBonus,
-                credited_amount: totalDepositCash,
                 currency: 'INR',
                 razorpay_payment_id: successfulPayment.id,
                 qr_id: qrId,
                 status: 'SUCCESS',
-                description: `QR Payment: Added ₹${amountInRupees} (+10% Bonus = ₹${totalDepositCash}) to Deposit Cash`,
+                description: `Deposit: Added ₹${amountInRupees} Real Cash`,
                 createdAt: new Date().toISOString(),
                 created_at: new Date().toISOString(),
               });
+
+              if (extraBonus > 0) {
+                await adminDb.collection('skillwinner_transactions').add({
+                  id: `txn_bonus_${Date.now()}`,
+                  userId: targetUserId,
+                  userName: 'Gamer',
+                  type: 'bonusCashback',
+                  walletAffected: 'bonusCash',
+                  amount: extraBonus,
+                  currency: 'INR',
+                  razorpay_payment_id: successfulPayment.id,
+                  qr_id: qrId,
+                  status: 'SUCCESS',
+                  description: `🎁 10% Extra Deposit Cashback (+₹${extraBonus} Bonus Cash)`,
+                  createdAt: new Date().toISOString(),
+                  created_at: new Date().toISOString(),
+                });
+              }
 
               // Mark pending QR as SUCCESS
               await adminDb.collection('skillwinner_pending_qr').doc(qrId).set(
@@ -100,13 +124,12 @@ export async function GET(req: NextRequest) {
 
             return NextResponse.json(
               {
-                success: true,
                 paid: true,
                 status: 'SUCCESS',
-                amount: amountInRupees,
-                extraBonus,
-                totalDepositCash,
                 paymentId: successfulPayment.id,
+                amount: amountInRupees,
+                extraBonus: extraBonus,
+                totalDepositCash: totalDepositCash,
               },
               { headers: corsHeaders }
             );
@@ -117,38 +140,9 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 2. Check pending QR in Firestore
-    if (adminDb) {
-      const qrDoc = await adminDb.collection('skillwinner_pending_qr').doc(qrId).get();
-      if (qrDoc.exists) {
-        const qrInfo = qrDoc.data() || {};
-        if (qrInfo.status === 'SUCCESS') {
-          return NextResponse.json(
-            {
-              success: true,
-              paid: true,
-              status: 'SUCCESS',
-              amount: qrInfo.amount,
-              extraBonus: qrInfo.extraBonus,
-              totalDepositCash: qrInfo.totalDepositCash,
-              paymentId: qrInfo.paymentId || 'QR_VERIFIED',
-            },
-            { headers: corsHeaders }
-          );
-        }
-      }
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        paid: false,
-        status: 'PENDING',
-        message: 'Waiting for QR payment...',
-      },
-      { headers: corsHeaders }
-    );
+    return NextResponse.json({ paid: false, status: 'PENDING' }, { headers: corsHeaders });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Error checking QR status' }, { status: 500, headers: corsHeaders });
+    console.error('QR Check error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
 }

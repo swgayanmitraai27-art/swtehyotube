@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
 
       const amountInRupees = (paymentEntity.amount || qrEntity.payment_amount || 0) / 100;
       const extraBonus = Number((amountInRupees * 0.10).toFixed(2));
-      const totalDepositCash = Number((amountInRupees + extraBonus).toFixed(2));
       const userId = String(
         paymentEntity.notes?.userId ||
         qrEntity.notes?.userId ||
@@ -42,18 +41,27 @@ export async function POST(req: NextRequest) {
 
         if (userDoc.exists) {
           const data = userDoc.data() || {};
-          const currentReal = Number(data.wallet?.depositCash || data.depositCash || data.real_balance || 0);
-          const currentAdCoins = Number(data.wallet?.adCoins || data.adCoins || 0);
-          const newDeposit = Number((currentReal + totalDepositCash).toFixed(2));
+          const currentDeposit = Number(data.wallet?.depositCash ?? data.depositCash ?? data.real_balance ?? 0);
+          const currentBonus = Number(data.wallet?.bonusCash ?? data.bonusCash ?? 0);
+          const currentWinning = Number(data.wallet?.winningCash ?? data.winningCash ?? data.total_winnings ?? 0);
+          const currentAdCoins = Number(data.wallet?.adCoins ?? data.adCoins ?? 0);
+          const currentRewardCoins = Number(data.wallet?.rewardCoins ?? data.rewardCoins ?? 0);
+
+          const newDeposit = Number((currentDeposit + amountInRupees).toFixed(2));
+          const newBonus = Number((currentBonus + extraBonus).toFixed(2));
 
           await userRef.set(
             {
               real_balance: newDeposit,
               depositCash: newDeposit,
+              bonusCash: newBonus,
               wallet: {
                 ...data.wallet,
                 depositCash: newDeposit,
+                bonusCash: newBonus,
+                winningCash: currentWinning,
                 adCoins: currentAdCoins,
+                rewardCoins: currentRewardCoins,
               },
               updated_at: new Date().toISOString(),
             },
@@ -61,7 +69,7 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Record Transaction
+        // Record Deposit Transaction
         await adminDb.collection('skillwinner_transactions').add({
           id: `txn_${Date.now()}`,
           userId: userId,
@@ -69,16 +77,31 @@ export async function POST(req: NextRequest) {
           type: 'deposit',
           walletAffected: 'depositCash',
           amount: amountInRupees,
-          real_amount: amountInRupees,
-          bonus_amount: extraBonus,
-          credited_amount: totalDepositCash,
           currency: 'INR',
           razorpay_payment_id: paymentEntity.id || 'WEBHOOK_CREDIT',
           status: 'SUCCESS',
-          description: `Webhook Confirmed: Added ₹${amountInRupees} (+10% Bonus = ₹${totalDepositCash}) to Deposit Cash`,
+          description: `Deposit: Added ₹${amountInRupees} Real Cash`,
           createdAt: new Date().toISOString(),
           created_at: new Date().toISOString(),
         });
+
+        // Record 10% Extra Bonus Transaction
+        if (extraBonus > 0) {
+          await adminDb.collection('skillwinner_transactions').add({
+            id: `txn_bonus_${Date.now()}`,
+            userId: userId,
+            userName: 'Gamer',
+            type: 'bonusCashback',
+            walletAffected: 'bonusCash',
+            amount: extraBonus,
+            currency: 'INR',
+            razorpay_payment_id: paymentEntity.id || 'WEBHOOK_CREDIT',
+            status: 'SUCCESS',
+            description: `🎁 10% Extra Deposit Cashback (+₹${extraBonus} Bonus Cash)`,
+            createdAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+          });
+        }
       }
     }
 
