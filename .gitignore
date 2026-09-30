@@ -8,3 +8,6 @@ build
 *.log
 test-*.mjs
 *.tsbuildinfo
+*service-account*.json
+*.pem
+
