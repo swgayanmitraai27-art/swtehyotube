@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
           notification: {
             title: title,
             body: bodyText,
-            icon: 'https://www.swgayanbhumi.in/logo.png',
+            icon: 'https://booyehreward.vercel.app/booyah_logo.png',
             image: imageUrl || undefined,
           },
         },
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
           notification: {
             title: title,
             body: bodyText,
-            icon: 'https://www.swgayanbhumi.in/logo.png',
+            icon: 'https://booyehreward.vercel.app/booyah_logo.png',
             image: imageUrl || undefined,
           },
         },
