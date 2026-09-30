@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { topic, token, notification, data } = body;
+    const { id, topic, token, notification, data, saveToDb } = body;
 
     const title = notification?.title || 'Booyah Rewards Alert';
     const bodyText = notification?.body || 'Check the tournament lobby for updates!';
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
           notification: {
             title: title,
             body: bodyText,
-            icon: '/icon.png',
+            icon: 'https://www.swgayanbhumi.in/logo.png',
             image: imageUrl || undefined,
           },
         },
@@ -96,27 +96,29 @@ export async function POST(req: NextRequest) {
           notification: {
             title: title,
             body: bodyText,
-            icon: '/icon.png',
+            icon: 'https://www.swgayanbhumi.in/logo.png',
             image: imageUrl || undefined,
           },
         },
       });
     }
 
-    // Also persist into Firestore skillwinner_notifications collection for instant real-time sync
-    const notifId = `notif_srv_${Date.now()}`;
-    await adminDb.collection('skillwinner_notifications').doc(notifId).set({
-      id: notifId,
-      title: title,
-      body: bodyText,
-      type: 'adminBroadcast',
-      target_type: topic ? (topic.startsWith('match_') ? 'match' : 'all') : 'all',
-      target_id: topic || null,
-      created_at: new Date().toISOString(),
-      is_read: false,
-      image_url: imageUrl || null,
-      data: stringifiedData,
-    });
+    // Persist into Firestore only if requested or if not already saved by client
+    if (saveToDb !== false) {
+      const notifId = id || `notif_srv_${Date.now()}`;
+      await adminDb.collection('skillwinner_notifications').doc(notifId).set({
+        id: notifId,
+        title: title,
+        body: bodyText,
+        type: 'adminBroadcast',
+        target_type: topic ? (topic.startsWith('match_') ? 'match' : 'all') : 'all',
+        target_id: topic || null,
+        created_at: new Date().toISOString(),
+        is_read: false,
+        image_url: imageUrl || null,
+        data: stringifiedData,
+      }, { merge: true });
+    }
 
     return NextResponse.json(
       {
