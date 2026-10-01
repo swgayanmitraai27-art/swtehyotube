@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,8 +10,87 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// In-Memory Global Server Cache (15-second TTL)
-let cachedData: {
+const FIREBASE_API_KEY = "AIzaSyCLTHMklWsgiydXuF3QssaR9XtHtHLjd_8";
+const PROJECT_ID = "sw-gyanmitra-finall2-426-dcc41";
+const BASE_FIRESTORE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+// Helper: Decode Firestore REST document format
+function decodeValue(val: any): any {
+  if (!val || typeof val !== 'object') return val;
+  if ('stringValue' in val) return val.stringValue;
+  if ('integerValue' in val) return parseInt(val.integerValue, 10);
+  if ('doubleValue' in val) return parseFloat(val.doubleValue);
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('nullValue' in val) return null;
+  if ('arrayValue' in val) {
+    const list = val.arrayValue?.values || [];
+    return list.map(decodeValue);
+  }
+  if ('mapValue' in val) {
+    const fields = val.mapValue?.fields || {};
+    const result: Record<string, any> = {};
+    for (const k in fields) {
+      result[k] = decodeValue(fields[k]);
+    }
+    return result;
+  }
+  return val;
+}
+
+function decodeFirestoreDoc(doc: any): any {
+  if (!doc || !doc.fields) return {};
+  const result: Record<string, any> = {};
+  for (const k in doc.fields) {
+    result[k] = decodeValue(doc.fields[k]);
+  }
+  // Also extract doc ID from name: projects/.../documents/collection/docId
+  if (doc.name) {
+    const parts = doc.name.split('/');
+    result.id = result.id || parts[parts.length - 1];
+  }
+  return result;
+}
+
+// Helper: Encode plain JS object to Firestore REST fields format
+function encodeValue(val: any): any {
+  if (val === null || val === undefined) return { nullValue: null };
+  if (typeof val === 'string') return { stringValue: val };
+  if (typeof val === 'number') {
+    return Number.isInteger(val) ? { integerValue: val.toString() } : { doubleValue: val };
+  }
+  if (typeof val === 'boolean') return { booleanValue: val };
+  if (Array.isArray(val)) {
+    return { arrayValue: { values: val.map(encodeValue) } };
+  }
+  if (typeof val === 'object') {
+    const fields: Record<string, any> = {};
+    for (const k in val) {
+      fields[k] = encodeValue(val[k]);
+    }
+    return { mapValue: { fields } };
+  }
+  return { stringValue: String(val) };
+}
+
+async function fetchCollectionDocs(collection: string): Promise<any[]> {
+  try {
+    const url = `${BASE_FIRESTORE_URL}/${collection}?key=${FIREBASE_API_KEY}`;
+    const res = await fetch(url, { next: { revalidate: 15 } });
+    if (!res.ok) {
+      console.warn(`[Firestore REST] Fetch ${collection} status: ${res.status}`);
+      return [];
+    }
+    const data = await res.json();
+    if (!data.documents || !Array.isArray(data.documents)) return [];
+    return data.documents.map(decodeFirestoreDoc);
+  } catch (e) {
+    console.warn(`[Firestore REST] Fetch ${collection} error:`, e);
+    return [];
+  }
+}
+
+// Global In-Memory Cache
+let memoryCache: {
   matches: any[];
   banners: any[];
   config: any;
@@ -33,69 +111,59 @@ export async function GET(req: NextRequest) {
     const collection = searchParams.get('collection');
     const now = Date.now();
 
-    // 1. Single collection query if specifically requested
     if (collection) {
-      if (adminDb) {
-        const snapshot = await adminDb.collection(collection).get();
-        const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        return NextResponse.json({ success: true, data: docs }, { headers: corsHeaders });
-      }
-      return NextResponse.json({ success: false, data: [] }, { headers: corsHeaders });
+      const docs = await fetchCollectionDocs(collection);
+      return NextResponse.json({ success: true, data: docs }, { headers: corsHeaders });
     }
 
-    // 2. Full Sync Bundled Endpoint (Matches, Banners, Config, User data)
-    // Check if cache is fresh
-    if (now - cachedData.lastUpdated > CACHE_TTL_MS || cachedData.matches.length === 0) {
-      if (adminDb) {
-        try {
-          const [matchesSnap, bannersSnap, configDoc] = await Promise.all([
-            adminDb.collection('skillwinner_matches').get(),
-            adminDb.collection('skillwinner_banners').get(),
-            adminDb.collection('skillwinner_settings').doc('app_config').get(),
-          ]);
+    // Refresh memory cache if expired or empty
+    if (now - memoryCache.lastUpdated > CACHE_TTL_MS || memoryCache.matches.length === 0) {
+      try {
+        const [matches, banners, configDocs] = await Promise.all([
+          fetchCollectionDocs('skillwinner_matches'),
+          fetchCollectionDocs('skillwinner_banners'),
+          fetchCollectionDocs('skillwinner_settings'),
+        ]);
 
-          cachedData = {
-            matches: matchesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-            banners: bannersSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-            config: configDoc.exists ? configDoc.data() : { telegramSupportUrl: 'https://t.me/swgayanmitra_support' },
-            lastUpdated: now,
-          };
-        } catch (e) {
-          console.warn('[Sync API] Firestore read warning (serving cached data):', e);
+        if (matches.length > 0 || memoryCache.matches.length === 0) {
+          memoryCache.matches = matches;
         }
+        if (banners.length > 0 || memoryCache.banners.length === 0) {
+          memoryCache.banners = banners;
+        }
+        const appConfig = configDocs.find((c) => c.id === 'app_config') || {
+          telegramSupportUrl: 'https://t.me/swgayanmitra_support',
+        };
+        memoryCache.config = appConfig;
+        memoryCache.lastUpdated = now;
+      } catch (err) {
+        console.warn('[Sync API] Cache refresh error:', err);
       }
     }
 
-    // User-specific data (not cached in global cache)
+    // User-specific data
     let userData: any = null;
     let userTransactions: any[] = [];
-    let userWithdrawals: any[] = [];
-    let userVouchers: any[] = [];
 
-    if (userId && userId !== 'user_guest' && adminDb) {
+    if (userId && userId !== 'user_guest') {
       try {
-        const userDoc = await adminDb.collection('skillwinner_users').doc(userId).get();
-        if (userDoc.exists) {
-          userData = { id: userDoc.id, ...userDoc.data() };
+        const userUrl = `${BASE_FIRESTORE_URL}/skillwinner_users/${userId}?key=${FIREBASE_API_KEY}`;
+        const userRes = await fetch(userUrl, { cache: 'no-store' });
+        if (userRes.ok) {
+          const uDoc = await userRes.json();
+          userData = decodeFirestoreDoc(uDoc);
         }
-
-        const txnSnap = await adminDb
-          .collection('skillwinner_transactions')
-          .where('userId', '==', userId)
-          .limit(50)
-          .get();
-        userTransactions = txnSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
       } catch (e) {
-        console.warn('[Sync API] User data fetch error:', e);
+        console.warn('[Sync API] User fetch error:', e);
       }
     }
 
     return NextResponse.json(
       {
         success: true,
-        matches: cachedData.matches,
-        banners: cachedData.banners,
-        config: cachedData.config,
+        matches: memoryCache.matches,
+        banners: memoryCache.banners,
+        config: memoryCache.config,
         user: userData,
         transactions: userTransactions,
         serverTimestamp: now,
@@ -110,7 +178,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// 3. POST / PATCH: Write or Update a Document and Invalidate Cache
+// Write/Update Document
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -123,11 +191,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (adminDb) {
-      await adminDb.collection(collection).doc(docId).set(data, { merge: true });
-      // Invalidate cache immediately on write
-      cachedData.lastUpdated = 0;
+    const fields: Record<string, any> = {};
+    for (const k in data) {
+      fields[k] = encodeValue(data[k]);
     }
+
+    const patchUrl = `${BASE_FIRESTORE_URL}/${collection}/${docId}?key=${FIREBASE_API_KEY}`;
+    const res = await fetch(patchUrl, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      return NextResponse.json(
+        { error: `Firestore REST write error (${res.status}): ${errText}` },
+        { status: res.status, headers: corsHeaders }
+      );
+    }
+
+    // Invalidate server cache
+    memoryCache.lastUpdated = 0;
 
     return NextResponse.json({ success: true, docId }, { headers: corsHeaders });
   } catch (error: any) {
