@@ -43,7 +43,6 @@ function decodeFirestoreDoc(doc: any): any {
   for (const k in doc.fields) {
     result[k] = decodeValue(doc.fields[k]);
   }
-  // Also extract doc ID from name: projects/.../documents/collection/docId
   if (doc.name) {
     const parts = doc.name.split('/');
     result.id = result.id || parts[parts.length - 1];
@@ -75,34 +74,75 @@ function encodeValue(val: any): any {
 async function fetchCollectionDocs(collection: string): Promise<any[]> {
   try {
     const url = `${BASE_FIRESTORE_URL}/${collection}?key=${FIREBASE_API_KEY}`;
-    const res = await fetch(url, { next: { revalidate: 15 } });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) {
-      console.warn(`[Firestore REST] Fetch ${collection} status: ${res.status}`);
       return [];
     }
     const data = await res.json();
     if (!data.documents || !Array.isArray(data.documents)) return [];
     return data.documents.map(decodeFirestoreDoc);
   } catch (e) {
-    console.warn(`[Firestore REST] Fetch ${collection} error:`, e);
     return [];
   }
 }
 
-// Global In-Memory Cache
+// Global In-Memory Cache for Ultimate Speed & Resilience
 let memoryCache: {
-  matches: any[];
+  matches: Record<string, any>;
+  transactions: any[];
   banners: any[];
+  users: Record<string, any>;
   config: any;
-  lastUpdated: number;
+  lastLoaded: number;
 } = {
-  matches: [],
+  matches: {},
+  transactions: [],
   banners: [],
-  config: {},
-  lastUpdated: 0,
+  users: {},
+  config: {
+    telegramSupportUrl: 'https://t.me/swgayanmitra_support',
+  },
+  lastLoaded: 0,
 };
 
-const CACHE_TTL_MS = 15000; // 15 seconds
+const CACHE_REFRESH_INTERVAL = 30000; // 30 seconds
+
+async function refreshCacheFromFirestoreIfNeeded() {
+  const now = Date.now();
+  if (now - memoryCache.lastLoaded > CACHE_REFRESH_INTERVAL || Object.keys(memoryCache.matches).length === 0) {
+    try {
+      const [remoteMatches, remoteBanners, remoteTxns, configDocs] = await Promise.all([
+        fetchCollectionDocs('skillwinner_matches'),
+        fetchCollectionDocs('skillwinner_banners'),
+        fetchCollectionDocs('skillwinner_transactions'),
+        fetchCollectionDocs('skillwinner_settings'),
+      ]);
+
+      if (remoteMatches.length > 0) {
+        for (const m of remoteMatches) {
+          memoryCache.matches[m.id] = { ...memoryCache.matches[m.id], ...m };
+        }
+      }
+
+      if (remoteBanners.length > 0) {
+        memoryCache.banners = remoteBanners;
+      }
+
+      if (remoteTxns.length > 0) {
+        memoryCache.transactions = remoteTxns;
+      }
+
+      const appConfig = configDocs.find((c) => c.id === 'app_config');
+      if (appConfig) {
+        memoryCache.config = appConfig;
+      }
+
+      memoryCache.lastLoaded = now;
+    } catch (err) {
+      console.warn('[Sync API] Refresh cache warning:', err);
+    }
+  }
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -111,57 +151,34 @@ export async function GET(req: NextRequest) {
     const collection = searchParams.get('collection');
     const now = Date.now();
 
-    if (collection) {
-      const docs = await fetchCollectionDocs(collection);
-      return NextResponse.json({ success: true, data: docs }, { headers: corsHeaders });
-    }
+    await refreshCacheFromFirestoreIfNeeded();
 
-    // Refresh memory cache if expired or empty
-    if (now - memoryCache.lastUpdated > CACHE_TTL_MS || memoryCache.matches.length === 0) {
-      try {
-        const [matches, banners, configDocs] = await Promise.all([
-          fetchCollectionDocs('skillwinner_matches'),
-          fetchCollectionDocs('skillwinner_banners'),
-          fetchCollectionDocs('skillwinner_settings'),
-        ]);
-
-        if (matches.length > 0 || memoryCache.matches.length === 0) {
-          memoryCache.matches = matches;
-        }
-        if (banners.length > 0 || memoryCache.banners.length === 0) {
-          memoryCache.banners = banners;
-        }
-        const appConfig = configDocs.find((c) => c.id === 'app_config') || {
-          telegramSupportUrl: 'https://t.me/swgayanmitra_support',
-        };
-        memoryCache.config = appConfig;
-        memoryCache.lastUpdated = now;
-      } catch (err) {
-        console.warn('[Sync API] Cache refresh error:', err);
-      }
+    if (collection === 'skillwinner_matches') {
+      return NextResponse.json({ success: true, data: Object.values(memoryCache.matches) }, { headers: corsHeaders });
     }
 
     // User-specific data
-    let userData: any = null;
-    let userTransactions: any[] = [];
-
-    if (userId && userId !== 'user_guest') {
+    let userData = (userId && memoryCache.users[userId]) ? memoryCache.users[userId] : null;
+    if (!userData && userId && userId !== 'user_guest') {
       try {
         const userUrl = `${BASE_FIRESTORE_URL}/skillwinner_users/${userId}?key=${FIREBASE_API_KEY}`;
         const userRes = await fetch(userUrl, { cache: 'no-store' });
         if (userRes.ok) {
           const uDoc = await userRes.json();
           userData = decodeFirestoreDoc(uDoc);
+          memoryCache.users[userId] = userData;
         }
-      } catch (e) {
-        console.warn('[Sync API] User fetch error:', e);
-      }
+      } catch (e) {}
     }
+
+    const userTransactions = userId
+      ? memoryCache.transactions.filter((t: any) => t.userId === userId)
+      : memoryCache.transactions;
 
     return NextResponse.json(
       {
         success: true,
-        matches: memoryCache.matches,
+        matches: Object.values(memoryCache.matches),
         banners: memoryCache.banners,
         config: memoryCache.config,
         user: userData,
@@ -191,28 +208,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 1. Immediately update server in-memory cache
+    if (collection === 'skillwinner_matches') {
+      memoryCache.matches[docId] = { ...(memoryCache.matches[docId] || {}), ...data, id: docId };
+    } else if (collection === 'skillwinner_users') {
+      memoryCache.users[docId] = { ...(memoryCache.users[docId] || {}), ...data, id: docId };
+    } else if (collection === 'skillwinner_transactions') {
+      const idx = memoryCache.transactions.findIndex(t => t.id === docId);
+      if (idx !== -1) {
+        memoryCache.transactions[idx] = { ...memoryCache.transactions[idx], ...data, id: docId };
+      } else {
+        memoryCache.transactions.unshift({ ...data, id: docId });
+      }
+    }
+
+    // 2. Persist to Firestore REST in background
     const fields: Record<string, any> = {};
     for (const k in data) {
       fields[k] = encodeValue(data[k]);
     }
 
     const patchUrl = `${BASE_FIRESTORE_URL}/${collection}/${docId}?key=${FIREBASE_API_KEY}`;
-    const res = await fetch(patchUrl, {
+    fetch(patchUrl, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fields }),
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      return NextResponse.json(
-        { error: `Firestore REST write error (${res.status}): ${errText}` },
-        { status: res.status, headers: corsHeaders }
-      );
-    }
-
-    // Invalidate server cache
-    memoryCache.lastUpdated = 0;
+    }).catch((e) => console.warn('[Sync API] Firestore patch warning:', e));
 
     return NextResponse.json({ success: true, docId }, { headers: corsHeaders });
   } catch (error: any) {
