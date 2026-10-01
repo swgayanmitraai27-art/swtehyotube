@@ -101,6 +101,7 @@ let memoryCache: {
   users: {},
   config: {
     telegramSupportUrl: 'https://t.me/swgayanmitra_support',
+    isRealCashModeEnabled: false,
   },
   lastLoaded: 0,
 };
@@ -135,7 +136,7 @@ async function refreshCacheFromFirestoreIfNeeded() {
 
       const appConfig = configDocs.find((c) => c.id === 'app_config');
       if (appConfig) {
-        memoryCache.config = appConfig;
+        memoryCache.config = { ...memoryCache.config, ...appConfig };
       }
 
       memoryCache.lastLoaded = now;
@@ -221,6 +222,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, message: 'All cache and matches reset to 0' }, { headers: corsHeaders });
     }
 
+    if (action === 'set_real_cash_mode') {
+      memoryCache.config.isRealCashModeEnabled = Boolean(data?.isRealCashModeEnabled);
+      // Persist to Firestore
+      const patchUrl = `${BASE_FIRESTORE_URL}/skillwinner_settings/app_config?key=${FIREBASE_API_KEY}`;
+      fetch(patchUrl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { isRealCashModeEnabled: { booleanValue: memoryCache.config.isRealCashModeEnabled } } }),
+      }).catch((e) => console.warn('[Sync API] Firestore config patch warning:', e));
+      return NextResponse.json({ success: true, isRealCashModeEnabled: memoryCache.config.isRealCashModeEnabled }, { headers: corsHeaders });
+    }
+
     if (action === 'delete' || action === 'delete_match') {
       if (collection === 'skillwinner_matches' && docId) {
         delete memoryCache.matches[docId];
@@ -240,6 +253,8 @@ export async function POST(req: NextRequest) {
       memoryCache.matches[docId] = { ...(memoryCache.matches[docId] || {}), ...data, id: docId };
     } else if (collection === 'skillwinner_users') {
       memoryCache.users[docId] = { ...(memoryCache.users[docId] || {}), ...data, id: docId };
+    } else if (collection === 'skillwinner_settings' && docId === 'app_config') {
+      memoryCache.config = { ...memoryCache.config, ...data };
     } else if (collection === 'skillwinner_transactions') {
       const idx = memoryCache.transactions.findIndex(t => t.id === docId);
       if (idx !== -1) {
