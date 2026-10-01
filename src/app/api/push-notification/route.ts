@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           notification: {
             sound: 'default',
             clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-            channelId: 'booyah_rewards_channel',
+            channelId: 'high_importance_channel',
           },
         },
         webpush: {
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
           notification: {
             sound: 'default',
             clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-            channelId: 'booyah_rewards_channel',
+            channelId: 'high_importance_channel',
           },
         },
         webpush: {
