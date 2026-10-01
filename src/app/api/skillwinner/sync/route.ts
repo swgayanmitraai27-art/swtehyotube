@@ -109,7 +109,7 @@ const CACHE_REFRESH_INTERVAL = 30000; // 30 seconds
 
 async function refreshCacheFromFirestoreIfNeeded() {
   const now = Date.now();
-  if (now - memoryCache.lastLoaded > CACHE_REFRESH_INTERVAL || Object.keys(memoryCache.matches).length === 0) {
+  if (now - memoryCache.lastLoaded > CACHE_REFRESH_INTERVAL && memoryCache.lastLoaded !== -1) {
     try {
       const [remoteMatches, remoteBanners, remoteTxns, configDocs] = await Promise.all([
         fetchCollectionDocs('skillwinner_matches'),
@@ -118,9 +118,10 @@ async function refreshCacheFromFirestoreIfNeeded() {
         fetchCollectionDocs('skillwinner_settings'),
       ]);
 
+      memoryCache.matches = {};
       if (remoteMatches.length > 0) {
         for (const m of remoteMatches) {
-          memoryCache.matches[m.id] = { ...memoryCache.matches[m.id], ...m };
+          memoryCache.matches[m.id] = m;
         }
       }
 
@@ -149,7 +150,17 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
     const collection = searchParams.get('collection');
+    const action = searchParams.get('action');
     const now = Date.now();
+
+    // Reset All Data Action
+    if (action === 'reset_all') {
+      memoryCache.matches = {};
+      memoryCache.transactions = [];
+      memoryCache.users = {};
+      memoryCache.lastLoaded = now;
+      return NextResponse.json({ success: true, message: 'All memory cache cleared' }, { headers: corsHeaders });
+    }
 
     await refreshCacheFromFirestoreIfNeeded();
 
@@ -199,7 +210,23 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { collection, docId, data } = body;
+    const { collection, docId, data, action } = body;
+
+    // Direct Reset Action
+    if (action === 'reset_all') {
+      memoryCache.matches = {};
+      memoryCache.transactions = [];
+      memoryCache.users = {};
+      memoryCache.lastLoaded = Date.now();
+      return NextResponse.json({ success: true, message: 'All cache and matches reset to 0' }, { headers: corsHeaders });
+    }
+
+    if (action === 'delete' || action === 'delete_match') {
+      if (collection === 'skillwinner_matches' && docId) {
+        delete memoryCache.matches[docId];
+      }
+      return NextResponse.json({ success: true, deleted: docId }, { headers: corsHeaders });
+    }
 
     if (!collection || !docId || !data) {
       return NextResponse.json(
@@ -241,5 +268,27 @@ export async function POST(req: NextRequest) {
       { success: false, error: error?.message || 'Write failed' },
       { status: 500, headers: corsHeaders }
     );
+  }
+}
+
+// Delete Document
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const collection = searchParams.get('collection');
+    const docId = searchParams.get('docId');
+
+    if (collection === 'skillwinner_matches' && docId) {
+      delete memoryCache.matches[docId];
+    }
+
+    if (collection && docId) {
+      const deleteUrl = `${BASE_FIRESTORE_URL}/${collection}/${docId}?key=${FIREBASE_API_KEY}`;
+      fetch(deleteUrl, { method: 'DELETE' }).catch((e) => console.warn('[Sync API] Delete warning:', e));
+    }
+
+    return NextResponse.json({ success: true, deleted: docId }, { headers: corsHeaders });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error?.message }, { status: 500, headers: corsHeaders });
   }
 }
